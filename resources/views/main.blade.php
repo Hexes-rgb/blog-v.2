@@ -29,9 +29,9 @@
                  <a href="/?tag_id={{ $tag->id }}" class="text-decoration-none link-primary">{{ $tag->name }}</a>
                  @endforeach
             </strong>
-            <h3>{{ $post->title }}</h3>
-            {{-- <div class="mb-1 text-muted">{{ $post->created_at }}</div> --}}
-            <p class="mb-auto">{{ $post->content }}</p>
+            <h3 class="text-3xl">{{ $post->title }}</h3>
+            <div class="mb-1 text-muted">{{ $post->created_at }}</div>
+            <p class="text-base">{{ $post->content }}</p>
             <div class="mb-1 text-muted">{{ $post->author->name }}</div>
             </div>
         </div>

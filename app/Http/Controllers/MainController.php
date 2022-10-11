@@ -23,9 +23,9 @@ class MainController extends Controller
         }
         if ($request->input('text')) {
             $text = $request->input('text');
-            $posts = Post::where('title', 'like', '%' . $text . '%')
+            $posts = Post::where('title', 'ILIKE', '%' . $text . '%')
                 ->orWhereHas('tags', function (Builder $query) use ($text) {
-                    $query->where('name', 'like', '%' . $text . '%');
+                    $query->where('name', 'ILIKE', '%' . $text . '%');
                 })->get();
         }
         return view('main', ['posts' => $posts, 'tags' => $tags]);
