@@ -1,9 +1,9 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
 
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="container">
         <div class="flex justify-between h-16">
-            <div class="flex">
+            <div class="flex col-3-md">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center text-3xl">
                     <a href="/">
@@ -19,9 +19,16 @@
 
                 </div>
             </div>
+            <div class="col-md-6 my-2">
+                <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                  @foreach($tags as $tag)
+                  <li><a href="/?tag_id={{ $tag->id }}"  class="nav-link px-2 link-primary">{{ $tag->name }}</a></li>
+                  @endforeach
+                </ul>
+            </div>
         @if( !empty(Auth::user()) )
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
+            <div class="hidden sm:flex sm:items-center sm:ml-6 col-3-md">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center text-sm font-medium text-primary hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
@@ -45,6 +52,9 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
+                        <x-dropdown-link :href="route('post-redactor')">
+                            {{ __('Create new post') }}
+                        </x-dropdown-link>
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -89,9 +99,10 @@
                     </div>
                 </div>
             </div> --}}
-
-            <a href="/login"> Log in</a>
-            <a href="/register"> Sign up</a>
+            <div class="col-3-md text-end my-2">
+                <a href="/register"> Sign up</a>
+                <a class = "btn btn-primary ms-2" href="/login"> Log in</a>
+            </div>
         @endif
         </div>
     </div>

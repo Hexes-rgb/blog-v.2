@@ -13,13 +13,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'App\Http\Controllers\MainController@index');
+Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
+    ->name('main');
 
-Route::post('/', 'App\Http\Controllers\MainController@index');
+Route::get('/read', [App\Http\Controllers\ReadPostController::class, 'show'])
+    ->name('read-post');
 
+Route::get('/post-redactor', [App\Http\Controllers\PostRedactorController::class, 'show'])
+    ->name('post-redactor');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::post('/post-redactor', [App\Http\Controllers\PostRedactorController::class, 'create'])
+    ->name('post-redactor');
+
+Route::post('/', [App\Http\Controllers\MainController::class, 'search'])
+    ->name('main');
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__ . '/auth.php';

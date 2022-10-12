@@ -10,9 +10,16 @@ use Illuminate\Database\Eloquent\Builder;
 
 class MainController extends Controller
 {
-    public function index(Request $request)
+
+    public function search(Request $request)
     {
-        $tags = Tag::all();
+        $all_tags = Tag::all();
+        $tags = array();
+        foreach ($all_tags as $tag) {
+            if (!empty($tag->posts[0])) {
+                array_push($tags, $tag);
+            }
+        }
         if ($request->input('tag_id')) {
             $tag_id = $request->input('tag_id');
             $posts = Post::whereHas('tags', function (Builder $query) use ($tag_id) {
@@ -28,6 +35,18 @@ class MainController extends Controller
                     $query->where('name', 'ILIKE', '%' . $text . '%');
                 })->get();
         }
+        return view('main', ['posts' => $posts, 'tags' => $tags]);
+    }
+    public function index()
+    {
+        $all_tags = Tag::all();
+        $tags = array();
+        foreach ($all_tags as $tag) {
+            if (!empty($tag->posts[0])) {
+                array_push($tags, $tag);
+            }
+        }
+        $posts = Post::all();
         return view('main', ['posts' => $posts, 'tags' => $tags]);
     }
 }
