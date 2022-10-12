@@ -29,7 +29,7 @@
                  <a href="/?tag_id={{ $tag->id }}" class="text-decoration-none link-primary">{{ $tag->name }}</a>
                  @endforeach
             </strong>
-            <h3 class="text-3xl"><a href="{{ route('read-post') }}?post_id={{ $post->id }}">{{ $post->title }}</a></h3>
+            <h3 class="text-3xl"><a href="{{ route('edit-post') }}?post_id={{ $post->id }}">{{ $post->title }}</a></h3>
             <div class="mb-1 text-muted">{{ $post->created_at }}</div>
             <p class="text-base">{{ $post->content }}</p>
             <div class="mb-1 text-muted">{{ $post->author->name }}</div>

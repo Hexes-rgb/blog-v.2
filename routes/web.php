@@ -19,11 +19,20 @@ Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
 Route::get('/read', [App\Http\Controllers\ReadPostController::class, 'show'])
     ->name('read-post');
 
-Route::get('/post-redactor', [App\Http\Controllers\PostRedactorController::class, 'show'])
-    ->name('post-redactor');
+Route::get('/create-post', [App\Http\Controllers\PostRedactorController::class, 'show_create_post_form'])
+    ->name('create-post');
 
-Route::post('/post-redactor', [App\Http\Controllers\PostRedactorController::class, 'create'])
-    ->name('post-redactor');
+Route::post('/create-post', [App\Http\Controllers\PostRedactorController::class, 'create_post'])
+    ->name('create-post');
+
+Route::get('/edit-post', [App\Http\Controllers\PostRedactorController::class, 'show_update_post_form'])
+    ->name('edit-post');
+
+Route::post('/edit-post', [App\Http\Controllers\PostRedactorController::class, 'update_post'])
+    ->name('edit-post');
+
+Route::get('/delete-post', [App\Http\Controllers\PostRedactorController::class, 'delete_post'])
+    ->name('delete-post');
 
 Route::post('/', [App\Http\Controllers\MainController::class, 'search'])
     ->name('main');

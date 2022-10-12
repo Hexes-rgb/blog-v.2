@@ -11,13 +11,13 @@
       <div class="row g-5 justify-content-center">
 
         <div class="col-md-7 col-lg-8">
-          <h4 class="mb-3">Fill in the relevant fields</h4>
-          <form action="{{ route('post-redactor') }}" method="POST">
+          <h4 class="mb-3 text-3xl text-center">Fill in the relevant fields</h4>
+          <form action="{{ route('create-post') }}" method="POST">
                  @csrf
             <div class="row g-3">
               <div class="col-sm-6">
                 <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" name="title" id="title" placeholder="" value="" required="">
+                <input type="text" class="form-control" name="title" id="title">
                 <div class="invalid-feedback">
                   Valid title is required.
                 </div>
@@ -51,7 +51,7 @@
               </div> --}}
 
               <div class="col-12">
-                <label for="content" class="form-label">Post content</label>
+                <label for="content" class="form-label">Text</label>
                 <textarea class="form-control" name="content" id="content" placeholder="Type your text here..." required=""></textarea>
                 <div class="invalid-feedback">
                   Please enter your text here.
@@ -60,7 +60,7 @@
             </div>
 
             <hr class="my-4">
-            <button class="btn btn-primary" type="submit">Create post</button>
+            <button class="btn btn-outline-primary" type="submit">Create post</button>
           </form>
         </div>
       </div>
