@@ -23,7 +23,7 @@ Route::get('/read', [App\Http\Controllers\ReadPostController::class, 'show'])
     ->name('read-post');
 
 Route::get('/create-post', [App\Http\Controllers\PostRedactorController::class, 'showCreatePostForm'])
-    ->name('create-post');
+    ->name('show-create-post');
 
 Route::post('/create-post', [App\Http\Controllers\PostRedactorController::class, 'createPost'])
     ->name('create-post');

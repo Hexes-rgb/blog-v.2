@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class MainController extends Controller
 {
-
     public function search(Request $request)
     {
         $text = $request->input('text');
@@ -33,7 +32,8 @@ class MainController extends Controller
             })->get()
                 ->sortByDesc('created_at');
         } else {
-            $posts = Post::all();
+            $posts = Post::all()
+                ->sortByDesc('created_at');
         }
         return view('main', ['tags' => Services::tags(), 'posts' => $posts]);
     }

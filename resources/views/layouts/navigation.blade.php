@@ -51,7 +51,7 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
-                        <x-dropdown-link :href="route('create-post')">
+                        <x-dropdown-link :href="route('show-create-post')">
                             {{ __('Create new post') }}
                         </x-dropdown-link>
                     </x-slot>

@@ -5,25 +5,25 @@
 @endsection
 
 @section('content')
+    <div class="container my-5">
+        <main>
+            <div class="row g-5">
 
-<div class="container my-5">
-    <main>
-      <div class="row g-5 justify-content-center">
-
-        <div class="col-md-7 col-lg-8">
-          <h4 class="mb-3 text-3xl text-center">Fill in the relevant fields</h4>
-          <form action="{{ route('update-post') }}" method="POST">
-                 @csrf
-            <div class="row g-3">
-              <div class="col-sm-6">
-                <label for="title" class="form-label">Title</label>
-                <input type="hidden" name="post_id" value="{{ $post->id }}">
-                <input type="text" class="form-control" name="title" id="title" value="{{ $post->title }}">
-                <div class="invalid-feedback">
-                  Valid title is required.
-                </div>
-              </div>
-{{--
+                <div class="col-md-7 col-lg-8">
+                    <h4 class="mb-3 text-3xl text-center">Fill in the relevant fields</h4>
+                    <form action="{{ route('update-post') }}" method="POST">
+                        @csrf
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="title" class="form-label">Title</label>
+                                <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                <input type="text" class="form-control" name="title" id="title"
+                                    value="{{ $post->title }}">
+                                <div class="invalid-feedback">
+                                    Valid title is required.
+                                </div>
+                            </div>
+                            {{--
               <div class="col-sm-6">
                 <label for="lastName" class="form-label">Last name</label>
                 <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
@@ -31,7 +31,7 @@
                   Valid last name is required.
                 </div>
               </div> --}}
-{{--
+                            {{--
               <div class="col-12">
                 <label for="username" class="form-label">Username</label>
                 <div class="input-group has-validation">
@@ -51,23 +51,26 @@
                 </div>
               </div> --}}
 
-              <div class="col-12">
-                <label for="content" class="form-label">Text</label>
-                <textarea class="form-control" name="content" id="content" placeholder="Type your text here...">{{ $post->content }}</textarea>
-                <div class="invalid-feedback">
-                  Please enter your text here.
+                            <div class="col-12">
+                                <label for="content" class="form-label">Text</label>
+                                <textarea class="form-control" name="content" id="content" placeholder="Type your text here...">{{ $post->content }}</textarea>
+                                <div class="invalid-feedback">
+                                    Please enter your text here.
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        <button class="btn btn-outline-primary" type="submit">Update post</button>
+                        <a href="#" class="link-danger ms-3 delete-post">Delete this post</a>
+                    </form>
+                    @include('layouts/inc/delete-post-modal')
                 </div>
-              </div>
+                <div class="col-md-5 col-lg-4">
+                    @include('layouts/inc/tags-dropdown-menu')
+
+                </div>
             </div>
-
-            <hr class="my-4">
-            <button class="btn btn-outline-primary" type="submit">Update post</button>
-            <a href="{{ route('delete-post', $post->id) }}" class="link-danger ms-3">Delete this post</a>
-          </form>
-        </div>
-      </div>
-    </main>
-  </div>
-
+        </main>
+    </div>
 @endsection
-

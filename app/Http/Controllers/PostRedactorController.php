@@ -26,7 +26,8 @@ class PostRedactorController extends Controller
             'title' => $request->input('title'),
             'content' => $request->input('content'),
         ]);
-        return view('edit-post', ['tags' => Services::tags(), 'post' => $post]);
+        return redirect()->route('edit-post', $post_id);
+        // return view('edit-post', ['tags' => Services::tags(), 'post' => $post]);
     }
     public function createPost(Request $request)
     {
@@ -35,12 +36,17 @@ class PostRedactorController extends Controller
             'title' => $request->input('title'),
             'content' => $request->input('content'),
         ]);
-        return view('create-post', ['tags' => Services::tags()]);
+        $post = Post::where('author_id', '=', Auth::user()->id)
+            ->where('title', '=', $request->input('title'))
+            ->where('content', '=', $request->input('content'))->first();
+        return redirect()->route('edit-post', $post->id);
+        // return view('create-post', ['tags' => Services::tags()]);
     }
     public function deletePost($post_id)
     {
         $post = Post::where('id', '=', $post_id)->first();
         $post->delete();
-        return view('main', ['posts' => Post::all(), 'tags' => Services::tags()]);
+        return redirect()->route('main-index');
+        // return view('main', ['posts' => Post::all()->sortByDesc('created_at'), 'tags' => Services::tags()]);
     }
 }

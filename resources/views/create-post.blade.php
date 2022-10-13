@@ -8,7 +8,7 @@
 
 <div class="container my-5">
     <main>
-      <div class="row g-5 justify-content-center">
+      <div class="row g-5">
 
         <div class="col-md-7 col-lg-8">
           <h4 class="mb-3 text-3xl text-center">Fill in the relevant fields</h4>
@@ -62,6 +62,10 @@
             <hr class="my-4">
             <button class="btn btn-outline-primary" type="submit">Create post</button>
           </form>
+        </div>
+        <div class="col-md-5 col-lg-4">
+            @include('layouts/inc/tags-dropdown-menu')
+
         </div>
       </div>
     </main>
