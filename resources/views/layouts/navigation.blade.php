@@ -6,7 +6,7 @@
             <div class="flex col-3-md">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center text-3xl">
-                    <a href="/">
+                    <a href="{{ route('main-index') }}">
                        Blog {{-- <x-application-logo class="block h-10 w-auto fill-current text-gray-600" /> --}}
                     </a>
                 </div>
@@ -16,13 +16,12 @@
                     {{-- <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link> --}}
-
                 </div>
             </div>
             <div class="col-md-6 my-2">
                 <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                   @foreach($tags as $tag)
-                  <li><a href="/?tag_id={{ $tag->id }}"  class="nav-link px-2 link-primary">{{ $tag->name }}</a></li>
+                  <li><a href="{{ route('main-filter-by-tag', $tag->id ) }}"  class="nav-link px-2 link-primary">{{ $tag->name }}</a></li>
                   @endforeach
                 </ul>
             </div>

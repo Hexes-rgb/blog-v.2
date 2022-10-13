@@ -12,7 +12,7 @@
 
         <div class="col-md-7 col-lg-8">
           <h4 class="mb-3 text-3xl text-center">Fill in the relevant fields</h4>
-          <form action="{{ route('edit-post') }}" method="POST">
+          <form action="{{ route('update-post') }}" method="POST">
                  @csrf
             <div class="row g-3">
               <div class="col-sm-6">
@@ -61,8 +61,8 @@
             </div>
 
             <hr class="my-4">
-            <button class="btn btn-outline-primary" type="submit">Create post</button>
-            <a href="{{ route('delete-post') }}?post_id={{ $post->id }}" class="link-danger">Delete this post</a>
+            <button class="btn btn-outline-primary" type="submit">Update post</button>
+            <a href="{{ route('delete-post', $post->id) }}" class="link-danger ms-3">Delete this post</a>
           </form>
         </div>
       </div>
