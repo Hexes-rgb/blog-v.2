@@ -22,7 +22,7 @@ class MainController extends Controller
             $posts = Post::all()
                 ->sortByDesc('created_at');
         }
-        return view('main', ['posts' => $posts, 'tags' => Services::tags()]);
+        return view('main', ['posts' => $posts, 'tags' => Services::popularTags()]);
     }
     public function filterByTag($tag_id)
     {
@@ -35,12 +35,12 @@ class MainController extends Controller
             $posts = Post::all()
                 ->sortByDesc('created_at');
         }
-        return view('main', ['tags' => Services::tags(), 'posts' => $posts]);
+        return view('main', ['tags' => Services::popularTags(), 'posts' => $posts]);
     }
     public function index()
     {
         $posts = Post::all()
             ->sortByDesc('created_at');
-        return view('main', ['posts' => $posts, 'tags' => Services::tags()]);
+        return view('main', ['posts' => $posts, 'tags' => Services::popularTags()]);
     }
 }

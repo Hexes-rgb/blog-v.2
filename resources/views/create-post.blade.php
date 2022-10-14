@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title-block')
-    Редактор публикации
+    Create publication
 @endsection
 
 @section('content')

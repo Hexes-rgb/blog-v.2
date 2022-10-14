@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title-block')
-    Главная страница
+    Main page
 @endsection
 
 @section('content')

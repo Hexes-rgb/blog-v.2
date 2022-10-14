@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\Services;
 use App\Models\Tag;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -19,6 +20,6 @@ class ReadPostController extends Controller
         }
         $post_id = $request->input('post_id');
         $post = Post::where('id', '=', $post_id)->first();
-        return view('read-post', ['post' => $post, 'tags' => $tags]);
+        return view('read-post', ['post' => $post, 'tags' => Services::allTags()]);
     }
 }

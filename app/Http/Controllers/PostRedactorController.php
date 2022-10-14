@@ -2,21 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Libraries\Services;
+use App\Models\Tag;
 use App\Models\Post;
+use App\Libraries\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PostRedactorController extends Controller
 {
+    public function sendTagsJson()
+    {
+        $data = json_encode(Tag::all());
+        return response()->json($data, 200);
+    }
+
     public function showCreatePostForm()
     {
-        return view('create-post', ['tags' => Services::tags()]);
+        return view('create-post', ['tags' => Services::popularTags()]);
     }
     public function showUpdatePostForm($post_id)
     {
         $post = Post::where('id', '=', $post_id)->first();
-        return view('edit-post', ['tags' => Services::tags(), 'post' => $post]);
+        return view('edit-post', ['tags' => Services::popularTags(), 'post' => $post]);
     }
     public function updatePost(Request $request)
     {

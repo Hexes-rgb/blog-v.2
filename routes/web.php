@@ -31,6 +31,9 @@ Route::post('/create-post', [App\Http\Controllers\PostRedactorController::class,
 Route::get('/edit-post/{post_id}', [App\Http\Controllers\PostRedactorController::class, 'showUpdatePostForm'])
     ->name('edit-post');
 
+Route::get('/api', [App\Http\Controllers\PostRedactorController::class, 'sendTagsJson'])
+    ->name('send-tags-json');
+
 Route::post('/edit-post/update', [App\Http\Controllers\PostRedactorController::class, 'updatePost'])
     ->name('update-post');
 

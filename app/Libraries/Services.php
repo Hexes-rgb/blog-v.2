@@ -6,7 +6,7 @@ use App\Models\Tag;
 
 class Services
 {
-    public static function tags()
+    public static function popularTags()
     {
         $all_tags = Tag::all();
         $tags = array();
