@@ -12,8 +12,12 @@ class PostRedactorController extends Controller
 {
     public function sendTagsJson()
     {
-        $data = json_encode(Tag::all());
-        return response()->json($data, 200);
+        $tags = array();
+        foreach (Tag::all() as $tag) {
+            array_push($tags, $tag->name);
+        }
+        $data = json_encode($tags);
+        return response()->json($data);
     }
 
     public function showCreatePostForm()
