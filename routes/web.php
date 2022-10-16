@@ -31,11 +31,17 @@ Route::post('/create-post', [App\Http\Controllers\PostRedactorController::class,
 Route::get('/edit-post/{post_id}', [App\Http\Controllers\PostRedactorController::class, 'showUpdatePostForm'])
     ->name('edit-post');
 
+Route::get('/edit-post/remove-tag/{post_id}/{tag_id}', [App\Http\Controllers\PostRedactorController::class, 'removeTag'])
+    ->name('remove-tag');
+
 Route::get('/api', [App\Http\Controllers\PostRedactorController::class, 'sendTagsJson'])
     ->name('send-tags-json');
 
 Route::post('/edit-post/update', [App\Http\Controllers\PostRedactorController::class, 'updatePost'])
     ->name('update-post');
+
+Route::post('/edit-post/add-tag', [App\Http\Controllers\PostRedactorController::class, 'addTag'])
+    ->name('add-tag');
 
 Route::get('/delete-post/{post_id}', [App\Http\Controllers\PostRedactorController::class, 'deletePost'])
     ->name('delete-post');
