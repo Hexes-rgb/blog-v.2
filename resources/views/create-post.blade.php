@@ -17,7 +17,7 @@
             <div class="row g-3">
               <div class="col-sm-6">
                 <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" name="title" id="title">
+                <input type="text" class="form-control" value="Example title" name="title" id="title">
                 <div class="invalid-feedback">
                   Valid title is required.
                 </div>
@@ -52,7 +52,7 @@
 
               <div class="col-12">
                 <label for="content" class="form-label">Text</label>
-                <textarea class="form-control" name="content" id="content" placeholder="Type your text here..." required=""></textarea>
+                <textarea class="form-control" name="content" id="content" placeholder="Type your text here..." required="">Example content</textarea>
                 <div class="invalid-feedback">
                   Please enter your text here.
                 </div>

@@ -44,7 +44,35 @@ class PostRedactorController extends Controller
     public function addTag(Request $request)
     {
         $post_id = $request->input('post_id');
-        $post = Post::where('id', '=', $post_id)->first();
+        if ($post_id == 'no-post') {
+            if (!empty($request->input('title')) and !empty($request->input('content'))) {
+                $post = Post::create([
+                    'author_id' => Auth::user()->id,
+                    'title' => $request->input('title'),
+                    'content' => $request->input('content'),
+                ]);
+            } elseif (!empty($request->input('title')) and empty($request->input('content'))) {
+                $post = Post::create([
+                    'author_id' => Auth::user()->id,
+                    'title' => $request->input('title'),
+                    'content' => 'Example content',
+                ]);
+            } elseif (empty($request->input('title')) and !empty($request->input('content'))) {
+                $post = Post::create([
+                    'author_id' => Auth::user()->id,
+                    'title' => 'Example title',
+                    'content' => $request->input('content'),
+                ]);
+            } else {
+                $post = Post::create([
+                    'author_id' => Auth::user()->id,
+                    'title' => 'Example title',
+                    'content' => 'Example content',
+                ]);
+            }
+        } else {
+            $post = Post::where('id', '=', $post_id)->first();
+        }
         $tagName = $request->input('myTags');
         if (empty(Tag::where('name', '=', $tagName)->first()->name)) {
             Tag::create([
@@ -83,6 +111,7 @@ class PostRedactorController extends Controller
     public function deletePost($post_id)
     {
         $post = Post::where('id', '=', $post_id)->first();
+        $post->tags()->detach();
         $post->delete();
         return redirect()->route('main-index');
         // return view('main', ['posts' => Post::all()->sortByDesc('created_at'), 'tags' => Services::tags()]);

@@ -11,7 +11,13 @@
                 </div>
             </div>
         </div>
+        @if(!empty($post))
         <input type="hidden" name="post_id" value="{{ $post->id }}">
+        @else
+        <input type="hidden" name="post_id" value="no-post">
+        <input type="hidden" id="hiddenTitle" name="title" value="">
+        <input type="hidden" id="hiddenContent" name="content" value="">
+        @endif
     </form>
     <ul id="tags-dropdown-menu" class="list-unstyled mb-0 d-block">
         @if (empty($post))
@@ -26,7 +32,10 @@
             @foreach ($post->tags as $tag)
                 <li><div class="dropdown-item d-flex align-items-center gap-2 py-2">
                         <span class="d-inline-block bg-primary rounded-circle p-1"></span>
-                        {{ $tag->name }} <a href="{{ route('remove-tag',['post_id' => $post->id, 'tag_id' => $tag->id]) }}"><span class="d-inline-block text-3xl text-danger p-1">-</span></a>
+                        {{ $tag->name }}
+                        <a href="{{ route('remove-tag',['post_id' => $post->id, 'tag_id' => $tag->id]) }}">
+                            <span class="d-inline-block text-3xl text-danger p-1">-</span>
+                        </a>
                 </div></li>
                 <input type="hidden" class="tag" name="tag_id" value="{{ $tag->id }}">
             @endforeach
@@ -35,6 +44,14 @@
 </div>
 
 <script>
+    title.onblur = function(){
+        hiddenTitle.value = title.value
+    }
+
+    content.onblur = function(){
+        hiddenContent.value = content.value
+    }
+
     autocompleteTags();
     async function autocompleteTags() {
         let tags = await getTags();
@@ -166,4 +183,6 @@
             closeAllLists(e.target);
         });
     }
+
+
 </script>
