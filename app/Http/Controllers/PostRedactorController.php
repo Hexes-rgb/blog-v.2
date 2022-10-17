@@ -17,7 +17,7 @@ class PostRedactorController extends Controller
         foreach (Tag::all() as $tag) {
             array_push($tags, $tag->name);
         }
-        $data = json_encode(array('allTags' => $tags, 'postTags' => ['eum', 'sapiente']));
+        $data = json_encode(array('allTags' => $tags));
         return response()->json($data);
     }
 
@@ -77,14 +77,17 @@ class PostRedactorController extends Controller
             $post = Post::where('id', '=', $post_id)->first();
         }
         $tagName = $request->input('myTags');
-        if (empty(Tag::where('name', '=', $tagName)->first()->name)) {
+        if (!empty(Tag::where('name', 'ILIKE', $tagName)->first()->name)) {
+            $tagName = Tag::where('name', 'ILIKE', $tagName)->first()->name;
+        }
+        if (empty(Tag::where('name', 'ILIKE', $tagName)->first()->name)) {
             Tag::create([
                 'name' => $tagName,
             ]);
-            $tag = Tag::where('name', '=', $tagName)->first();
+            $tag = Tag::where('name', 'ILIKE', $tagName)->first();
             $post->tags()->attach($tag);
-        } elseif (empty($post->tags->where('name', '=', $tagName)->first()->name)) {
-            $tag = Tag::where('name', '=', $tagName)->first();
+        } elseif (empty($post->tags->where('name', 'ILIKE', $tagName)->first()->name)) {
+            $tag = Tag::where('name', 'ILIKE', $tagName)->first();
             $post->tags()->attach($tag);
         } else {
             return redirect()->route('edit-post', $post->id);

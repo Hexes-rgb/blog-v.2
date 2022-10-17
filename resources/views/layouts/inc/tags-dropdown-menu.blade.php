@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-9">
                     <input type="text" autocomplete="off" class="form-control tags" id="myInput" name="myTags"
-                        placeholder="Type to find...">
+                        placeholder="Type to find..." required>
                 </div>
                 <div class="col-3">
                     <button type="submit" class="btn btn-outline-primary">Add tag</button>
