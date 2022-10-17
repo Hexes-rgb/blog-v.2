@@ -12,7 +12,7 @@
 
         <div class="col-md-7 col-lg-8">
           <h4 class="mb-3 text-3xl text-center">Fill in the relevant fields</h4>
-          <form action="{{ route('create-post') }}" method="POST">
+          <form action="{{ route('create-post') }}" method="POST" enctype="multipart/form-data">
                  @csrf
             <div class="row g-3">
               <div class="col-sm-6">
@@ -58,7 +58,7 @@
                 </div>
               </div>
             </div>
-
+            @include('layouts/inc/add-image')
             <hr class="my-4">
             <button class="btn btn-outline-primary" type="submit">Create post</button>
           </form>

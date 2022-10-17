@@ -30,9 +30,10 @@
                  @endforeach
             </strong>
             <h3 class="text-3xl"><a href="{{ route('edit-post', $post->id) }}">{{ $post->title }}</a></h3>
-            <div class="mb-1 text-muted">{{ $post->created_at }}</div>
+            <div class="mb-1 text-muted">Created at: {{ $post->created_at }}</div>
             <p class="text-base">{{ $post->content }}</p>
             <div class="mb-1 text-muted">{{ $post->author->name }}</div>
+            <div class="mb-1 text-muted">Updated at: {{ $post->updated_at }}</div>
             </div>
         </div>
 </div>

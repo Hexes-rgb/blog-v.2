@@ -33,11 +33,14 @@ class PostRedactorController extends Controller
     public function updatePost(Request $request)
     {
         $post_id = $request->input('post_id');
+        $image = $request->file('image');
         $post = Post::where('id', '=', $post_id)->first();
         $post->update([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
+            'image' => date('YmdHi') . $image->getClientOriginalName(),
         ]);
+        $image->move(public_path('public/Image'), date('YmdHi') . $image->getClientOriginalName());
         return redirect()->route('edit-post', $post_id);
         // return view('edit-post', ['tags' => Services::tags(), 'post' => $post]);
     }
@@ -101,6 +104,7 @@ class PostRedactorController extends Controller
             'author_id' => Auth::user()->id,
             'title' => $request->input('title'),
             'content' => $request->input('content'),
+            'image' => $request->file('image'),
         ]);
         $post = Post::where('author_id', '=', Auth::user()->id)
             ->where('title', '=', $request->input('title'))
