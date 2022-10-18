@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
     ->name('main-index');
 
+Route::get('/sort-by-asc', [App\Http\Controllers\MainController::class, 'sortByAsc'])
+    ->name('sort-by-asc');
+
+Route::get('/sort-by-desc', [App\Http\Controllers\MainController::class, 'sortByDesc'])
+    ->name('sort-by-desc');
+
 Route::get('/search/tag/{tag_id}', [App\Http\Controllers\MainController::class, 'filterByTag'])
     ->name('main-filter-by-tag');
 

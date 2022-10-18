@@ -5,8 +5,8 @@
           <h5 class="mb-0">Delete this post?</h5>
           <p class="mb-0">You can always delete this post in your profile.</p>
         </div>
-        <div class="modal-footer flex-nowrap p-0">
-          <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end delete-post"><a href="{{ route('delete-post', $post->id) }}" >Yes, delete</a></button>
+        <div class="modal-footer flex-nowrap p-0 text-center">
+            <a href="{{ route('delete-post', $post->id) }}"class="w-100" ><button type="button" class="btn btn-lg btn-link fs-6 w-100 text-decoration-none col-6 m-0 rounded-0 border-end delete-post">Yes, delete</button></a>
           <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 cancel-delete-post" data-bs-dismiss="modal">No, thanks</button>
         </div>
       </div>

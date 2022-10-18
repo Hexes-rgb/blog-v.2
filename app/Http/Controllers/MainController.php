@@ -9,6 +9,16 @@ use Illuminate\Database\Eloquent\Builder;
 
 class MainController extends Controller
 {
+    public function sortByAsc()
+    {
+        $posts = Post::all();
+        return view('main', ['tags' => Services::popularTags(), 'posts' => $posts->sortBy('created_at')]);
+    }
+    public function sortByDesc()
+    {
+        $posts = Post::all();
+        return view('main', ['tags' => Services::popularTags(), 'posts' => $posts->sortByDesc('created_at')]);
+    }
     public function search(Request $request)
     {
         $text = $request->input('text');
@@ -22,25 +32,22 @@ class MainController extends Controller
             $posts = Post::all()
                 ->sortByDesc('created_at');
         }
-        return view('main', ['posts' => $posts, 'tags' => Services::popularTags()]);
+        return view('main', ['posts' => $posts, 'tags' => Services::popularTags(), 'text' => $text]);
     }
     public function filterByTag($tag_id)
     {
         if ($tag_id) {
             $posts = Post::whereHas('tags', function (Builder $query) use ($tag_id) {
                 $query->where('id', '=', $tag_id);
-            })->get()
-                ->sortByDesc('created_at');
+            })->get();
         } else {
-            $posts = Post::all()
-                ->sortByDesc('created_at');
+            $posts = Post::all();
         }
-        return view('main', ['tags' => Services::popularTags(), 'posts' => $posts]);
+        return view('main', ['tags' => Services::popularTags(), 'posts' => $posts->sortByDesc('created_at'), 'tag_id' => $tag_id]);
     }
     public function index()
     {
-        $posts = Post::all()
-            ->sortByDesc('created_at');
-        return view('main', ['posts' => $posts, 'tags' => Services::popularTags()]);
+        $posts = Post::all();
+        return view('main', ['posts' => $posts->sortByDesc('created_at'), 'tags' => Services::popularTags()]);
     }
 }

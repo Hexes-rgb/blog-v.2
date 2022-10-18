@@ -13,6 +13,8 @@
                     <input type="text" autocomplete="off" name="text" class="form-control rounded" aria-label="Search"
                         aria-describedby="search-addon">
                     <button type="submit" class="btn btn-outline-primary">Search</button>
+                    <a href="{{ route('sort-by-asc') }}" class="ms-3 text-decoration-none link-primary">Sort by ASC</a>
+                    <a href="{{ route('sort-by-desc') }}" class="ms-3 text-decoration-none link-primary">Sort by DESC</a>
                 </div>
             </form>
         </div>
@@ -41,7 +43,7 @@
                 <div class="col-6 gy-5">
                     <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
                         <div class="col-12 p-4 d-flex flex-column position-static mh-50">
-                            <strong class="d-inline-block mb-2 text-success">
+                            <strong class="d-inline-block mb-2 text-center">
                                 @foreach ($post->tags as $tag)
                                     <a href="{{ route('main-filter-by-tag', $tag->id) }}"
                                         class="text-decoration-none link-primary">{{ $tag->name }}</a>
@@ -62,7 +64,7 @@
                                 <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%"
                                     y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
                             </svg> --}}
-                            <img src="{{ url('public/Image/'.$post->image) }}" class="img-fluid w-100 h-100" alt="Responsive image">
+                            <img src="{{ url('public/Image/'.$post->image) }}" class="img-thumbnail w-100 h-100" alt="Responsive image">
 
                         </div>
                         @endif

@@ -60,8 +60,9 @@
                             </div>
                         </div>
                         @include('layouts/inc/add-image')
-                        <img src="{{ url('public/Image/'.$post->image) }}"
-                        style="height: 100px; width: 150px;">
+                        @if($post->image)
+                        <img class="mt-5 img-thumbnail" src="{{ url('public/Image/'.$post->image) }}" style="height: 200px; width: 300px;">
+                        @endif
                         <hr class="my-4">
                         <button class="btn btn-outline-primary" type="submit">Update post</button>
                         <a href="#" class="link-danger ms-3 delete-post">Delete this post</a>

@@ -1,5 +1,5 @@
 <div class="dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px">
-    <form method="POST" class="p-2 mb-2 bg-light border-bottom" action="{{ route('add-tag') }}">
+    <form method="POST" class="p-2 mb-2 bg-light border-bottom" action="{{ route('add-tag') }}" enctype="multipart/form-data">
         @csrf
         <div class="autocomplete">
             <div class="row">
