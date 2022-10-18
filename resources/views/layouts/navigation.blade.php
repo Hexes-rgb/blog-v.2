@@ -54,6 +54,9 @@
                         <x-dropdown-link :href="route('show-create-post')">
                             {{ __('Create new post') }}
                         </x-dropdown-link>
+                        <x-dropdown-link :href="route('user-profile')">
+                            {{ __('My Profile') }}
+                        </x-dropdown-link>
                     </x-slot>
                 </x-dropdown>
             </div>

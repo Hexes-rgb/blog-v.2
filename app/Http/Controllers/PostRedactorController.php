@@ -34,12 +34,19 @@ class PostRedactorController extends Controller
         $post_id = $request->input('post_id');
         $image = $request->file('image');
         $post = Post::where('id', '=', $post_id)->first();
-        $post->update([
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'image' => date('YmdHi') . $image->getClientOriginalName(),
-        ]);
-        $image->move(public_path('public/Image'), date('YmdHi') . $image->getClientOriginalName());
+        if ($image) {
+            $post->update([
+                'title' => $request->input('title'),
+                'content' => $request->input('content'),
+                'image' => date('YmdHi') . $image->getClientOriginalName(),
+            ]);
+            $image->move(public_path('public/Image'), date('YmdHi') . $image->getClientOriginalName());
+        } else {
+            $post->update([
+                'title' => $request->input('title'),
+                'content' => $request->input('content'),
+            ]);
+        }
         return redirect()->route('edit-post', $post_id);
         // return view('edit-post', ['tags' => Services::tags(), 'post' => $post]);
     }
@@ -47,31 +54,13 @@ class PostRedactorController extends Controller
     {
         $post_id = $request->input('post_id');
         if ($post_id == 'no-post') {
-            if (!empty($request->input('title')) and !empty($request->input('content'))) {
-                $post = Post::create([
-                    'author_id' => Auth::user()->id,
-                    'title' => $request->input('title'),
-                    'content' => $request->input('content'),
-                ]);
-            } elseif (!empty($request->input('title')) and empty($request->input('content'))) {
-                $post = Post::create([
-                    'author_id' => Auth::user()->id,
-                    'title' => $request->input('title'),
-                    'content' => 'Example content',
-                ]);
-            } elseif (empty($request->input('title')) and !empty($request->input('content'))) {
-                $post = Post::create([
-                    'author_id' => Auth::user()->id,
-                    'title' => 'Example title',
-                    'content' => $request->input('content'),
-                ]);
-            } else {
-                $post = Post::create([
-                    'author_id' => Auth::user()->id,
-                    'title' => 'Example title',
-                    'content' => 'Example content',
-                ]);
-            }
+            $title = $request->input('title') ?? 'Example title';
+            $content = $request->input('content') ?? 'Example content';
+            $post = Post::create([
+                'author_id' => Auth::user()->id,
+                'title' => $title,
+                'content' => $content,
+            ]);
         } else {
             $post = Post::where('id', '=', $post_id)->first();
         }
@@ -85,7 +74,7 @@ class PostRedactorController extends Controller
             ]);
             $tag = Tag::where('name', 'ILIKE', $tagName)->first();
             $post->tags()->attach($tag);
-        } elseif (empty($post->tags->where('name', 'ILIKE', $tagName)->first()->name)) {
+        } elseif (empty($post->tags->where('name', $tagName)->first()->name)) {
             $tag = Tag::where('name', 'ILIKE', $tagName)->first();
             $post->tags()->attach($tag);
         } else {

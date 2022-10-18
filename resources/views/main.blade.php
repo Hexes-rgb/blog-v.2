@@ -10,11 +10,21 @@
             <form action="{{ route('main-search') }}" method="POST">
                 @csrf
                 <div class="input-group">
-                    <input type="text" autocomplete="off" name="text" class="form-control rounded" aria-label="Search"
+                    @if(!empty($text))
+                    <input type="text" autocomplete="off" value="{{ $text }}" name="text" class="form-control rounded" aria-label="Search"
                         aria-describedby="search-addon">
-                    <button type="submit" class="btn btn-outline-primary">Search</button>
-                    <a href="{{ route('sort-by-asc') }}" class="ms-3 text-decoration-none link-primary">Sort by ASC</a>
-                    <a href="{{ route('sort-by-desc') }}" class="ms-3 text-decoration-none link-primary">Sort by DESC</a>
+                    @else
+                    <input type="text" autocomplete="off" name="text" class="form-control rounded" aria-label="Search"
+                         aria-describedby="search-addon">
+                    @endif
+                        {{-- Объединить в одну функцию, параметр поиска добавить в select --}}
+                    <button type="submit" class="btn btn-outline-primary">Apply</button>
+                    {{-- <a href="{{ route('sort-by-asc') }}" class="ms-3 text-decoration-none link-primary">Sort by ASC</a>
+                    <a href="{{ route('sort-by-desc') }}" class="ms-3 text-decoration-none link-primary">Sort by DESC</a> --}}
+                    <select class="form-select text-grey border-white overflow-hidden" size="2" aria-label="size 2 select example" name="sort">
+                       <option class="d-inline ms-3" value="DESC">DESC</option>
+                       <option class="d-inline ms-3" value="ASC">ASC</option>
+                    </select>
                 </div>
             </form>
         </div>
@@ -49,10 +59,14 @@
                                         class="text-decoration-none link-primary">{{ $tag->name }}</a>
                                 @endforeach
                             </strong>
-                            <h3 class="text-3xl"><a href="{{ route('edit-post', $post->id) }}">{{ Str::limit($post->title, 100) }}</a></h3>
+                            <h3 class="text-3xl"><a href="{{ route('read-post', $post->id) }}">{{ Str::limit($post->title, 100) }}</a></h3>
                             <div class="mb-1 text-muted">Created at: {{ $post->created_at }}</div>
                             <p class="text-base">{{Str::limit($post->content, 100)}}</p>
-                            <div class="mb-1 text-muted">Author: {{ $post->author->name }}</div>
+                            @if(!empty(Auth::user()->id) and (Auth::user()->id == $post->author->id))
+                            <div class="mb-1 text-muted">Author: <a href="{{ route('user-profile') }}" >{{ $post->author->name }}</a></div>
+                            @else
+                            <div class="mb-1 text-muted">Author: <a href="{{ route('another-user-profile', $post->author->id) }}" >{{ $post->author->name }}</a></div>
+                            @endif
                             <div class="mb-1 text-muted">Updated at: {{ $post->updated_at }}</div>
                         </div>
                         @if($post->image)

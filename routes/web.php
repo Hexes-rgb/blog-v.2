@@ -13,23 +13,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// RESTFul
+
 Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
     ->name('main-index');
-
-Route::get('/sort-by-asc', [App\Http\Controllers\MainController::class, 'sortByAsc'])
-    ->name('sort-by-asc');
-
-Route::get('/sort-by-desc', [App\Http\Controllers\MainController::class, 'sortByDesc'])
-    ->name('sort-by-desc');
 
 Route::get('/search/tag/{tag_id}', [App\Http\Controllers\MainController::class, 'filterByTag'])
     ->name('main-filter-by-tag');
 
-Route::get('/read', [App\Http\Controllers\ReadPostController::class, 'show'])
+Route::get('/read/{post_id}', [App\Http\Controllers\ReadPostController::class, 'readPost'])
     ->name('read-post');
 
 Route::get('/create-post', [App\Http\Controllers\PostRedactorController::class, 'showCreatePostForm'])
     ->name('show-create-post');
+
+Route::get('/my-profile', [App\Http\Controllers\UserProfileController::class, 'showUserProfile'])
+    ->name('user-profile');
+
+Route::get('/profile/{user_id}', [App\Http\Controllers\UserProfileController::class, 'showAnotherUserProfile'])
+    ->name('another-user-profile');
 
 Route::post('/create-post', [App\Http\Controllers\PostRedactorController::class, 'createPost'])
     ->name('create-post');

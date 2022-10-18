@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ReadPostController extends Controller
 {
-    public function show(Request $request)
+    public function readPost($post_id)
     {
         $all_tags = Tag::all();
         $tags = array();
@@ -18,8 +18,7 @@ class ReadPostController extends Controller
                 array_push($tags, $tag);
             }
         }
-        $post_id = $request->input('post_id');
         $post = Post::where('id', '=', $post_id)->first();
-        return view('read-post', ['post' => $post, 'tags' => Services::allTags()]);
+        return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
     }
 }

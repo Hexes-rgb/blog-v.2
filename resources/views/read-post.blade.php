@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title-block')
-    Чтение публикации
+    Read post
 @endsection
 
 @section('content')
