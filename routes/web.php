@@ -18,10 +18,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
     ->name('main-index');
 
+Route::get('/profile/subscribe/{author_id}', [App\Http\Controllers\UserProfileController::class, 'subscribe'])
+    ->name('subscribe');
+
+Route::get('/like-posе/{post_id}', [App\Http\Controllers\ContentRatingController::class, 'like'])
+    ->name('like-post');
+
+Route::get('/remove-like/{post_id}', [App\Http\Controllers\ContentRatingController::class, 'removeLike'])
+    ->name('remove-like');
+
 Route::get('/search/tag/{tag_id}', [App\Http\Controllers\MainController::class, 'filterByTag'])
     ->name('main-filter-by-tag');
 
-Route::get('/read/{post_id}', [App\Http\Controllers\ReadPostController::class, 'readPost'])
+Route::get('/read-post/{post_id}', [App\Http\Controllers\ReadPostController::class, 'readPost'])
     ->name('read-post');
 
 Route::get('/create-post', [App\Http\Controllers\PostRedactorController::class, 'showCreatePostForm'])

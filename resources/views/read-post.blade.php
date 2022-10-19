@@ -32,7 +32,13 @@
             @if(!empty(Auth::user()->id) and (Auth::user()->id == $post->author->id))
             <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('edit-post', $post->id) }}">Edit this post</a></p>
             @else
-            <p class="fs-5 col-4 text-end text-primary">Like this post</p>
+            @if(empty(Auth::user()->likedPosts->where('id', $post->id)->first()->title))
+            <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('like-post', ['post_id' => $post->id]) }}">Like this post</a></p>
+            <p>{{ $post->loadCount('likes')->likes_count }}</p>
+            @else
+            <p class="fs-5 col-4 text-end text-danger"><a href="{{ route('remove-like', ['post_id' => $post->id]) }}">Remove your like</a></p>
+            <p>{{ $post->loadCount('likes')->likes_count }}</p>
+            @endif
             @endif
         </div>
     </div>

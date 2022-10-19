@@ -63,11 +63,31 @@
                             <div class="mb-1 text-muted">Created at: {{ $post->created_at }}</div>
                             <p class="text-base">{{Str::limit($post->content, 100)}}</p>
                             @if(!empty(Auth::user()->id) and (Auth::user()->id == $post->author->id))
-                            <div class="mb-1 text-muted">Author: <a href="{{ route('user-profile') }}" >{{ $post->author->name }}</a></div>
+                            <div class="mb-1 text-muted">
+                                Author: <a href="{{ route('user-profile') }}" >{{ $post->author->name }}</a>
+                            </div>
                             @else
-                            <div class="mb-1 text-muted">Author: <a href="{{ route('another-user-profile', $post->author->id) }}" >{{ $post->author->name }}</a></div>
+                            <div class="mb-1 text-muted">
+                                Author: <a href="{{ route('another-user-profile', $post->author->id) }}" >{{ $post->author->name }}</a>
+                            </div>
                             @endif
-                            <div class="mb-1 text-muted">Updated at: {{ $post->updated_at }}</div>
+                            <div class="mb-1 text-muted">
+                                Updated at: {{ $post->updated_at }}
+                            </div>
+                            {{-- @if(!empty(Auth::user()->id) and (Auth::user()->id != $post->author->id))
+                            @if(empty(Auth::user()->likedPosts->where('id', $post->id)->first()->title))
+                            <p class="fs-5 col-4 text-start text-primary">
+                                <a href="{{ route('like-post', ['post_id' => $post->id, 'route' => '']) }}">Like this post</a>
+                            </p>
+                            @else
+                            <p class="fs-5 col-4 text-start text-danger">
+                                <a href="{{ route('remove-like', ['post_id' => $post->id]) }}">Remove your like</a>
+                            </p>
+                            @endif
+                            @endif --}}
+                            <p>
+                                {{ $post->loadCount('likes')->likes_count }}
+                            </p>
                         </div>
                         @if($post->image)
                         <div class="col-12 d-none d-lg-block mh-50 mw-100">
