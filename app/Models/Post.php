@@ -22,6 +22,14 @@ class Post extends Model
     public function likes()
     {
         return $this->belongsToMany(User::class, 'likes', 'post_id', 'user_id')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->as('likes');
+    }
+
+    public function views()
+    {
+        return $this->belongsToMany(User::class, 'views', 'post_id', 'user_id')
+            ->withTimestamps()
+            ->as('views');
     }
 }

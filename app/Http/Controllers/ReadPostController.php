@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Tag;
 use App\Models\Post;
 use App\Libraries\Services;
@@ -20,6 +21,12 @@ class ReadPostController extends Controller
             }
         }
         $post = Post::where('id', '=', $post_id)->first();
+        $now = Carbon::now();
+        dd($post->views);
+        dd($now->diffInMinutes($post->views->where('id', Auth::user()->id)->first()->pivot->created_at));
+        if ($now->diffInSeconds($post->views->where('id', Auth::user()->id)->last()->created_at) > 10) {
+            $post->views()->attach(Auth::user());
+        }
         return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
     }
 }
