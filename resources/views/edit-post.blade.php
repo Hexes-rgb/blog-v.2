@@ -61,7 +61,7 @@
                         </div>
                         @include('layouts/inc/add-image')
                         @if($post->image)
-                        <img class="mt-5 img-thumbnail" src="{{ url('public/Image/'.$post->image) }}" style="height: 200px; width: 300px;">
+                        <img class="mt-5 img-thumbnail" src="{{ url('public/postsImages/'.$post->image) }}" style="height: 200px; width: 300px;">
                         @endif
                         <hr class="my-4">
                         <button class="btn btn-outline-primary" type="submit">Update post</button>

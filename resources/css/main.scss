@@ -1,7 +1,24 @@
-.olol {
-    color: red;
+.like-color {
+    color: #fa1f43;
 }
 
 select option[selected]{
     background-color: #0d6efd;
 }
+
+#like-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.like-block-read{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.like-block-main{
+    display: flex;
+    justify-content: flex-start;
+}
+
+

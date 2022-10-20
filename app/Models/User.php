@@ -44,12 +44,20 @@ class User extends Authenticatable
 
     public function likedPosts()
     {
-        return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id');
+        return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id')
+            ->withTimestamps();
+    }
+
+    public function subscribers()
+    {
+        return $this->belongsToMany(User::class, 'subscriptions', 'author_id', 'sub_id')
+            ->withTimestamps();
     }
 
     public function subscriptions()
     {
-        return $this->belongsToMany(User::class, 'subscriptions', 'author_id', 'sub_id');
+        return $this->belongsToMany(User::class, 'subscriptions', 'sub_id', 'author_id')
+            ->withTimestamps();
     }
 
     public function posts()

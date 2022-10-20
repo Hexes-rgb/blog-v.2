@@ -21,6 +21,9 @@ Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
 Route::get('/profile/subscribe/{author_id}', [App\Http\Controllers\UserProfileController::class, 'subscribe'])
     ->name('subscribe');
 
+Route::get('/profile/unsubscribe/{author_id}', [App\Http\Controllers\UserProfileController::class, 'unSubscribe'])
+    ->name('unsubscribe');
+
 Route::get('/like-posе/{post_id}', [App\Http\Controllers\ContentRatingController::class, 'like'])
     ->name('like-post');
 

@@ -40,7 +40,7 @@ class PostRedactorController extends Controller
                 'content' => $request->input('content'),
                 'image' => date('YmdHi') . $image->getClientOriginalName(),
             ]);
-            $image->move(public_path('public/Image'), date('YmdHi') . $image->getClientOriginalName());
+            $image->move(public_path('public/postsImages'), date('YmdHi') . $image->getClientOriginalName());
         } else {
             $post->update([
                 'title' => $request->input('title'),
@@ -91,12 +91,14 @@ class PostRedactorController extends Controller
     }
     public function createPost(Request $request)
     {
+        $image = $request->file('image');
         Post::create([
             'author_id' => Auth::user()->id,
             'title' => $request->input('title'),
             'content' => $request->input('content'),
-            'image' => $request->file('image'),
+            'image' => date('YmdHi') . $image->getClientOriginalName(),
         ]);
+        $image->move(public_path('public/postsImages'), date('YmdHi') . $image->getClientOriginalName());
         $post = Post::where('author_id', '=', Auth::user()->id)
             ->where('title', '=', $request->input('title'))
             ->where('content', '=', $request->input('content'))->first();

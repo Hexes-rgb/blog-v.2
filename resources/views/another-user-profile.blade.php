@@ -5,11 +5,12 @@
 @endsection
 
 @section('content')
-
-@foreach ($user->posts as $post)
-    <p class="text-center">
-        <a href="{{ route('read-post', $post->id) }}" class="link-primary">{{ $post->title }}</a>
-    </p>
-@endforeach
+<div class="container p-4 mt-5 border rounded overflow-hidden shadow-sm">
+@include('layouts/inc/user-profile-sidebar')
+@if($isSubscribed)
+<a href="{{ route('unsubscribe', $user->id) }}" class="link-danger">Unsubscribe</a>
+@else
 <a href="{{ route('subscribe', $user->id) }}" class="link-primary">Subscribe</a>
+@endif
+</div>
 @endsection

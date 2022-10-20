@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <section class="w-100 p-4 pb-4 d-flex justify-content-center align-items-center flex-column">
+    <section class="w-100 p-4 pb-1 d-flex justify-content-center align-items-center flex-column">
         <div>
             <form action="{{ route('main-search') }}" method="POST">
                 @csrf
@@ -50,17 +50,27 @@
             </div>
         </div>
 </div> --}}
-                <div class="col-6 gy-5">
+                <div class="col-6 gy-3">
                     <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
                         <div class="col-12 p-4 d-flex flex-column position-static mh-50">
-                            <strong class="d-inline-block mb-2 text-center">
+                            <div class="row">
+                                <div class="like-block-main col justify">
+                                    <div>
+                                    <img id="like-icon" src="{{ url('public/appImages/heart.png') }}">
+                                    </div>
+                                    <div class="like-color fs-5">
+                                    {{ $post->loadCount('likes')->likes_count }}
+                                    </div>
+                                </div>
+                            <strong class="d-inline-block mb-2 text-end col">
                                 @foreach ($post->tags as $tag)
                                     <a href="{{ route('main-filter-by-tag', $tag->id) }}"
                                         class="text-decoration-none link-primary">{{ $tag->name }}</a>
                                 @endforeach
                             </strong>
+                            </div>
                             <h3 class="text-3xl"><a href="{{ route('read-post', $post->id) }}">{{ Str::limit($post->title, 100) }}</a></h3>
-                            <div class="mb-1 text-muted">Created at: {{ $post->created_at }}</div>
+                            <div class="mb-1 text-muted">Created at: {{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y h:m:s')  }}</div>
                             <p class="text-base">{{Str::limit($post->content, 100)}}</p>
                             @if(!empty(Auth::user()->id) and (Auth::user()->id == $post->author->id))
                             <div class="mb-1 text-muted">
@@ -72,7 +82,7 @@
                             </div>
                             @endif
                             <div class="mb-1 text-muted">
-                                Updated at: {{ $post->updated_at }}
+                                Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y h:m:s')  }}
                             </div>
                             {{-- @if(!empty(Auth::user()->id) and (Auth::user()->id != $post->author->id))
                             @if(empty(Auth::user()->likedPosts->where('id', $post->id)->first()->title))
@@ -85,9 +95,6 @@
                             </p>
                             @endif
                             @endif --}}
-                            <p>
-                                {{ $post->loadCount('likes')->likes_count }}
-                            </p>
                         </div>
                         @if($post->image)
                         <div class="col-12 d-none d-lg-block mh-50 mw-100">
@@ -98,7 +105,7 @@
                                 <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%"
                                     y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
                             </svg> --}}
-                            <img src="{{ url('public/Image/'.$post->image) }}" class="img-thumbnail w-100 h-100" alt="Responsive image">
+                            <img src="{{ url('public/postsImages/'.$post->image) }}" class="img-thumbnail w-100 h-100" alt="Responsive image">
 
                         </div>
                         @endif
