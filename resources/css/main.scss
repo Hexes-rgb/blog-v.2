@@ -21,4 +21,24 @@ select option[selected]{
     justify-content: flex-start;
 }
 
+#view-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.view-block-read{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
+
+.view-block-main{
+    display: flex;
+    margin-left: 20px;
+    justify-content: flex-start;
+}
+
+.post-info-block{
+    display: flex;
+}
 

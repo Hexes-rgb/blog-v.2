@@ -45,8 +45,8 @@ class User extends Authenticatable
     public function likedPosts()
     {
         return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id')
-            ->withTimestamps()
-            ->as('likedPosts');
+            ->as('likedPosts')
+            ->withTimestamps();
     }
 
     public function subscribers()
@@ -69,7 +69,12 @@ class User extends Authenticatable
     public function viewedPosts()
     {
         return $this->belongsToMany(Post::class, 'views', 'user_id', 'post_id')
-            ->withTimestamps()
-            ->as('viewedPosts');
+            ->as('viewedPosts')
+            ->withTimestamps();
+    }
+
+    public function userComments()
+    {
+        return $this->hasMany(Comment::class, 'user_id', 'id');
     }
 }

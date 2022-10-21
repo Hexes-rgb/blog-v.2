@@ -27,8 +27,8 @@
             @endif
         </div>
         <div class="text-start mt-3 row">
-            <p class="fs-5 col-4 text-muted">Created at: {{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y h:m:s') }}</p>
-            <p class="fs-5 col-4 text-muted">Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y h:m:s') }}</p>
+            <p class="fs-5 col-4 text-muted">Created at: {{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y H:m:s') }}</p>
+            <p class="fs-5 col-4 text-muted">Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y H:m:s') }}</p>
             @if(Auth::user())
             @if(Auth::user() and (Auth::user()->id == $post->author->id))
             <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('edit-post', $post->id) }}">Edit this post</a></p>
@@ -41,6 +41,15 @@
             @endif
             @endif
         </div>
+        <div class="post-info-block justify-content-end">
+        <div class="view-block-read">
+            <div>
+            <img id="view-icon" src="{{ url('public/appImages/view.png') }}">
+            </div>
+            <div class="text-primary fs-5">
+            {{ $post->loadCount('views')->views_count }}
+            </div>
+        </div>
         <div class="like-block-read">
             <div>
             <img id="like-icon" src="{{ url('public/appImages/heart.png') }}">
@@ -49,6 +58,10 @@
             {{ $post->loadCount('likes')->likes_count }}
             </div>
         </div>
+        </div>
+        {{-- <div>
+            {{ $post->postComments->first()-> }}
+        </div> --}}
     </div>
 </div>
 

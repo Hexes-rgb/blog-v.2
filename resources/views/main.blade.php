@@ -54,13 +54,23 @@
                     <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
                         <div class="col-12 p-4 d-flex flex-column position-static mh-50">
                             <div class="row">
-                                <div class="like-block-main col justify">
+                                <div class="col post-info-block">
+                                <div class="like-block-main">
                                     <div>
                                     <img id="like-icon" src="{{ url('public/appImages/heart.png') }}">
                                     </div>
                                     <div class="like-color fs-5">
                                     {{ $post->loadCount('likes')->likes_count }}
                                     </div>
+                                </div>
+                                <div class="view-block-main">
+                                    <div>
+                                    <img id="view-icon" src="{{ url('public/appImages/view.png') }}">
+                                    </div>
+                                    <div class="text-primary fs-5">
+                                    {{ $post->loadCount('views')->views_count }}
+                                    </div>
+                                </div>
                                 </div>
                             <strong class="d-inline-block mb-2 text-end col">
                                 @foreach ($post->tags as $tag)
@@ -70,7 +80,7 @@
                             </strong>
                             </div>
                             <h3 class="text-3xl"><a href="{{ route('read-post', $post->id) }}">{{ Str::limit($post->title, 100) }}</a></h3>
-                            <div class="mb-1 text-muted">Created at: {{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y h:m:s')  }}</div>
+                            <div class="mb-1 text-muted">Created at: {{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y H:m:s')  }}</div>
                             <p class="text-base">{{Str::limit($post->content, 100)}}</p>
                             @if(!empty(Auth::user()->id) and (Auth::user()->id == $post->author->id))
                             <div class="mb-1 text-muted">
@@ -82,7 +92,7 @@
                             </div>
                             @endif
                             <div class="mb-1 text-muted">
-                                Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y h:m:s')  }}
+                                Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y H:m:s')  }}
                             </div>
                             {{-- @if(!empty(Auth::user()->id) and (Auth::user()->id != $post->author->id))
                             @if(empty(Auth::user()->likedPosts->where('id', $post->id)->first()->title))

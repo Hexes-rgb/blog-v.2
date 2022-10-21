@@ -22,14 +22,19 @@ class Post extends Model
     public function likes()
     {
         return $this->belongsToMany(User::class, 'likes', 'post_id', 'user_id')
-            ->withTimestamps()
-            ->as('likes');
+            ->as('likes')
+            ->withTimestamps();
     }
 
     public function views()
     {
         return $this->belongsToMany(User::class, 'views', 'post_id', 'user_id')
-            ->withTimestamps()
-            ->as('views');
+            ->as('views')
+            ->withTimestamps();
+    }
+
+    public function postComments()
+    {
+        return $this->hasMany(Comment::class, 'post_id', 'id');
     }
 }

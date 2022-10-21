@@ -87,6 +87,9 @@ class PostRedactorController extends Controller
         $post = Post::where('id', '=', $post_id)->first();
         $tag = Tag::where('id', '=', $tag_id)->first();
         $post->tags()->detach($tag);
+        if (empty($tag->posts->first()->title)) {
+            $tag->delete();
+        }
         return redirect()->route('edit-post', $post->id);
     }
     public function createPost(Request $request)

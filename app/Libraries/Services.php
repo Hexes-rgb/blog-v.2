@@ -15,6 +15,6 @@ class Services
                 array_push($tags, $tag);
             }
         }
-        return $tags;
+        return array_slice($tags, 0, 4);
     }
 }

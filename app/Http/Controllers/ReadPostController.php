@@ -21,12 +21,20 @@ class ReadPostController extends Controller
             }
         }
         $post = Post::where('id', '=', $post_id)->first();
-        $now = Carbon::now();
-        dd($post->views);
-        dd($now->diffInMinutes($post->views->where('id', Auth::user()->id)->first()->pivot->created_at));
-        if ($now->diffInSeconds($post->views->where('id', Auth::user()->id)->last()->created_at) > 10) {
-            $post->views()->attach(Auth::user());
+        // dd($post->likes->last()->likes->created_at);
+        // dd($post->postComments);
+        // dd($post->postComments->where('comment_id', null)->first()->comments);
+        if (Auth::user()) {
+            if (empty($post->views->where('id', Auth::user()->id)->last()->name)) {
+                $post->views()->attach(Auth::user());
+                return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
+            }
+            if (Carbon::now()->diffInHours($post->views->where('id', Auth::user()->id)->last()->views->created_at) > 3) {
+                $post->views()->attach(Auth::user());
+            }
+            return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
+        } else {
+            return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
         }
-        return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
     }
 }
