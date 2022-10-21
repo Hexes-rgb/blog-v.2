@@ -29,7 +29,7 @@
         <div class="text-start mt-3 row">
             <p class="fs-5 col-4 text-muted">Created at: {{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y H:m:s') }}</p>
             <p class="fs-5 col-4 text-muted">Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y H:m:s') }}</p>
-            @if(Auth::user())
+            @auth
             @if(Auth::user() and (Auth::user()->id == $post->author->id))
             <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('edit-post', $post->id) }}">Edit this post</a></p>
             @else
@@ -39,7 +39,7 @@
             <p class="fs-5 col-4 text-end text-danger"><a href="{{ route('remove-like', ['post_id' => $post->id]) }}">Remove your like</a></p>
             @endif
             @endif
-            @endif
+            @endauth
         </div>
         <div class="post-info-block justify-content-end">
         <div class="view-block-read">
@@ -63,6 +63,36 @@
             {{ $post->postComments->first()-> }}
         </div> --}}
     </div>
+</div>
+
+<div class="p-4 mt-4 container border rounded overflow-hidden shadow-sm">
+<p class="fs-2">({{ count($post->postComments) }}) Commentaries:</p>
+
+<div class="ms-2 mb-2">
+    @each('layouts/inc/comment', $post->postComments->where('comment_id', null), 'comment', 'layouts/inc/no-comments')
+</div>
+{{-- @foreach ($post->postComments->where('comment_id', null) as $comment)
+    <div class="p-2 border rounded overflow-hidden">
+        <div class="text-start">
+            {{ $comment->author->name }}
+        </div>
+        <div class="text-start">
+            {{ $comment->text}}
+        </div>
+    </div>
+    @foreach ($comment->comments as $answerComment)
+        <div class="ms-3 p-2 border rounded overflow-hidden">
+            <div class="text-start">
+                {{ $answerComment->author->name }}
+            </div>
+            <div class="text-start">
+                {{ $answerComment->text}}
+            </div>
+        </div>
+    @endforeach
+
+@endforeach --}}
+
 </div>
 
 @endsection

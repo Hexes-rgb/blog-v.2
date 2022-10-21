@@ -3,23 +3,14 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Tag;
 use App\Models\Post;
 use App\Libraries\Services;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ReadPostController extends Controller
 {
     public function readPost($post_id)
     {
-        $all_tags = Tag::all();
-        $tags = array();
-        foreach ($all_tags as $tag) {
-            if (!empty($tag->posts[0])) {
-                array_push($tags, $tag);
-            }
-        }
         $post = Post::where('id', '=', $post_id)->first();
         // dd($post->likes->last()->likes->created_at);
         // dd($post->postComments);
