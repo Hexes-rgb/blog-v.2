@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
     ->name('main-index');
 
+Route::post('/read-post/comment', [App\Http\Controllers\ReadPostController::class, 'createComment'])
+    ->name('create-comment');
+
 Route::get('/profile/subscribe/{author_id}', [App\Http\Controllers\UserProfileController::class, 'subscribe'])
     ->name('subscribe');
 

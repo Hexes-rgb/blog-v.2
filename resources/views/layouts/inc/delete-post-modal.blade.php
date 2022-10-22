@@ -1,9 +1,9 @@
-<div id="delete-modal" class="modal modal-alert position-static d-none bg-secondary py-5" tabindex="-1" role="dialog" id="modalChoice">
+<div id="delete-modal" class="modal start-50 top-50 modal-alert position-absolute d-none bg-secondary py-5 zindex-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content rounded-3 shadow">
         <div class="modal-body p-4 text-center">
           <h5 class="mb-0">Delete this post?</h5>
-          <p class="mb-0">You can always delete this post in your profile.</p>
+          <p class="mb-0">You can always delete it in your profile.</p>
         </div>
         <div class="modal-footer flex-nowrap p-0 text-center">
             <a href="{{ route('delete-post', $post->id) }}"class="w-100" ><button type="button" class="btn btn-lg btn-link fs-6 w-100 text-decoration-none col-6 m-0 rounded-0 border-end delete-post">Yes, delete</button></a>
