@@ -7,7 +7,6 @@
 @section('content')
     <div class="container my-5">
         <main class="position-relative">
-            @include('layouts/inc/delete-post-modal')
             <div class="row g-5">
 
                 <div class="col-md-7 col-lg-8">
@@ -68,6 +67,7 @@
                         <button class="btn btn-outline-primary" type="submit">Update post</button>
                         <a href="#" class="link-danger ms-3 delete-post">Delete this post</a>
                     </form>
+                    @include('layouts/inc/delete-post-modal')
                 </div>
                 <div class="col-md-5 col-lg-4">
                     @include('layouts/inc/tags-dropdown-menu')

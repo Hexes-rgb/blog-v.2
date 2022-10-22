@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
     ->name('main-index');
 
+Route::get('/read-post/{post_id}/delete-comment/{comment_id}', [App\Http\Controllers\ReadPostController::class, 'deleteComment'])
+    ->name('delete-comment');
+
 Route::post('/read-post/comment', [App\Http\Controllers\ReadPostController::class, 'createComment'])
     ->name('create-comment');
 

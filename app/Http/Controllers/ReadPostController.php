@@ -44,4 +44,19 @@ class ReadPostController extends Controller
         ]);
         return redirect()->route('read-post', $post_id);
     }
+
+    public function deleteComment($post_id, $comment_id)
+    {
+        $comment = Comment::where('id', $comment_id)->first();
+        // if (!empty($comment->comments->first()->text)) {
+        //     $comment->update([
+        //         'user_id' => null,
+        //         'text' => 'Deleted comment'
+        //     ]);
+        // } else {
+        //     $comment->delete();
+        // }
+        $comment->delete();
+        return redirect()->route('read-post', $post_id);
+    }
 }
