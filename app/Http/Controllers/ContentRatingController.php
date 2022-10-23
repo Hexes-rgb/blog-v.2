@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Libraries\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,5 +22,11 @@ class ContentRatingController extends Controller
         $post->likes->where('id', Auth::user()->id)->last()->likes->is_deleted = true;
         $post->likes->where('id', Auth::user()->id)->last()->likes->save();
         return redirect()->route('read-post', $post_id);
+    }
+
+    public function trends()
+    {
+        $posts = Post::withCount('likes')->get()->sortBy('likes');
+        return view('trends', ['posts' => $posts, 'tags' => Services::popularTags()]);
     }
 }

@@ -7,15 +7,17 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center text-3xl">
                     <a href="{{ route('main-index') }}">
-                       Blog {{-- <x-application-logo class="block h-10 w-auto fill-current text-gray-600" /> --}}
+                       Blog
                     </a>
                 </div>
-
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="ms-4 mt-4 text-primary">
                     {{-- <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link> --}}
+                    <a style="link link-primary" href="{{ route('trends') }}">
+                        Trends
+                    </a>
                 </div>
             </div>
             <div class="col-md-6 my-2">

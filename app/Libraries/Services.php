@@ -11,7 +11,7 @@ class Services
         $all_tags = Tag::all();
         $tags = array();
         foreach ($all_tags as $tag) {
-            if (!empty($tag->posts[0])) {
+            if (!empty($tag->posts->where('is_deleted', false)->first())) {
                 array_push($tags, $tag);
             }
         }

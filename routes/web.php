@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
     ->name('main-index');
 
+Route::get('/trends', [App\Http\Controllers\ContentRatingController::class, 'trends'])
+    ->name('trends');
+
 Route::get('/read-post/{post_id}/change-comment-status/{comment_id}/{is_deleted}', [App\Http\Controllers\ReadPostController::class, 'changeCommentStatus'])
     ->name('change-comment-status');
 

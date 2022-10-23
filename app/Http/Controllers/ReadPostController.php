@@ -18,7 +18,7 @@ class ReadPostController extends Controller
         // dd($post->postComments);
         // dd($post->postComments->where('comment_id', null)->first()->comments);
         if (Auth::user()) {
-            if (empty($post->views->where('id', Auth::user()->id)->last()->name)) {
+            if ($post->views->where('id', Auth::user()->id)->isEmpty()) {
                 $post->views()->attach(Auth::user());
                 return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
             }

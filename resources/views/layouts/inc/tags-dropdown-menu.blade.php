@@ -15,7 +15,6 @@
         @if (!empty($post))
             <input type="hidden" name="post_id" value="{{ $post->id }}">
         @else
-            <input type="hidden" name="post_id" value="no-post">
             <input type="hidden" id="hiddenTitle" name="title" value="">
             <input type="hidden" id="hiddenContent" name="content" value="">
         @endif
