@@ -65,7 +65,11 @@
                         @endif
                         <hr class="my-4">
                         <button class="btn btn-outline-primary" type="submit">Update post</button>
+                        @if ($post->is_deleted == false)
                         <a href="#" class="link-danger ms-3 delete-post">Delete this post</a>
+                        @else
+                        <a href="{{ route('change-post-status', ['post_id' => $post->id, 'is_deleted' => 'false']) }}" class="link-success ms-3">Restore deleted post</a>
+                        @endif
                     </form>
                     @include('layouts/inc/delete-post-modal')
                 </div>

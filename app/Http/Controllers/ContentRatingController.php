@@ -18,7 +18,8 @@ class ContentRatingController extends Controller
     public function removeLike($post_id)
     {
         $post = Post::where('id', $post_id)->first();
-        $post->likes()->detach(Auth::user());
+        $post->likes->where('id', Auth::user()->id)->last()->likes->is_deleted = true;
+        $post->likes->where('id', Auth::user()->id)->last()->likes->save();
         return redirect()->route('read-post', $post_id);
     }
 }

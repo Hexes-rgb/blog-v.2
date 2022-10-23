@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->text('content')->nullable();
             $table->string('image')->nullable();
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

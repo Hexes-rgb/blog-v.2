@@ -55,18 +55,17 @@
             <img id="like-icon" src="{{ url('public/appImages/heart.png') }}">
             </div>
             <div class="fs-5 like-color">
-            {{ $post->loadCount('likes')->likes_count }}
+            {{ $post->loadCount(['likes' => function($query){
+                $query->where('is_deleted', false);
+            }])->likes_count }}
             </div>
         </div>
         </div>
-        {{-- <div>
-            {{ $post->postComments->first()-> }}
-        </div> --}}
     </div>
 </div>
 
 <div class="p-4 mt-4 container border rounded overflow-hidden shadow-sm">
-<p class="fs-2">({{ count($post->postComments) }}) Commentaries:</p>
+<p class="fs-2">({{ count($post->postComments->where('is_deleted', false)) }}) Commentaries:</p>
 @auth
     <form method="POST" action="{{ route('create-comment') }}">
         @csrf
@@ -79,27 +78,6 @@
 <div class="ms-2 mb-2">
     @each('layouts/inc/comment', $post->postComments->where('comment_id', null), 'comment', 'layouts/inc/no-comments')
 </div>
-{{-- @foreach ($post->postComments->where('comment_id', null) as $comment)
-    <div class="p-2 border rounded overflow-hidden">
-        <div class="text-start">
-            {{ $comment->author->name }}
-        </div>
-        <div class="text-start">
-            {{ $comment->text}}
-        </div>
-    </div>
-    @foreach ($comment->comments as $answerComment)
-        <div class="ms-3 p-2 border rounded overflow-hidden">
-            <div class="text-start">
-                {{ $answerComment->author->name }}
-            </div>
-            <div class="text-start">
-                {{ $answerComment->text}}
-            </div>
-        </div>
-    @endforeach
-
-@endforeach --}}
 
 </div>
 

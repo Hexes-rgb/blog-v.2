@@ -32,7 +32,7 @@
 
     <div class="container">
         <div class="row mb-2">
-            @foreach ($posts as $post)
+            @foreach ($posts->where('is_deleted', false) as $post)
                 <!-- <div class="col-md-6"></div> -->
                 {{-- <div class="text-center">
     <div class="row col-md-12 g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -60,7 +60,9 @@
                                     <img id="like-icon" src="{{ url('public/appImages/heart.png') }}">
                                     </div>
                                     <div class="like-color fs-5">
-                                    {{ $post->loadCount('likes')->likes_count }}
+                                    {{ $post->loadCount(['likes' => function($query){
+                                        $query->where('is_deleted', false);
+                                    }])->likes_count }}
                                     </div>
                                 </div>
                                 <div class="view-block-main">

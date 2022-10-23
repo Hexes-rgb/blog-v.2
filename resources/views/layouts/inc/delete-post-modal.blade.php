@@ -6,7 +6,7 @@
           <p class="mb-0">You can always delete it in your profile.</p>
         </div>
         <div class="modal-footer flex-nowrap p-0 text-center">
-            <a href="{{ route('delete-post', $post->id) }}"class="w-100" ><button type="button" class="btn btn-lg btn-link fs-6 w-100 text-decoration-none col-6 m-0 rounded-0 border-end delete-post">Yes, delete</button></a>
+            <a href="{{ route('change-post-status', ['post_id' => $post->id, 'is_deleted' => 'true']) }}"class="w-100" ><button type="button" class="btn btn-lg btn-link fs-6 w-100 text-decoration-none col-6 m-0 rounded-0 border-end delete-post">Yes, delete</button></a>
           <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 cancel-delete-post" data-bs-dismiss="modal">No, thanks</button>
         </div>
       </div>

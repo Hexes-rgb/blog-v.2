@@ -10,19 +10,33 @@
         </div>
         @else
         <div>
+        @if($comment->is_deleted == true)
+            Unknowm user
+        @else
         {{ $comment->author->name }}
+        @endif
         </div>
         @endif
     </div>
     <div class="text-start">
+        @if($comment->is_deleted == true)
+        Comment has been deleted
+        @else
         {{ $comment->text}}
+        @endif
         <br>
         @if($comment->loadCount('comments')->comments_count > 0)
         <button onclick="showHideComment({{ $comment->id }})" type="button" class="link-primary text-sm" >({{ $comment->loadCount('comments')->comments_count }})hide/show</button>
         @endif
+        @auth
+        @if($comment->is_deleted == false)
         <button onclick="showCommentForm({{ $comment->id }})" type="button" class="link-primary text-sm" >Reply</button>
-        @if($comment->author->id == Auth::user()->id and empty($comment->comments->first()->text))
-        <a href="{{ route('delete-comment', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-danger">x</a>
+        @endif
+        @endauth
+        @if($comment->author->id == Auth::user()->id and $comment->is_deleted == false)
+        <a href="{{ route('change-comment-status', ['comment_id' => $comment->id, 'post_id' => $comment->post->id, 'is_deleted' => 'true']) }}" class="link-danger">x</a>
+        @else
+        <a href="{{ route('change-comment-status', ['comment_id' => $comment->id, 'post_id' => $comment->post->id, 'is_deleted' => 'false']) }}" class="link-success">Restore</a>
         @endif
         <br>
         @auth

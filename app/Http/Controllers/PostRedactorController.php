@@ -95,25 +95,38 @@ class PostRedactorController extends Controller
     public function createPost(Request $request)
     {
         $image = $request->file('image');
-        Post::create([
-            'author_id' => Auth::user()->id,
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'image' => date('YmdHi') . $image->getClientOriginalName(),
-        ]);
-        $image->move(public_path('public/postsImages'), date('YmdHi') . $image->getClientOriginalName());
-        $post = Post::where('author_id', '=', Auth::user()->id)
-            ->where('title', '=', $request->input('title'))
-            ->where('content', '=', $request->input('content'))->first();
+        if (!empty($image)) {
+            $post = Post::create([
+                'author_id' => Auth::user()->id,
+                'title' => $request->input('title'),
+                'content' => $request->input('content'),
+                'image' => date('YmdHi') . $image->getClientOriginalName(),
+            ]);
+            $image->move(public_path('public/postsImages'), date('YmdHi') . $image->getClientOriginalName());
+        } else {
+            $post = Post::create([
+                'author_id' => Auth::user()->id,
+                'title' => $request->input('title'),
+                'content' => $request->input('content'),
+            ]);
+        }
+        // $post = Post::where('author_id', '=', Auth::user()->id)
+        //     ->where('title', '=', $request->input('title'))
+        //     ->where('content', '=', $request->input('content'))->first();
         return redirect()->route('edit-post', $post->id);
         // return view('create-post', ['tags' => Services::tags()]);
     }
-    public function deletePost($post_id)
+    public function changePostStatus($post_id, $is_deleted)
     {
         $post = Post::where('id', '=', $post_id)->first();
-        $post->tags()->detach();
-        $post->delete();
-        return redirect()->route('main-index');
+        // $post->tags()->detach();
+        if ($is_deleted == 'true') {
+            $post->is_deleted = true;
+        } else {
+            $post->is_deleted = false;
+        }
+        $post->save();
+        return redirect()->route('edit-post', $post->id);
         // return view('main', ['posts' => Post::all()->sortByDesc('created_at'), 'tags' => Services::tags()]);
     }
 }
