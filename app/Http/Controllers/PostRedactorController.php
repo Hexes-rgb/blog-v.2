@@ -65,17 +65,16 @@ class PostRedactorController extends Controller
             $post = Post::where('id', '=', $post_id)->first();
         }
         $tagName = $request->input('myTags');
-        dd(empty(null));
-        if (Tag::where('name', 'ILIKE', $tagName)->first()->isNotEmpty()) {
+        if (!empty(Tag::where('name', 'ILIKE', $tagName)->first()->name)) {
             $tagName = Tag::where('name', 'ILIKE', $tagName)->first()->name;
         }
-        if (Tag::where('name', 'ILIKE', $tagName)->first()->isEmpty()) {
+        if (empty(Tag::where('name', 'ILIKE', $tagName)->first()->name)) {
             Tag::create([
                 'name' => $tagName,
             ]);
             $tag = Tag::where('name', 'ILIKE', $tagName)->first();
             $post->tags()->attach($tag);
-        } elseif ($post->tags->where('name', $tagName)->first()->isEmpty()) {
+        } elseif (empty($post->tags->where('name', $tagName)->first()->name)) {
             $tag = Tag::where('name', 'ILIKE', $tagName)->first();
             $post->tags()->attach($tag);
         } else {
@@ -88,7 +87,7 @@ class PostRedactorController extends Controller
         $post = Post::where('id', '=', $post_id)->first();
         $tag = Tag::where('id', '=', $tag_id)->first();
         $post->tags()->detach($tag);
-        if ($tag->posts->first()->isEmpty()) {
+        if (empty($tag->posts->first()->name)) {
             $tag->delete();
         }
         return redirect()->route('edit-post', $post->id);

@@ -57,6 +57,9 @@
                                 {{ $post->loadCount('views')->views_count }}
                                 </div>
                             </div>
+                            <div class="text-success fs-5">
+                                ff
+                            </div>
                             </div>
                         <strong class="d-inline-block mb-2 text-end col">
                             @foreach ($post->tags as $tag)

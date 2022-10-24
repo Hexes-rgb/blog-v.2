@@ -23,7 +23,8 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'likes', 'post_id', 'user_id')
             ->as('likes')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot('is_deleted');
     }
 
     public function views()

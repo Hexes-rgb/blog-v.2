@@ -36,8 +36,8 @@ Route::get('/profile/unsubscribe/{author_id}', [App\Http\Controllers\UserProfile
 Route::get('/like-posе/{post_id}', [App\Http\Controllers\ContentRatingController::class, 'like'])
     ->name('like-post');
 
-Route::get('/remove-like/{post_id}', [App\Http\Controllers\ContentRatingController::class, 'removeLike'])
-    ->name('remove-like');
+Route::get('/change-like-status/{post_id}', [App\Http\Controllers\ContentRatingController::class, 'changeLikeStatus'])
+    ->name('change-like-status');
 
 Route::get('/search/tag/{tag_id}', [App\Http\Controllers\MainController::class, 'filterByTag'])
     ->name('main-filter-by-tag');

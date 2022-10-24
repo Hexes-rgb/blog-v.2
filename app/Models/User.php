@@ -46,7 +46,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id')
             ->as('likedPosts')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot('is_deleted');
     }
 
     public function subscribers()

@@ -35,8 +35,10 @@
             @else
             @if(empty(Auth::user()->likedPosts->where('id', $post->id)->first()->title))
             <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('like-post', ['post_id' => $post->id]) }}">Like this post</a></p>
+            @elseif($post->likes->where('id', Auth::user()->id)->first()->likes->is_deleted == true)
+            <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('change-like-status', ['post_id' => $post->id]) }}">Like this post</a></p>
             @else
-            <p class="fs-5 col-4 text-end text-danger"><a href="{{ route('remove-like', ['post_id' => $post->id]) }}">Remove your like</a></p>
+            <p class="fs-5 col-4 text-end text-danger"><a href="{{ route('change-like-status', ['post_id' => $post->id]) }}">Remove your like</a></p>
             @endif
             @endif
             @endauth

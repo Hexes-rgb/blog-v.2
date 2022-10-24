@@ -15,9 +15,8 @@ class ReadPostController extends Controller
     {
 
         $post = Post::find($post_id);
-
         if (Auth::user()) {
-            if ($post->views->where('id', Auth::user()->id)->isEmpty()) {
+            if (empty($post->views->where('id', Auth::user()->id)->first()->views->created_at)) {
                 $post->views()->attach(Auth::user());
                 return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
             }
