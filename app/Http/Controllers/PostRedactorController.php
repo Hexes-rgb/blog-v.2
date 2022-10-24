@@ -65,6 +65,7 @@ class PostRedactorController extends Controller
             $post = Post::where('id', '=', $post_id)->first();
         }
         $tagName = $request->input('myTags');
+        dd(empty(null));
         if (Tag::where('name', 'ILIKE', $tagName)->first()->isNotEmpty()) {
             $tagName = Tag::where('name', 'ILIKE', $tagName)->first()->name;
         }

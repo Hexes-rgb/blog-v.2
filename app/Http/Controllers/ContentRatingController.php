@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Post;
 use App\Libraries\Services;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class ContentRatingController extends Controller
@@ -26,7 +28,16 @@ class ContentRatingController extends Controller
 
     public function trends()
     {
-        $posts = Post::withCount('likes')->get()->sortBy('likes');
+        // $posts = Post::withCount('likes')->get()->sortBy('likes');
+        $posts = DB::table('posts')
+            ->selectRaw(
+                'posts.*,
+                (select count(*) from likes where likes.post_id = posts.id) + (select count(*) from "views" where "views".post_id = posts.id) as rating'
+            )
+            ->where('posts.is_deleted', '=',  false)
+            ->get();
+
+        dd($posts);
         return view('trends', ['posts' => $posts, 'tags' => Services::popularTags()]);
     }
 }

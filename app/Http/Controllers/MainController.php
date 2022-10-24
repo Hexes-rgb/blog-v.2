@@ -21,9 +21,11 @@ class MainController extends Controller
                 })
                 ->orWhereHas('author', function (Builder $query) use ($text) {
                     $query->where('name', 'ILIKE', '%' . $text . '%');
-                })->get();
+                })->get()
+                ->where('is_deleted', false);
         } else {
-            $posts = Post::all();
+            $posts = Post::all()
+                ->where('is_deleted', false);
         }
         if ($sort == 'DESC') {
             return view('main', ['posts' => $posts->sortByDesc('created_at'), 'tags' => Services::popularTags(), 'text' => $text]);
@@ -35,17 +37,19 @@ class MainController extends Controller
     {
         if ($tag_id) {
             $posts = Post::whereHas('tags', function (Builder $query) use ($tag_id) {
-                $query->where('id', '=', $tag_id);
+                $query->where('id', '=', $tag_id)
+                    ->where('is_deleted', false);
             })->get();
         } else {
-            $posts = Post::all();
+            $posts = Post::all()
+                ->where('is_deleted', false);
         }
         $text = Tag::where('id', '=', $tag_id)->first()->name;
         return view('main', ['tags' => Services::popularTags(), 'posts' => $posts->sortByDesc('created_at'), 'text' => $text]);
     }
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::all()->where('is_deleted', false);
         return view('main', ['posts' => $posts->sortByDesc('created_at'), 'tags' => Services::popularTags()]);
     }
 }

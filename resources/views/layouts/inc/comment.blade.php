@@ -1,7 +1,7 @@
 
 <div class="m-3 p-2 border rounded overflow-hidden shadow-sm">
     <div class="text-start d-flex">
-        @if($comment->author->id == $comment->post->author->id)
+        @if($comment->author->id == $comment->post->author->id and $comment->is_deleted == false)
         <div>
         {{ $comment->author->name }}
         </div>
@@ -35,8 +35,9 @@
         @endauth
         @if($comment->author->id == Auth::user()->id and $comment->is_deleted == false)
         <a href="{{ route('change-comment-status', ['comment_id' => $comment->id, 'post_id' => $comment->post->id, 'is_deleted' => 'true']) }}" class="link-danger">x</a>
-        @else
+        @elseif($comment->author->id == Auth::user()->id and $comment->is_deleted == true)
         <a href="{{ route('change-comment-status', ['comment_id' => $comment->id, 'post_id' => $comment->post->id, 'is_deleted' => 'false']) }}" class="link-success">Restore</a>
+        @else
         @endif
         <br>
         @auth

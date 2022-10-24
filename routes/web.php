@@ -78,8 +78,5 @@ Route::get('/change-post-status/{post_id}/{is_deleted}', [App\Http\Controllers\P
 Route::post('/search/result', [App\Http\Controllers\MainController::class, 'search'])
     ->name('main-search');
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__ . '/auth.php';

@@ -16,7 +16,7 @@
 
     <div class="container">
         <div class="row mb-2">
-            @foreach ($posts->where('is_deleted', false) as $post)
+            @foreach ($posts as $post)
                 <!-- <div class="col-md-6"></div> -->
                 {{-- <div class="text-center">
     <div class="row col-md-12 g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">

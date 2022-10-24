@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Post;
-use App\Libraries\Services;
 use App\Models\Comment;
+use App\Libraries\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,10 +13,9 @@ class ReadPostController extends Controller
 {
     public function readPost($post_id)
     {
-        $post = Post::where('id', '=', $post_id)->first();
-        // dd($post->likes->last()->likes->created_at);
-        // dd($post->postComments);
-        // dd($post->postComments->where('comment_id', null)->first()->comments);
+
+        $post = Post::find($post_id);
+
         if (Auth::user()) {
             if ($post->views->where('id', Auth::user()->id)->isEmpty()) {
                 $post->views()->attach(Auth::user());
