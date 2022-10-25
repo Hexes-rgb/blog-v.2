@@ -18,7 +18,7 @@ class UserProfileController extends Controller
     public function showAnotherUserProfile($user_id)
     {
         $user = User::where('id', '=', $user_id)->first();
-        if (Auth::user()->subscriptions->where('id', $user_id)->isNotEmpty()) {
+        if (count(Auth::user()->subscriptions->where('id', $user_id)) > 0) {
             $isSubscribed = true;
         } else {
             $isSubscribed = false;

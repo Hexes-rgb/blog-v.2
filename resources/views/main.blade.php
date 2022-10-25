@@ -35,7 +35,20 @@
         </div>
 </div> --}}
                 <div class="col-6 gy-3">
+                    @auth
+                    @if($post->author->id == Auth::user()->id)
+                    <div class="row g-0 border border-success border-2 rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                    @elseif(Auth::user()->subscriptions->where('id', $post->author->id)->isNotEmpty())
+                        @if($post->author->id == Auth::user()->subscriptions->where('id', $post->author->id)->first()->id)
+                            <div class="row g-0 border border-primary border-2 rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                        @endif
+                    @else
                     <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                    @endif
+                    @endauth
+                    @guest
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                    @endguest
                         <div class="col-12 p-4 d-flex flex-column position-static mh-50">
                             <div class="row">
                                 <div class="col post-info-block">
