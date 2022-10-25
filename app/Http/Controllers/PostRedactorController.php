@@ -116,14 +116,14 @@ class PostRedactorController extends Controller
         return redirect()->route('edit-post', $post->id);
         // return view('create-post', ['tags' => Services::tags()]);
     }
-    public function changePostStatus($post_id, $is_deleted)
+    public function changePostStatus($post_id)
     {
         $post = Post::where('id', '=', $post_id)->first();
         // $post->tags()->detach();
-        if ($is_deleted == 'true') {
-            $post->is_deleted = true;
-        } else {
+        if ($post->is_deleted == true) {
             $post->is_deleted = false;
+        } else {
+            $post->is_deleted = true;
         }
         $post->save();
         return redirect()->route('edit-post', $post->id);

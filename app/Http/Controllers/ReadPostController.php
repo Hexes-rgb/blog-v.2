@@ -43,13 +43,13 @@ class ReadPostController extends Controller
         return redirect()->route('read-post', $post_id);
     }
 
-    public function changeCommentStatus($post_id, $comment_id, $is_deleted)
+    public function changeCommentStatus($post_id, $comment_id)
     {
         $comment = Comment::where('id', $comment_id)->first();
-        if ($is_deleted == 'false') {
-            $comment->is_deleted = false;
-        } else {
+        if ($comment->is_deleted == false) {
             $comment->is_deleted = true;
+        } else {
+            $comment->is_deleted = false;
         }
         $comment->save();
         return redirect()->route('read-post', $post_id);

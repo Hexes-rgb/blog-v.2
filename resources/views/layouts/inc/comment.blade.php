@@ -34,9 +34,9 @@
         @endif
         @endauth
         @if($comment->author->id == Auth::user()->id and $comment->is_deleted == false)
-        <a href="{{ route('change-comment-status', ['comment_id' => $comment->id, 'post_id' => $comment->post->id, 'is_deleted' => 'true']) }}" class="link-danger">x</a>
+        <a href="{{ route('change-comment-status', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-danger">x</a>
         @elseif($comment->author->id == Auth::user()->id and $comment->is_deleted == true)
-        <a href="{{ route('change-comment-status', ['comment_id' => $comment->id, 'post_id' => $comment->post->id, 'is_deleted' => 'false']) }}" class="link-success">Restore</a>
+        <a href="{{ route('change-comment-status', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-success">Restore</a>
         @else
         @endif
         <br>

@@ -68,7 +68,7 @@
                         @if ($post->is_deleted == false)
                         <a href="#" class="link-danger ms-3 delete-post">Delete this post</a>
                         @else
-                        <a href="{{ route('change-post-status', ['post_id' => $post->id, 'is_deleted' => 'false']) }}" class="link-success ms-3">Restore deleted post</a>
+                        <a href="{{ route('change-post-status', ['post_id' => $post->id]) }}" class="link-success ms-3">Restore deleted post</a>
                         @endif
                     </form>
                     @include('layouts/inc/delete-post-modal')
