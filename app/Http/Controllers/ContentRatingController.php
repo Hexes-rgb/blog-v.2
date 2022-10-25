@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Post;
 use App\Libraries\Services;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class ContentRatingController extends Controller
 {
@@ -73,12 +72,62 @@ class ContentRatingController extends Controller
         //     )
         //     ->get();
 
-        $posts = Post::withCount(['likes', 'views'])
-            ->select(
-                'posts.*'
-            )
+        // $posts = Post::withCount(['likes', 'views'])
+        //     ->select(
+        //         'posts.*'
+        //     )
+        //     ->get();
+
+        $posts = Post::selectRaw('
+            *,
+            (select count(*) from likes where likes.post_id = posts.id and likes.is_deleted = false and localtimestamp - likes.created_at < interval \'3 days\') +
+            (select count(*) from views where views.post_id = posts.id and localtimestamp - views.created_at < interval \'3 days\') +
+            (select count(distinct comments.user_id) from comments where comments.post_id = posts.id and comments.is_deleted = false and localtimestamp - comments.created_at < interval \'3 days\') as rating
+        ')
+            ->where('is_deleted', false)
+            ->orderBy('rating', 'desc')
             ->get();
-        dd($posts);
         return view('trends', ['posts' => $posts, 'tags' => Services::popularTags()]);
+    }
+
+    public function search(Request $request)
+    {
+        $text = $request->input('text');
+        $sort = $request->input('sort') ?? 'DESC';
+        if ($text) {
+            $posts = Post::selectRaw('
+            *,
+            (select count(*) from likes where likes.post_id = posts.id and likes.is_deleted = false and localtimestamp - likes.created_at < interval \'3 days\') +
+            (select count(*) from views where views.post_id = posts.id and localtimestamp - views.created_at < interval \'3 days\') +
+            (select count(distinct comments.user_id) from comments where comments.post_id = posts.id and comments.is_deleted = false and localtimestamp - comments.created_at < interval \'3 days\') as rating
+        ')
+                ->where('is_deleted', '=', false)
+                ->where(function (Builder $query) use ($text) {
+                    $query->where('title', 'ILIKE', '%' . $text . '%')
+                        ->orWhereHas('tags', function (Builder $query) use ($text) {
+                            $query->where('name', 'ILIKE', '%' . $text . '%');
+                        })
+                        ->orWhereHas('author', function (Builder $query) use ($text) {
+                            $query->where('name', 'ILIKE', '%' . $text . '%');
+                        });
+                })
+                ->orderBy('rating', 'desc')
+                ->get();
+        } else {
+            $posts = Post::selectRaw('
+            *,
+            (select count(*) from likes where likes.post_id = posts.id and likes.is_deleted = false and localtimestamp - likes.created_at < interval \'3 days\') +
+            (select count(*) from views where views.post_id = posts.id and localtimestamp - views.created_at < interval \'3 days\') +
+            (select count(distinct comments.user_id) from comments where comments.post_id = posts.id and comments.is_deleted = false and localtimestamp - comments.created_at < interval \'3 days\') as rating
+        ')
+                ->where('is_deleted', false)
+                ->orderBy('rating', 'desc')
+                ->get();
+        }
+        if ($sort == 'DESC') {
+            return view('trends', ['posts' => $posts, 'tags' => Services::popularTags(), 'text' => $text]);
+        } else {
+            return view('trends', ['posts' => $posts, 'tags' => Services::popularTags(), 'text' => $text]);
+        }
     }
 }

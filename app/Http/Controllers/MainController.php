@@ -37,14 +37,14 @@ class MainController extends Controller
     {
         if ($tag_id) {
             $posts = Post::whereHas('tags', function (Builder $query) use ($tag_id) {
-                $query->where('id', '=', $tag_id)
+                $query->where('id', $tag_id)
                     ->where('is_deleted', false);
             })->get();
         } else {
             $posts = Post::all()
                 ->where('is_deleted', false);
         }
-        $text = Tag::where('id', '=', $tag_id)->first()->name;
+        $text = Tag::where('id', $tag_id)->first()->name;
         return view('main', ['tags' => Services::popularTags(), 'posts' => $posts->sortByDesc('created_at'), 'text' => $text]);
     }
     public function index()

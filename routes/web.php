@@ -21,6 +21,9 @@ Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
 Route::get('/trends', [App\Http\Controllers\ContentRatingController::class, 'trends'])
     ->name('trends');
 
+Route::post('/trends/search/result', [App\Http\Controllers\ContentRatingController::class, 'search'])
+    ->name('trends-search');
+
 Route::get('/read-post/{post_id}/change-comment-status/{comment_id}/{is_deleted}', [App\Http\Controllers\ReadPostController::class, 'changeCommentStatus'])
     ->name('change-comment-status');
 

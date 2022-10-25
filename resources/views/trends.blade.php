@@ -7,7 +7,7 @@
 @section('content')
 <section class="w-100 p-4 pb-1 d-flex justify-content-center align-items-center flex-column">
     <div>
-        <form action="{{ route('main-search') }}" method="POST">
+        <form action="{{ route('trends-search') }}" method="POST">
             @csrf
             @include('layouts.inc.search-form')
         </form>
@@ -57,8 +57,8 @@
                                 {{ $post->loadCount('views')->views_count }}
                                 </div>
                             </div>
-                            <div class="text-success fs-5">
-                                ff
+                            <div class="text-success fs-5 ms-4">
+                                Rating: {{ $post->rating }}
                             </div>
                             </div>
                         <strong class="d-inline-block mb-2 text-end col">

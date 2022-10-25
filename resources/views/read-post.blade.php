@@ -78,7 +78,9 @@
 @endauth
 
 <div class="ms-2 mb-2">
-    @each('layouts/inc/comment', $post->postComments->where('comment_id', null), 'comment', 'layouts/inc/no-comments')
+    @if(!empty($post->postComments->first()->text))
+      @each('layouts/inc/comment', $post->postComments->where('comment_id', null), 'comment', 'layouts/inc/no-comments')
+    @endif
 </div>
 
 </div>
