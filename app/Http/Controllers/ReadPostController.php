@@ -16,11 +16,11 @@ class ReadPostController extends Controller
 
         $post = Post::find($post_id);
         if (Auth::user()) {
-            if ($post->views->where('id', Auth::user()->id)->isEmpty()) {
+            if ($post->views->where('id', Auth::id())->isEmpty()) {
                 $post->views()->attach(Auth::user());
                 return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
             }
-            if (Carbon::now()->diffInHours($post->views->where('id', Auth::user()->id)->last()->views->created_at) > 3) {
+            if (Carbon::now()->diffInHours($post->views->where('id', Auth::id())->last()->views->created_at) > 3) {
                 $post->views()->attach(Auth::user());
             }
             return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
@@ -45,13 +45,12 @@ class ReadPostController extends Controller
 
     public function changeCommentStatus($post_id, $comment_id)
     {
-        $comment = Comment::where('id', $comment_id)->first();
-        if ($comment->is_deleted == false) {
-            $comment->is_deleted = true;
+        $comment = Comment::withTrashed()->find($post_id);
+        if ($comment->trashed()) {
+            $comment->restore();
         } else {
-            $comment->is_deleted = false;
+            $comment->delete();
         }
-        $comment->save();
         return redirect()->route('read-post', $post_id);
     }
 }

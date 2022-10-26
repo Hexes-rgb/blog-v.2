@@ -35,14 +35,12 @@ Route::controller(ReadPostController::class)->group(function () {
 Route::controller(UserProfileController::class)->group(function () {
     Route::get('/my-profile', 'showUserProfile')->name('user-profile');
     Route::get('/profile/{user_id}', 'showAnotherUserProfile')->name('another-user-profile');
-    Route::get('/profile/subscribe/{author_id}', 'subscribe')->name('subscribe');
-    Route::get('/profile/unsubscribe/{author_id}', 'unSubscribe')->name('unsubscribe');
+    Route::get('/profile/subscribe-status/{author_id}', 'changeSubscribeStatus')->name('change-subscribe-status');
 });
 
 Route::controller(ContentRatingController::class)->group(function () {
     Route::get('/trends', 'trends')->name('trends');
-    Route::get('/like-posе/{post_id}', 'like')->name('like-post');
-    Route::patch('/change-like-status/{post_id}', 'changeLikeStatus')->name('change-like-status');
+    Route::get('/change-like-status/{post_id}', 'changeLikeStatus')->name('change-like-status');
     Route::post('/trends/search/result', 'search')->name('trends-search');
 });
 
@@ -52,9 +50,10 @@ Route::controller(PostRedactorController::class)->group(function () {
     Route::get('/edit-post/remove-tag/{post_id}/{tag_id}', 'removeTag')->name('remove-tag');
     Route::get('/api', 'sendTagsJson')->name('send-tags-json');
     Route::get('/change-post-status/{post_id}', 'changePostStatus')->name('change-post-status');
+    // Route::get('/delete-post/{post_id}', 'deletePost')->name('post-delete');
     Route::post('/create-post', 'createPost')->name('create-post');
-    Route::patch('/edit-post/update', 'updatePost')->name('update-post');
-    Route::patch('/edit-post/add-tag', 'addTag')->name('add-tag');
+    Route::post('/edit-post/update', 'updatePost')->name('update-post');
+    Route::post('/edit-post/add-tag', 'addTag')->name('add-tag');
 });
 
 require __DIR__ . '/auth.php';

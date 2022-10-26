@@ -26,7 +26,7 @@ class PostRedactorController extends Controller
     }
     public function showUpdatePostForm($post_id)
     {
-        $post = Post::where('id', '=', $post_id)->first();
+        $post = Post::where('id', '=', $post_id)->withTrashed()->get()->first();
         return view('edit-post', ['tags' => Services::popularTags(), 'post' => $post]);
     }
     public function updatePost(Request $request)
@@ -48,7 +48,6 @@ class PostRedactorController extends Controller
             ]);
         }
         return redirect()->route('edit-post', $post_id);
-        // return view('edit-post', ['tags' => Services::tags(), 'post' => $post]);
     }
     public function addTag(Request $request)
     {
@@ -68,7 +67,7 @@ class PostRedactorController extends Controller
         if (Tag::where('name', 'ILIKE', $tagName)->get()->isNotEmpty()) {
             $tagName = Tag::where('name', 'ILIKE', $tagName)->first()->name;
         }
-        if (count(Tag::where('name', 'ILIKE', $tagName)->get()) == 0) {
+        if (Tag::where('name', 'ILIKE', $tagName)->get()->isEmpty()) {
             Tag::create([
                 'name' => $tagName,
             ]);
@@ -87,9 +86,6 @@ class PostRedactorController extends Controller
         $post = Post::where('id', '=', $post_id)->first();
         $tag = Tag::where('id', '=', $tag_id)->first();
         $post->tags()->detach($tag);
-        if (count($tag->posts) == 0) {
-            $tag->delete();
-        }
         return redirect()->route('edit-post', $post->id);
     }
     public function createPost(Request $request)
@@ -110,23 +106,24 @@ class PostRedactorController extends Controller
                 'content' => $request->input('content'),
             ]);
         }
-        // $post = Post::where('author_id', '=', Auth::user()->id)
-        //     ->where('title', '=', $request->input('title'))
-        //     ->where('content', '=', $request->input('content'))->first();
         return redirect()->route('edit-post', $post->id);
-        // return view('create-post', ['tags' => Services::tags()]);
     }
     public function changePostStatus($post_id)
     {
-        $post = Post::where('id', '=', $post_id)->first();
-        // $post->tags()->detach();
-        if ($post->is_deleted == true) {
-            $post->is_deleted = false;
+        $post = Post::withTrashed()->find($post_id);
+        if ($post->trashed()) {
+            $post->restore();
         } else {
-            $post->is_deleted = true;
+            $post->delete();
         }
-        $post->save();
         return redirect()->route('edit-post', $post->id);
-        // return view('main', ['posts' => Post::all()->sortByDesc('created_at'), 'tags' => Services::tags()]);
     }
+
+    // public function deletePost($post_id)
+    // {
+    //     $post = Post::find($post_id);
+    //     $post->tags()->detach();
+    //     $post->delete();
+    //     return redirect()->route('main-index', ['posts' => Post::all()->sortByDesc('created_at'), 'tags' => Services::popularTags()]);
+    // }
 }

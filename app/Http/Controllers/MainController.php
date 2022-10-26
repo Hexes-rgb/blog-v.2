@@ -49,7 +49,7 @@ class MainController extends Controller
     }
     public function index()
     {
-        $posts = Post::all()->where('is_deleted', false);
+        $posts = Post::all();
         return view('main', ['posts' => $posts->sortByDesc('created_at'), 'tags' => Services::popularTags()]);
     }
 }

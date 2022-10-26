@@ -12,11 +12,15 @@
                 <img src="{{ url('public/appImages/avatar.png') }}" class="float-end" height="200px" width="200px">
             </div>
             <div class="text-end">
-            @if ($isSubscribed)
-            <a href="{{ route('unsubscribe', $user->id) }}" class="link-danger">Unsubscribe</a>
-            @else
-            <a href="{{ route('subscribe', $user->id) }}" class="link-primary">Subscribe</a>
-            @endif
+                @if ($isSubscribed)
+                    <a href="{{ route('change-subscribe-status', $user->id) }}" class="link-danger">
+                        Unsubscribe
+                    </a>
+                @else
+                    <a href="{{ route('change-subscribe-status', $user->id) }}" class="link-primary">
+                        Subscribe
+                    </a>
+                @endif
             </div>
         </div>
     </div>

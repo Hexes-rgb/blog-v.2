@@ -12,7 +12,7 @@
                 </div>
             </div>
         </div>
-        @if (!empty($post))
+        @if (isset($post))
             <input type="hidden" name="post_id" value="{{ $post->id }}">
         @else
             <input type="hidden" id="hiddenTitle" name="title" value="">
@@ -20,15 +20,7 @@
         @endif
     </form>
     <ul id="tags-dropdown-menu" class="list-unstyled mb-0 d-block">
-        @if (empty($post))
-            {{-- @foreach ($tags as $tag)
-        <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
-            <span class="d-inline-block bg-primary rounded-circle p-1"></span>
-            {{ $tag->name }}
-                </a></li>
-            <input type="hidden" class="tag" name="tag_id" value="{{ $tag->id }}">
-        @endforeach --}}
-        @else
+        @if(isset($post))
             @foreach ($post->tags as $tag)
                 <li>
                     <div class="dropdown-item d-flex align-items-center gap-2 py-2">

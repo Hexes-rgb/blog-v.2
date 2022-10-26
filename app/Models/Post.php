@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Post extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     protected $fillable = ['author_id', 'title', 'content', 'image'];
 
     public function tags()
@@ -23,8 +26,8 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'likes', 'post_id', 'user_id')
             ->as('likes')
-            ->withTimestamps()
-            ->withPivot('is_deleted');
+            ->withPivot('deleted_at')
+            ->withTimestamps();
     }
 
     public function views()

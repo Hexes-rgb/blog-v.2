@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Libraries\Services;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserProfileController extends Controller
@@ -18,27 +18,32 @@ class UserProfileController extends Controller
     public function showAnotherUserProfile($user_id)
     {
         $user = User::where('id', '=', $user_id)->first();
-        if (count(Auth::user()->subscriptions->where('id', $user_id)) > 0) {
-            $isSubscribed = true;
+        if (Auth::user()->subscriptions->where('id', $user_id)->isNotEmpty()) {
+            if (Auth::user()->subscriptions->find($user_id)->subscriptions->deleted_at == null) {
+                $isSubscribed = true;
+            } else {
+                $isSubscribed = false;
+            }
         } else {
             $isSubscribed = false;
         }
         return view('another-user-profile', ['tags' => Services::popularTags(), 'user' => $user, 'isSubscribed' => $isSubscribed]);
     }
 
-    public function subscribe($author_id)
+    public function changeSubscribeStatus($author_id)
     {
-        $author = User::where('id', $author_id)->first();
-        $user = User::where('id', Auth::user()->id)->first();
-        $user->subscriptions()->attach($author);
-        return redirect()->route('another-user-profile', $author_id);
-    }
-
-    public function unSubscribe($author_id)
-    {
-        $author = User::where('id', $author_id)->first();
-        $user = User::where('id', Auth::user()->id)->first();
-        $user->subscriptions()->detach($author);
+        $author = User::find($author_id);
+        $user = User::find(Auth::id());
+        if ($user->subscriptions->where('id', $author_id)->isEmpty()) {
+            $user->subscriptions()->attach($author);
+        } else {
+            if ($user->subscriptions->find($author_id)->subscriptions->deleted_at == null) {
+                $user->subscriptions->find($author_id)->subscriptions->deleted_at = Carbon::now();
+            } else {
+                $user->subscriptions->find($author_id)->subscriptions->deleted_at = null;
+            }
+        }
+        $user->subscriptions->find($author_id)->subscriptions->save();
         return redirect()->route('another-user-profile', $author_id);
     }
 }

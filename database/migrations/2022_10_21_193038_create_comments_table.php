@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId("user_id")->references('id')->on('users');
             $table->foreignId("comment_id")->nullable()->references('id')->on('comments');
             $table->text('text')->nullable();
-            $table->boolean('is_deleted')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
