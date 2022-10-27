@@ -28,19 +28,19 @@ Route::controller(MainController::class)->group(function () {
 
 Route::controller(ReadPostController::class)->group(function () {
     Route::get('/read-post/{post_id}', 'readPost')->name('read-post');
-    Route::get('/read-post/{post_id}/change-comment-status/{comment_id}', 'changeCommentStatus')->name('change-comment-status');
+    Route::get('/change-like-status/{post_id}', 'changeLikeVisibility')->name('change-like-visibility');
+    Route::get('/read-post/{post_id}/change-comment-status/{comment_id}', 'changeCommentVisibility')->name('change-comment-visibility');
     Route::post('/read-post/comment', 'createComment')->name('create-comment');
 });
 
 Route::controller(UserProfileController::class)->group(function () {
     Route::get('/my-profile', 'showUserProfile')->name('user-profile');
     Route::get('/profile/{user_id}', 'showAnotherUserProfile')->name('another-user-profile');
-    Route::get('/profile/subscribe-status/{author_id}', 'changeSubscribeStatus')->name('change-subscribe-status');
+    Route::get('/profile/subscribe-status/{author_id}', 'changeSubscribeVisibility')->name('change-subscribe-visibility');
 });
 
 Route::controller(ContentRatingController::class)->group(function () {
     Route::get('/trends', 'trends')->name('trends');
-    Route::get('/change-like-status/{post_id}', 'changeLikeStatus')->name('change-like-status');
     Route::post('/trends/search/result', 'search')->name('trends-search');
 });
 
@@ -49,7 +49,7 @@ Route::controller(PostRedactorController::class)->group(function () {
     Route::get('/edit-post/{post_id}', 'showUpdatePostForm')->name('edit-post');
     Route::get('/edit-post/remove-tag/{post_id}/{tag_id}', 'removeTag')->name('remove-tag');
     Route::get('/api', 'sendTagsJson')->name('send-tags-json');
-    Route::get('/change-post-status/{post_id}', 'changePostStatus')->name('change-post-status');
+    Route::get('/change-post-status/{post_id}', 'changePostVisibility')->name('change-post-visibility');
     // Route::get('/delete-post/{post_id}', 'deletePost')->name('post-delete');
     Route::post('/create-post', 'createPost')->name('create-post');
     Route::post('/edit-post/update', 'updatePost')->name('update-post');

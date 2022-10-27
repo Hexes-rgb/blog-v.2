@@ -20,7 +20,7 @@
     </div>
     <div class="text-start mt-3">
         <div class="text-start mt-3 text-muted">
-            @if(!empty(Auth::user()->id) and (Auth::user()->id == $post->author->id))
+            @if(Auth::check() and (Auth::id() == $post->author->id))
                 <p class="fs-5">
                     Author: <a href="{{ route('user-profile') }}" >
                         {{ $post->author->name }}
@@ -34,18 +34,18 @@
             <p class="fs-5 col-4 text-muted">Created at: {{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y H:i:s') }}</p>
             <p class="fs-5 col-4 text-muted">Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y H:i:s') }}</p>
             @auth
-                @if(Auth::user() and (Auth::user()->id == $post->author->id))
+                @if(Auth::check() and (Auth::id() == $post->author->id))
                     <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('edit-post', $post->id) }}">Edit this post</a></p>
                 @else
                     @if(Auth::user()->likedPosts->where('id', $post->id)->isEmpty() or $post->likes->find(Auth::id())->likes->deleted_at != null)
                     <p class="fs-5 col-4 text-end text-primary">
-                        <a href="{{ route('change-like-status', ['post_id' => $post->id]) }}">
+                        <a href="{{ route('change-like-visibility', ['post_id' => $post->id]) }}">
                         Like this post
                         </a>
                     </p>
                     @else
                         <p class="fs-5 col-4 text-end text-danger">
-                            <a href="{{ route('change-like-status', ['post_id' => $post->id]) }}">Remove your like
+                            <a href="{{ route('change-like-visibility', ['post_id' => $post->id]) }}">Remove your like
                             </a>
                         </p>
                     @endif
@@ -75,22 +75,7 @@
     </div>
 </div>
 
-<div class="p-4 mt-4 container border rounded overflow-hidden shadow-sm">
-    <p class="fs-2">({{ count($post->postComments) }}) Commentaries:</p>
-    @auth
-        <form method="POST" action="{{ route('create-comment') }}">
-            @csrf
-            <input type="text" name="text" autocomplete="off">
-            <button type="submit" class="btn btn-outline-primary">Send</button>
-            <input type="hidden" name="post_id" value="{{ $post->id }}">
-        </form>
-    @endauth
+@include('layouts.inc.comments-block')
 
-    <div class="ms-2 mb-2">
-        @if(!empty($post->postComments->first()->text))
-            @each('layouts/inc/comment', $post->postComments->where('comment_id', null), 'comment', 'layouts/inc/no-comments')
-        @endif
-    </div>
-</div>
 @endsection
 

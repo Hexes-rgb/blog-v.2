@@ -1,10 +1,12 @@
 <div class="col-6 gy-3">
     @auth
-        @if($post->author->id == Auth::user()->id)
+        @if($post->author->id == Auth::id())
             <div class="row g-0 border border-success border-2 rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
         @elseif(Auth::user()->subscriptions->where('id', $post->author->id)->isNotEmpty())
-            @if($post->author->id == Auth::user()->subscriptions->where('id', $post->author->id)->first()->id)
+            @if($post->author->id == Auth::user()->subscriptions->find($post->author->id)->id and Auth::user()->subscriptions->find($post->author->id)->subscriptions->deleted_at == null)
                 <div class="row g-0 border border-primary border-2 rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+            @else
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
             @endif
         @else
             <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
@@ -52,7 +54,7 @@
                 Created at: {{ \Carbon\Carbon::parse($post->created_at)->format('d.m.y H:i:s')  }}
             </div>
             <p class="text-base">{{Str::limit($post->content, 100)}}</p>
-            @if(!empty(Auth::user()->id) and (Auth::user()->id == $post->author->id))
+            @if(!empty(Auth::id()) and (Auth::id() == $post->author->id))
                 <div class="mb-1 text-muted">
                     Author: <a href="{{ route('user-profile') }}" >
                         {{ $post->author->name }}

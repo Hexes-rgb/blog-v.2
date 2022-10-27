@@ -8,6 +8,7 @@
 <div class="container p-4 mt-5 border rounded overflow-hidden shadow-sm">
     <div class="row">
         @include('layouts/inc/user-profile-sidebar')
+        @include('layouts.inc.subscriptions')
         <div class="col">
             <img src="{{ url('public/appImages/avatar.png') }}" class="float-end" height="200px" width="200px">
         </div>

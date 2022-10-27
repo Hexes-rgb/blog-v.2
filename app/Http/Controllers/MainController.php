@@ -28,9 +28,9 @@ class MainController extends Controller
                 ->where('is_deleted', false);
         }
         if ($sort == 'DESC') {
-            return view('main', ['posts' => $posts->sortByDesc('created_at'), 'tags' => Services::popularTags(), 'text' => $text]);
+            return view('main', ['posts' => $posts->sortByDesc('created_at'), 'tags' => Tag::popular()->get(), 'text' => $text]);
         } else {
-            return view('main', ['posts' => $posts->sortBy('created_at'), 'tags' => Services::popularTags(), 'text' => $text]);
+            return view('main', ['posts' => $posts->sortBy('created_at'), 'tags' => Tag::popular()->get(), 'text' => $text]);
         }
     }
     public function filterByTag($tag_id)
@@ -50,6 +50,6 @@ class MainController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return view('main', ['posts' => $posts->sortByDesc('created_at'), 'tags' => Services::popularTags()]);
+        return view('main', ['posts' => $posts->sortByDesc('created_at'), 'tags' => Tag::popular()->get()]);
     }
 }

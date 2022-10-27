@@ -19,7 +19,8 @@ class Comment extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'comment_id', 'id');
+        return $this->hasMany(Comment::class, 'comment_id', 'id')
+            ->withTrashed();
     }
 
     public function author()

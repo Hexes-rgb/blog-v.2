@@ -1,7 +1,7 @@
 
 <div class="m-3 p-2 border rounded overflow-hidden shadow-sm">
     <div class="text-start d-flex">
-        @if($comment->author->id == $comment->post->author->id and $comment->is_deleted == false)
+        @if($comment->author->id == $comment->post->author->id and !$comment->trashed())
             <div>
                 {{ $comment->author->name }}
             </div>
@@ -10,7 +10,7 @@
             </div>
             @else
             <div>
-            @if($comment->is_deleted == true)
+            @if($comment->trashed())
                 Unknowm user
             @else
                 {{ $comment->author->name }}
@@ -19,7 +19,7 @@
         @endif
     </div>
     <div class="text-start">
-        @if($comment->is_deleted == true)
+        @if($comment->trashed())
             Comment has been deleted
         @else
             {{ $comment->text}}
@@ -29,14 +29,14 @@
             <button onclick="showHideComment({{ $comment->id }})" type="button" class="link-primary text-sm" >({{ $comment->loadCount('comments')->comments_count }})hide/show</button>
         @endif
         @auth
-            @if($comment->is_deleted == false)
+            @if(!$comment->trashed())
                 <button onclick="showCommentForm({{ $comment->id }})" type="button" class="link-primary text-sm" >Reply</button>
             @endif
         @endauth
-        @if($comment->author->id == Auth::user()->id and $comment->is_deleted == false)
-            <a href="{{ route('change-comment-status', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-danger">x</a>
-        @elseif($comment->author->id == Auth::user()->id and $comment->is_deleted == true)
-            <a href="{{ route('change-comment-status', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-success">Restore</a>
+        @if($comment->author->id == Auth::user()->id and !$comment->trashed())
+            <a href="{{ route('change-comment-visibility', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-danger">x</a>
+        @elseif($comment->author->id == Auth::id() and $comment->trashed())
+            <a href="{{ route('change-comment-visibility', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-success">Restore</a>
         @else
 
         @endif

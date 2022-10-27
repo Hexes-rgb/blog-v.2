@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Tag;
 use App\Models\Post;
 use App\Models\Comment;
-use App\Libraries\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,15 +18,31 @@ class ReadPostController extends Controller
         if (Auth::user()) {
             if ($post->views->where('id', Auth::id())->isEmpty()) {
                 $post->views()->attach(Auth::user());
-                return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
+                return view('read-post', ['post' => $post, 'tags' => Tag::popular()->get()]);
             }
             if (Carbon::now()->diffInHours($post->views->where('id', Auth::id())->last()->views->created_at) > 3) {
                 $post->views()->attach(Auth::user());
             }
-            return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
+            return view('read-post', ['post' => $post, 'tags' => Tag::popular()->get()]);
         } else {
-            return view('read-post', ['post' => $post, 'tags' => Services::popularTags()]);
+            return view('read-post', ['post' => $post, 'tags' => Tag::popular()->get()]);
         }
+    }
+
+    public function changeLikeVisibility($post_id)
+    {
+        $post = Post::withTrashed()->find($post_id);
+        if ($post->likes->where('id', Auth::id())->isEmpty()) {
+            $post->likes()->attach(Auth::user());
+        } else {
+            if ($post->likes->where('id', Auth::id())->last()->likes->deleted_at != null) {
+                $post->likes->where('id', Auth::id())->last()->likes->deleted_at = null;
+            } else {
+                $post->likes->where('id', Auth::id())->last()->likes->deleted_at = Carbon::now();
+            }
+            $post->likes->find(Auth::id())->likes->save();
+        }
+        return redirect()->route('read-post', $post_id);
     }
 
     public function createComment(Request $request)
@@ -43,9 +59,9 @@ class ReadPostController extends Controller
         return redirect()->route('read-post', $post_id);
     }
 
-    public function changeCommentStatus($post_id, $comment_id)
+    public function changeCommentVisibility($post_id, $comment_id)
     {
-        $comment = Comment::withTrashed()->find($post_id);
+        $comment = Comment::withTrashed()->find($comment_id);
         if ($comment->trashed()) {
             $comment->restore();
         } else {

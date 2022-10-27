@@ -18,7 +18,22 @@
     <div class="row mb-2">
         @foreach ($posts->where('is_deleted', false) as $post)
             <div class="col-6 gy-3">
-                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                @auth
+                    @if($post->author->id == Auth::id())
+                        <div class="row g-0 border border-success border-2 rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                    @elseif(Auth::user()->subscriptions->where('id', $post->author->id)->isNotEmpty())
+                        @if($post->author->id == Auth::user()->subscriptions->find($post->author->id)->id and Auth::user()->subscriptions->find($post->author->id)->subscriptions->deleted_at == null)
+                            <div class="row g-0 border border-primary border-2 rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                        @else
+                            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                        @endif
+                    @else
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                    @endif
+                @endauth
+                @guest
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                @endguest
                     <div class="col-12 p-4 d-flex flex-column position-static mh-50">
                         <div class="row">
                             <div class="col post-info-block">
@@ -62,7 +77,7 @@
                         <p class="text-base">
                             {{Str::limit($post->content, 100)}}
                         </p>
-                        @if(!empty(Auth::user()->id) and (Auth::user()->id == $post->author->id))
+                        @if(!empty(Auth::id()) and (Auth::id() == $post->author->id))
                             <div class="mb-1 text-muted">
                                 Author: <a href="{{ route('user-profile') }}" >{{ $post->author->name }}</a>
                             </div>

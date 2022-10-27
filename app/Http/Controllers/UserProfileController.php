@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Tag;
 use App\Models\User;
-use App\Libraries\Services;
 use Illuminate\Support\Facades\Auth;
 
 class UserProfileController extends Controller
@@ -12,7 +12,7 @@ class UserProfileController extends Controller
     public function showUserProfile()
     {
         $user = User::where('id', Auth::user()->id)->first();
-        return view('user-profile', ['tags' => Services::popularTags(), 'user' => $user]);
+        return view('user-profile', ['tags' => Tag::popular()->get(), 'user' => $user]);
     }
 
     public function showAnotherUserProfile($user_id)
@@ -27,10 +27,10 @@ class UserProfileController extends Controller
         } else {
             $isSubscribed = false;
         }
-        return view('another-user-profile', ['tags' => Services::popularTags(), 'user' => $user, 'isSubscribed' => $isSubscribed]);
+        return view('another-user-profile', ['tags' => Tag::popular()->get(), 'user' => $user, 'isSubscribed' => $isSubscribed]);
     }
 
-    public function changeSubscribeStatus($author_id)
+    public function changeSubscribeVisibility($author_id)
     {
         $author = User::find($author_id);
         $user = User::find(Auth::id());
@@ -42,8 +42,8 @@ class UserProfileController extends Controller
             } else {
                 $user->subscriptions->find($author_id)->subscriptions->deleted_at = null;
             }
+            $user->subscriptions->find($author_id)->subscriptions->save();
         }
-        $user->subscriptions->find($author_id)->subscriptions->save();
         return redirect()->route('another-user-profile', $author_id);
     }
 }

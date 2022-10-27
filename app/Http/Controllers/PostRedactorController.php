@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Models\Post;
-use App\Libraries\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,12 +21,12 @@ class PostRedactorController extends Controller
 
     public function showCreatePostForm()
     {
-        return view('create-post', ['tags' => Services::popularTags()]);
+        return view('create-post', ['tags' => Tag::popular()->get()]);
     }
     public function showUpdatePostForm($post_id)
     {
         $post = Post::where('id', '=', $post_id)->withTrashed()->get()->first();
-        return view('edit-post', ['tags' => Services::popularTags(), 'post' => $post]);
+        return view('edit-post', ['tags' => Tag::popular()->get(), 'post' => $post]);
     }
     public function updatePost(Request $request)
     {
@@ -108,7 +107,7 @@ class PostRedactorController extends Controller
         }
         return redirect()->route('edit-post', $post->id);
     }
-    public function changePostStatus($post_id)
+    public function changePostVisibility($post_id)
     {
         $post = Post::withTrashed()->find($post_id);
         if ($post->trashed()) {
