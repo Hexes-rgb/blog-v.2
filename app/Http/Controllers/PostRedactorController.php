@@ -50,8 +50,8 @@ class PostRedactorController extends Controller
     }
     public function addTag(Request $request)
     {
-        $post_id = $request->input('post_id') ?? 'no-post';
-        if ($post_id == 'no-post') {
+        $post_id = $request->input('post_id') ?? false;
+        if (!$post_id) {
             $title = $request->input('title') ?? 'Example title';
             $content = $request->input('content') ?? 'Example content';
             $post = Post::create([
@@ -60,7 +60,7 @@ class PostRedactorController extends Controller
                 'content' => $content,
             ]);
         } else {
-            $post = Post::where('id', '=', $post_id)->first();
+            $post = Post::find($post_id);
         }
         $tagName = $request->input('myTags');
         if (Tag::where('name', 'ILIKE', $tagName)->get()->isNotEmpty()) {
@@ -107,22 +107,18 @@ class PostRedactorController extends Controller
         }
         return redirect()->route('edit-post', $post->id);
     }
-    public function changePostVisibility($post_id)
+
+    public function deletePost($post_id)
     {
-        $post = Post::withTrashed()->find($post_id);
-        if ($post->trashed()) {
-            $post->restore();
-        } else {
-            $post->delete();
-        }
+        $post = Post::find($post_id);
+        $post->delete();
         return redirect()->route('edit-post', $post->id);
     }
 
-    // public function deletePost($post_id)
-    // {
-    //     $post = Post::find($post_id);
-    //     $post->tags()->detach();
-    //     $post->delete();
-    //     return redirect()->route('main-index', ['posts' => Post::all()->sortByDesc('created_at'), 'tags' => Services::popularTags()]);
-    // }
+    public function restorePost($post_id)
+    {
+        $post = Post::withTrashed()->find($post_id);
+        $post->restore();
+        return redirect()->route('edit-post', $post->id);
+    }
 }

@@ -1,6 +1,9 @@
 <div class="ms-3 d-flex flex-column align-items-stretch flex-shrink-0 bg-white border rounded overflow-hidden shadow-sm col" style="width: 380px;">
-    <span class="fs-5 fw-semibold text-center">Unreaded posts()</span>
+    <span class="fs-5 fw-semibold text-center">Unreaded posts({{ $unreaded_posts }})</span>
     <div class="list-group list-group-flush border-bottom scrollarea">
+        @if($unreaded_posts == 0)
+            {{ $message }}
+        @endif
         @foreach($user->subscriptions as $author)
             @foreach ($author->posts as $post)
                 @if($post->views->where('id', Auth::id())->isEmpty())

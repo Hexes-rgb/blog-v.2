@@ -11,39 +11,47 @@ class UserProfileController extends Controller
 {
     public function showUserProfile()
     {
-        $user = User::where('id', Auth::user()->id)->first();
-        return view('user-profile', ['tags' => Tag::popular()->get(), 'user' => $user]);
+        $user = User::find(Auth::id());
+        if ($user->subscriptions->isNotEmpty()) {
+            return view('user-profile', [
+                'tags' => Tag::popular()->get(), 'user' => $user,
+                'unreaded_posts' => User::unreadedPosts()->first()->unreaded_posts, 'message' => 'No new posts'
+            ]);
+        } else {
+            return view('user-profile', [
+                'tags' => Tag::popular()->get(), 'user' => $user,
+                'unreaded_posts' => 0, 'message' => 'You don\'t have any subscriptions.'
+            ]);
+        }
     }
 
     public function showAnotherUserProfile($user_id)
     {
-        $user = User::where('id', '=', $user_id)->first();
-        if (Auth::user()->subscriptions->where('id', $user_id)->isNotEmpty()) {
-            if (Auth::user()->subscriptions->find($user_id)->subscriptions->deleted_at == null) {
-                $isSubscribed = true;
-            } else {
-                $isSubscribed = false;
-            }
-        } else {
-            $isSubscribed = false;
-        }
-        return view('another-user-profile', ['tags' => Tag::popular()->get(), 'user' => $user, 'isSubscribed' => $isSubscribed]);
+        $user = User::find($user_id);
+        return view('another-user-profile', ['tags' => Tag::popular()->get(), 'user' => $user]);
     }
 
-    public function changeSubscribeVisibility($author_id)
+    public function createSubscription($author_id)
     {
         $author = User::find($author_id);
         $user = User::find(Auth::id());
-        if ($user->subscriptions->where('id', $author_id)->isEmpty()) {
-            $user->subscriptions()->attach($author);
-        } else {
-            if ($user->subscriptions->find($author_id)->subscriptions->deleted_at == null) {
-                $user->subscriptions->find($author_id)->subscriptions->deleted_at = Carbon::now();
-            } else {
-                $user->subscriptions->find($author_id)->subscriptions->deleted_at = null;
-            }
-            $user->subscriptions->find($author_id)->subscriptions->save();
-        }
+        $user->subscriptions()->attach($author);
+        return redirect()->route('another-user-profile', $author_id);
+    }
+
+    public function deleteSubscription($author_id)
+    {
+        $user = User::find(Auth::id());
+        $user->subscriptions->find($author_id)->subscriptions->deleted_at = Carbon::now();
+        $user->subscriptions->find($author_id)->subscriptions->save();
+        return redirect()->route('another-user-profile', $author_id);
+    }
+
+    public function restoreSubscription($author_id)
+    {
+        $user = User::find(Auth::id());
+        $user->subscriptions->find($author_id)->subscriptions->deleted_at = null;
+        $user->subscriptions->find($author_id)->subscriptions->save();
         return redirect()->route('another-user-profile', $author_id);
     }
 }

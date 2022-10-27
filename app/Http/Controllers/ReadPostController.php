@@ -29,19 +29,26 @@ class ReadPostController extends Controller
         }
     }
 
-    public function changeLikeVisibility($post_id)
+    public function createLike($post_id)
     {
         $post = Post::withTrashed()->find($post_id);
-        if ($post->likes->where('id', Auth::id())->isEmpty()) {
-            $post->likes()->attach(Auth::user());
-        } else {
-            if ($post->likes->where('id', Auth::id())->last()->likes->deleted_at != null) {
-                $post->likes->where('id', Auth::id())->last()->likes->deleted_at = null;
-            } else {
-                $post->likes->where('id', Auth::id())->last()->likes->deleted_at = Carbon::now();
-            }
-            $post->likes->find(Auth::id())->likes->save();
-        }
+        $post->likes()->attach(Auth::user());
+        return redirect()->route('read-post', $post_id);
+    }
+
+    public function deleteLike($post_id)
+    {
+        $post = Post::withTrashed()->find($post_id);
+        $post->likes->where('id', Auth::id())->last()->likes->deleted_at = Carbon::now();
+        $post->likes->find(Auth::id())->likes->save();
+        return redirect()->route('read-post', $post_id);
+    }
+
+    public function restoreLike($post_id)
+    {
+        $post = Post::withTrashed()->find($post_id);
+        $post->likes->where('id', Auth::id())->last()->likes->deleted_at = null;
+        $post->likes->find(Auth::id())->likes->save();
         return redirect()->route('read-post', $post_id);
     }
 
@@ -59,14 +66,17 @@ class ReadPostController extends Controller
         return redirect()->route('read-post', $post_id);
     }
 
-    public function changeCommentVisibility($post_id, $comment_id)
+    public function deleteComment($post_id, $comment_id)
     {
         $comment = Comment::withTrashed()->find($comment_id);
-        if ($comment->trashed()) {
-            $comment->restore();
-        } else {
-            $comment->delete();
-        }
+        $comment->delete();
+        return redirect()->route('read-post', $post_id);
+    }
+
+    public function restoreComment($post_id, $comment_id)
+    {
+        $comment = Comment::withTrashed()->find($comment_id);
+        $comment->restore();
         return redirect()->route('read-post', $post_id);
     }
 }

@@ -34,9 +34,9 @@
             @endif
         @endauth
         @if($comment->author->id == Auth::user()->id and !$comment->trashed())
-            <a href="{{ route('change-comment-visibility', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-danger">x</a>
+            <a href="{{ route('delete-comment', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-danger">x</a>
         @elseif($comment->author->id == Auth::id() and $comment->trashed())
-            <a href="{{ route('change-comment-visibility', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-success">Restore</a>
+            <a href="{{ route('restore-comment', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-success">Restore</a>
         @else
 
         @endif

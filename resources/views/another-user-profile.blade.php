@@ -13,13 +13,17 @@
             </div>
             <div class="text-end">
                 @auth
-                    @if ($isSubscribed)
-                        <a href="{{ route('change-subscribe-visibility', $user->id) }}" class="link-danger">
-                            Unsubscribe
+                    @if (Auth::user()->subscriptions->where('id', $user->id)->isEmpty())
+                        <a href="{{ route('create-subscription', $user->id) }}" class="link-primary">
+                            Subscribe
+                        </a>
+                    @elseif(Auth::user()->subscriptions->find($user->id)->subscriptions->deleted_at != null)
+                        <a href="{{ route('restore-subscription', $user->id) }}" class="link-primary">
+                            Subscribe
                         </a>
                     @else
-                        <a href="{{ route('change-subscribe-visibility', $user->id) }}" class="link-primary">
-                            Subscribe
+                        <a href="{{ route('delete-subscription', $user->id) }}" class="link-danger">
+                            Unsubscribe
                         </a>
                     @endif
                 @endauth

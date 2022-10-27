@@ -28,15 +28,20 @@ Route::controller(MainController::class)->group(function () {
 
 Route::controller(ReadPostController::class)->group(function () {
     Route::get('/read-post/{post_id}', 'readPost')->name('read-post');
-    Route::get('/change-like-status/{post_id}', 'changeLikeVisibility')->name('change-like-visibility');
-    Route::get('/read-post/{post_id}/change-comment-status/{comment_id}', 'changeCommentVisibility')->name('change-comment-visibility');
+    Route::get('/create-like/{post_id}', 'createLike')->name('create-like');
+    Route::get('/delete-like/{post_id}', 'deleteLike')->name('delete-like');
+    Route::get('/restore-like/{post_id}', 'restoreLike')->name('restore-like');
+    Route::get('/read-post/{post_id}/delete-comment/{comment_id}', 'deleteComment')->name('delete-comment');
+    Route::get('/read-post/{post_id}/restore-comment/{comment_id}', 'restoreComment')->name('restore-comment');
     Route::post('/read-post/comment', 'createComment')->name('create-comment');
 });
 
 Route::controller(UserProfileController::class)->group(function () {
     Route::get('/my-profile', 'showUserProfile')->name('user-profile');
     Route::get('/profile/{user_id}', 'showAnotherUserProfile')->name('another-user-profile');
-    Route::get('/profile/subscribe-status/{author_id}', 'changeSubscribeVisibility')->name('change-subscribe-visibility');
+    Route::get('/profile/{author_id}/subscribtion/create', 'createSubscription')->name('create-subscription');
+    Route::get('/profile/{author_id}/subscribtion/delete', 'deleteSubscription')->name('delete-subscription');
+    Route::get('/profile/{author_id}/subscribtion/restore', 'restoreSubscription')->name('restore-subscription');
 });
 
 Route::controller(ContentRatingController::class)->group(function () {
@@ -49,8 +54,8 @@ Route::controller(PostRedactorController::class)->group(function () {
     Route::get('/edit-post/{post_id}', 'showUpdatePostForm')->name('edit-post');
     Route::get('/edit-post/remove-tag/{post_id}/{tag_id}', 'removeTag')->name('remove-tag');
     Route::get('/api', 'sendTagsJson')->name('send-tags-json');
-    Route::get('/change-post-status/{post_id}', 'changePostVisibility')->name('change-post-visibility');
-    // Route::get('/delete-post/{post_id}', 'deletePost')->name('post-delete');
+    Route::get('/delete-post/{post_id}', 'deletePost')->name('delete-post');
+    Route::get('/restore-post/{post_id}', 'restorePost')->name('restore-post');
     Route::post('/create-post', 'createPost')->name('create-post');
     Route::post('/edit-post/update', 'updatePost')->name('update-post');
     Route::post('/edit-post/add-tag', 'addTag')->name('add-tag');

@@ -3,10 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -81,5 +82,32 @@ class User extends Authenticatable
     public function userComments()
     {
         return $this->hasMany(Comment::class, 'user_id', 'id');
+    }
+
+    public function scopeUnreadedPosts($query)
+    {
+        $query->selectRaw('
+        users.id,
+        users.name,
+        (select count(*) from posts where posts.author_id in
+            (select s2.author_id from subscriptions s2 where s2.sub_id = users.id and s2.deleted_at is null)
+            and posts.deleted_at is null) -
+        count(distinct views.post_id) as unreaded_posts
+        ')
+            ->join('subscriptions as s', function ($join) {
+                $join->on('users.id', '=', 's.sub_id')
+                    ->where('s.deleted_at', null);
+            })
+            ->join('users as u2', 's.author_id', '=', 'u2.id')
+            ->join('posts', function ($join) {
+                $join->on('u2.id', '=', 'posts.author_id')
+                    ->where('posts.deleted_at', null);
+            })
+            ->join('views', function ($join) {
+                $join->on('posts.id', '=', 'views.post_id')
+                    ->on('users.id', '=', 'views.user_id');
+            })
+            ->groupBy('users.id', 'users.name')
+            ->where('users.id', '=', Auth::id());
     }
 }

@@ -37,15 +37,21 @@
                 @if(Auth::check() and (Auth::id() == $post->author->id))
                     <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('edit-post', $post->id) }}">Edit this post</a></p>
                 @else
-                    @if(Auth::user()->likedPosts->where('id', $post->id)->isEmpty() or $post->likes->find(Auth::id())->likes->deleted_at != null)
-                    <p class="fs-5 col-4 text-end text-primary">
-                        <a href="{{ route('change-like-visibility', ['post_id' => $post->id]) }}">
-                        Like this post
-                        </a>
-                    </p>
+                    @if(Auth::user()->likedPosts->where('id', $post->id)->isEmpty())
+                        <p class="fs-5 col-4 text-end text-primary">
+                            <a href="{{ route('create-like', ['post_id' => $post->id]) }}">
+                            Like this post
+                            </a>
+                        </p>
+                    @elseif($post->likes->find(Auth::id())->likes->deleted_at != null)
+                        <p class="fs-5 col-4 text-end text-primary">
+                            <a href="{{ route('restore-like', ['post_id' => $post->id]) }}">
+                            Like this post
+                            </a>
+                        </p>
                     @else
                         <p class="fs-5 col-4 text-end text-danger">
-                            <a href="{{ route('change-like-visibility', ['post_id' => $post->id]) }}">Remove your like
+                            <a href="{{ route('delete-like', ['post_id' => $post->id]) }}">Remove your like
                             </a>
                         </p>
                     @endif

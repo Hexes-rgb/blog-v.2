@@ -39,8 +39,7 @@
                         @if (!$post->trashed())
                             <a href="#" class="link-danger ms-3 delete-post">Delete this post</a>
                         @else
-                            <a href="{{ route('change-post-visibility', ['post_id' => $post->id]) }}" class="link-success ms-3">Restore deleted post</a>
-                            {{-- <a href="{{ route('post-delete', ['post_id' => $post->id]) }}" class="link-danger ms-3">Delete permanently</a> --}}
+                            <a href="{{ route('restore-post', ['post_id' => $post->id]) }}" class="link-success ms-3">Restore deleted post</a>
                         @endif
                     </form>
                     @include('layouts/inc/delete-post-modal')
