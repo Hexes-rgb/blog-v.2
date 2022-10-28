@@ -12,6 +12,6 @@ class PostsTagsController extends Controller
         $post = Post::where('id', '=', $post_id)->first();
         $tag = Tag::where('id', '=', $tag_id)->first();
         $post->tags()->detach($tag);
-        return redirect()->route('edit-post', $post->id);
+        return redirect()->route('post.edit', $post->id);
     }
 }

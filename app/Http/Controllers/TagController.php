@@ -38,8 +38,8 @@ class TagController extends Controller
             $tag = Tag::where('name', 'ILIKE', $tagName)->first();
             $post->tags()->attach($tag);
         } else {
-            return redirect()->route('edit-post', $post->id);
+            return redirect()->route('post.edit', $post->id);
         }
-        return redirect()->route('edit-post', $post->id);
+        return redirect()->route('post.edit', $post->id);
     }
 }

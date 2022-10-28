@@ -19,20 +19,20 @@ class CommentController extends Controller
             'comment_id' => $comment_id,
             'text' => $text,
         ]);
-        return redirect()->route('read-post', $post_id);
+        return redirect()->route('post.show', $post_id);
     }
 
     public function destroy($post_id, $comment_id)
     {
         $comment = Comment::withTrashed()->find($comment_id);
         $comment->delete();
-        return redirect()->route('read-post', $post_id);
+        return redirect()->route('post.show', $post_id);
     }
 
     public function restore($post_id, $comment_id)
     {
         $comment = Comment::withTrashed()->find($comment_id);
         $comment->restore();
-        return redirect()->route('read-post', $post_id);
+        return redirect()->route('post.show', $post_id);
     }
 }
