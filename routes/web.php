@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContentRatingController;
+use App\Http\Controllers\LikeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PostRedactorController;
-use App\Http\Controllers\ReadPostController;
+use App\Http\Controllers\PostsTagsController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserProfileController;
 
 /*
@@ -18,47 +22,58 @@ use App\Http\Controllers\UserProfileController;
 |
 */
 
-// RESTFul
+// RESTFul переписать по табличке
 
 Route::controller(MainController::class)->group(function () {
-    Route::get('/', 'index')->name('main-index');
-    Route::get('/search/tag/{tag_id}', 'filterByTag')->name('main-filter-by-tag');
-    Route::post('/search/result', 'search')->name('main-search');
+    Route::get('/', 'index')->name('main.index');
+    Route::get('/tag/{tag_id}', 'filter')->name('main.filter');
+    Route::post('/search', 'search')->name('main.search');
 });
 
-Route::controller(ReadPostController::class)->group(function () {
-    Route::get('/read-post/{post_id}', 'readPost')->name('read-post');
-    Route::get('/create-like/{post_id}', 'createLike')->name('create-like');
-    Route::get('/delete-like/{post_id}', 'deleteLike')->name('delete-like');
-    Route::get('/restore-like/{post_id}', 'restoreLike')->name('restore-like');
-    Route::get('/read-post/{post_id}/delete-comment/{comment_id}', 'deleteComment')->name('delete-comment');
-    Route::get('/read-post/{post_id}/restore-comment/{comment_id}', 'restoreComment')->name('restore-comment');
-    Route::post('/read-post/comment', 'createComment')->name('create-comment');
+Route::controller(LikeController::class)->group(function () {
+    Route::get('/post/{post_id}/like/create', 'create')->name('like.create');
+    Route::delete('/post/like/delete', 'destroy')->name('like.delete');
+    Route::get('/post/{post_id}/like/restore', 'restore')->name('like.restore');
+});
+
+Route::controller(CommentController::class)->group(function () {
+    Route::get('/post/{post_id}/read/comment/{comment_id}/delete', 'destroy')->name('comment.delete');
+    Route::get('/post/{post_id}/read/comment/{comment_id}/restore', 'restore')->name('comment.restore');
+    Route::post('/comment', 'store')->name('comment.store');
+});
+
+Route::controller(SubscriptionController::class)->group(function () {
+    Route::get('/profile/{author_id}/subscribtion/create', 'create')->name('subscription.create');
+    Route::get('/profile/{author_id}/subscribtion/delete', 'destroy')->name('subscription.delete');
+    Route::get('/profile/{author_id}/subscribtion/restore', 'restore')->name('subscription.restore');
+});
+
+Route::controller(TagController::class)->group(function () {
+    Route::post('/tag', 'store')->name('tag.store');
 });
 
 Route::controller(UserProfileController::class)->group(function () {
-    Route::get('/my-profile', 'showUserProfile')->name('user-profile');
-    Route::get('/profile/{user_id}', 'showAnotherUserProfile')->name('another-user-profile');
-    Route::get('/profile/{author_id}/subscribtion/create', 'createSubscription')->name('create-subscription');
-    Route::get('/profile/{author_id}/subscribtion/delete', 'deleteSubscription')->name('delete-subscription');
-    Route::get('/profile/{author_id}/subscribtion/restore', 'restoreSubscription')->name('restore-subscription');
+    Route::get('/profile/{user_id}', 'index')->name('user.index');
 });
 
 Route::controller(ContentRatingController::class)->group(function () {
-    Route::get('/trends', 'trends')->name('trends');
-    Route::post('/trends/search/result', 'search')->name('trends-search');
+    Route::get('/trends', 'index')->name('trends.index');
+    Route::post('/trends/search', 'search')->name('trends.search');
+});
+
+Route::controller(PostsTagsController::class)->group(function () {
+    Route::get('/post/{post_id}/tag/{tag_id}/delete', 'destroy')->name('posts_tags.delete');
 });
 
 Route::controller(PostRedactorController::class)->group(function () {
-    Route::get('/create-post', 'showCreatePostForm')->name('show-create-post');
-    Route::get('/edit-post/{post_id}', 'showUpdatePostForm')->name('edit-post');
-    Route::get('/edit-post/remove-tag/{post_id}/{tag_id}', 'removeTag')->name('remove-tag');
+    Route::get('/post/{post_id}', 'show')->name('post.show');
+    Route::get('/post/{post_id}/edit', 'edit')->name('post.edit');
+    Route::get('/post/create', 'create')->name('post.create');
+    Route::get('/post/{post_id}/delete', 'destroy')->name('post.delete');
+    Route::get('/post/{post_id}/restore', 'restore')->name('post.restore');
+    Route::post('/post', 'store')->name('post.store');
+    Route::post('/post/{post_id}', 'update')->name('post.update');
     Route::get('/api', 'sendTagsJson')->name('send-tags-json');
-    Route::get('/delete-post/{post_id}', 'deletePost')->name('delete-post');
-    Route::get('/restore-post/{post_id}', 'restorePost')->name('restore-post');
-    Route::post('/create-post', 'createPost')->name('create-post');
-    Route::post('/edit-post/update', 'updatePost')->name('update-post');
-    Route::post('/edit-post/add-tag', 'addTag')->name('add-tag');
 });
 
 require __DIR__ . '/auth.php';
@@ -100,10 +115,10 @@ require __DIR__ . '/auth.php';
 //     ->name('show-create-post');
 
 // Route::get('/my-profile', [App\Http\Controllers\UserProfileController::class, 'showUserProfile'])
-//     ->name('user-profile');
+//     ->name('user.index');
 
 // Route::get('/profile/{user_id}', [App\Http\Controllers\UserProfileController::class, 'showAnotherUserProfile'])
-//     ->name('another-user-profile');
+//     ->name('user.index');
 
 // Route::post('/create-post', [App\Http\Controllers\PostRedactorController::class, 'createPost'])
 //     ->name('create-post');

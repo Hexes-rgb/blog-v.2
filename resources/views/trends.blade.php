@@ -7,7 +7,7 @@
 @section('content')
 <section class="w-100 p-4 pb-1 d-flex justify-content-center align-items-center flex-column">
     <div>
-        <form action="{{ route('trends-search') }}" method="POST">
+        <form action="{{ route('trends.search') }}" method="POST">
             @csrf
             @include('layouts.inc.search-form')
         </form>
@@ -61,13 +61,13 @@
                             </div>
                             <strong class="d-inline-block mb-2 text-end col">
                                 @foreach ($post->tags as $tag)
-                                    <a href="{{ route('main-filter-by-tag', $tag->id) }}"
+                                    <a href="{{ route('main.filter', $tag->id) }}"
                                         class="text-decoration-none link-primary">{{ $tag->name }}</a>
                                 @endforeach
                             </strong>
                         </div>
                         <h3 class="text-3xl">
-                            <a href="{{ route('read-post', $post->id) }}">
+                            <a href="{{ route('post.show', $post->id) }}">
                                 {{ Str::limit($post->title, 100) }}
                             </a>
                         </h3>
@@ -77,15 +77,9 @@
                         <p class="text-base">
                             {{Str::limit($post->content, 100)}}
                         </p>
-                        @if(!empty(Auth::id()) and (Auth::id() == $post->author->id))
-                            <div class="mb-1 text-muted">
-                                Author: <a href="{{ route('user-profile') }}" >{{ $post->author->name }}</a>
-                            </div>
-                        @else
-                            <div class="mb-1 text-muted">
-                                Author: <a href="{{ route('another-user-profile', $post->author->id) }}" >{{ $post->author->name }}</a>
-                            </div>
-                        @endif
+                        <div class="mb-1 text-muted">
+                            Author: <a href="{{ route('user.index', $post->author->id) }}" >{{ $post->author->name }}</a>
+                        </div>
                         <div class="mb-1 text-muted">
                             Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y H:m:s')  }}
                         </div>

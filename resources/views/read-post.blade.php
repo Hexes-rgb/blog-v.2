@@ -20,39 +20,39 @@
     </div>
     <div class="text-start mt-3">
         <div class="text-start mt-3 text-muted">
-            @if(Auth::check() and (Auth::id() == $post->author->id))
-                <p class="fs-5">
-                    Author: <a href="{{ route('user-profile') }}" >
-                        {{ $post->author->name }}
-                    </a>
-                </p>
-            @else
-                <p class="fs-5">Author: <a href="{{ route('another-user-profile', $post->author->id) }}" >{{ $post->author->name }}</a></p>
-            @endif
+            <p class="fs-5">
+                Author: <a href="{{ route('user.index', $post->author->id) }}" >
+                    {{ $post->author->name }}
+                </a>
+            </p>
         </div>
         <div class="text-start mt-3 row">
             <p class="fs-5 col-4 text-muted">Created at: {{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y H:i:s') }}</p>
             <p class="fs-5 col-4 text-muted">Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y H:i:s') }}</p>
             @auth
                 @if(Auth::check() and (Auth::id() == $post->author->id))
-                    <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('edit-post', $post->id) }}">Edit this post</a></p>
+                    <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('post.edit', $post->id) }}">Edit this post</a></p>
                 @else
                     @if(Auth::user()->likedPosts->where('id', $post->id)->isEmpty())
                         <p class="fs-5 col-4 text-end text-primary">
-                            <a href="{{ route('create-like', ['post_id' => $post->id]) }}">
+                            <a href="{{ route('like.create', ['post_id' => $post->id]) }}">
                             Like this post
                             </a>
                         </p>
                     @elseif($post->likes->find(Auth::id())->likes->deleted_at != null)
                         <p class="fs-5 col-4 text-end text-primary">
-                            <a href="{{ route('restore-like', ['post_id' => $post->id]) }}">
+                            <a href="{{ route('like.restore', ['post_id' => $post->id]) }}">
                             Like this post
                             </a>
                         </p>
                     @else
-                        <p class="fs-5 col-4 text-end text-danger">
-                            <a href="{{ route('delete-like', ['post_id' => $post->id]) }}">Remove your like
-                            </a>
+                        <p class="fs-5 col-4">
+                            <form method="POST" action="{{ route('like.delete') }}" class="text-end">
+                                @csrf
+                                @method('delete')
+                                <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                            </form>
                         </p>
                     @endif
                 @endif

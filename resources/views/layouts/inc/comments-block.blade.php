@@ -1,7 +1,7 @@
 <div class="p-4 mt-4 container border rounded overflow-hidden shadow-sm">
     <p class="fs-2">({{ count($post->postComments) }}) Commentaries:</p>
     @auth
-        <form method="POST" action="{{ route('create-comment') }}">
+        <form method="POST" action="{{ route('comment.store') }}">
             @csrf
             <input type="text" name="text" autocomplete="off">
             <button type="submit" class="btn btn-outline-primary">Send</button>

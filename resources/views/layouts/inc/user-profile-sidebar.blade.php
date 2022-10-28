@@ -4,7 +4,7 @@
         @if ($user->id == Auth::id())
             @foreach ($user->posts()->withTrashed()->get() as $post)
                 @if($post->trashed())
-                    <a href="{{ route('read-post', $post->id) }}" class="list-group-item py-3 lh-sm link-danger" aria-current="true">
+                    <a href="{{ route('post.edit', $post->id) }}" class="list-group-item py-3 lh-sm link-danger" aria-current="true">
                         <div class="d-flex w-100 align-items-center justify-content-between">
                             <strong class="mb-1">{{ $post->title }}</strong>
                             <small>{{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y') }}</small>
@@ -12,7 +12,7 @@
                         <div class="col-10 mb-1 small">{{ Str::limit($post->content, 40) }}</div>
                     </a>
                 @else
-                    <a href="{{ route('read-post', $post->id) }}" class="list-group-item py-3 lh-sm" aria-current="true">
+                    <a href="{{ route('post.edit', $post->id) }}" class="list-group-item py-3 lh-sm" aria-current="true">
                         <div class="d-flex w-100 align-items-center justify-content-between">
                             <strong class="mb-1">{{ $post->title }}</strong>
                             <small>{{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y') }}</small>
@@ -23,7 +23,7 @@
             @endforeach
         @else
             @foreach ($user->posts as $post)
-                <a href="{{ route('read-post', $post->id) }}" class="list-group-item py-3 lh-sm" aria-current="true">
+                <a href="{{ route('post.show', $post->id) }}" class="list-group-item py-3 lh-sm" aria-current="true">
                     <div class="d-flex w-100 align-items-center justify-content-between">
                         <strong class="mb-1">{{ $post->title }}</strong>
                         <small>{{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y') }}</small>

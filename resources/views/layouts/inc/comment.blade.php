@@ -32,18 +32,16 @@
             @if(!$comment->trashed())
                 <button onclick="showCommentForm({{ $comment->id }})" type="button" class="link-primary text-sm" >Reply</button>
             @endif
-        @endauth
-        @if($comment->author->id == Auth::user()->id and !$comment->trashed())
-            <a href="{{ route('delete-comment', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-danger">x</a>
-        @elseif($comment->author->id == Auth::id() and $comment->trashed())
-            <a href="{{ route('restore-comment', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-success">Restore</a>
-        @else
 
+        @if($comment->author->id == Auth::id() and !$comment->trashed())
+            <a href="{{ route('comment.delete', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-danger">x</a>
+        @elseif($comment->author->id == Auth::id() and $comment->trashed())
+            <a href="{{ route('comment.restore', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-success">Restore</a>
+        @else
         @endif
         <br>
-        @auth
             <div class="ms-2 d-none" id="comment-form{{ $comment->id }}">
-                <form method="POST" action="{{ route('create-comment') }}">
+                <form method="POST" action="{{ route('comment.store') }}">
                     @csrf
                     <input class="" type="text" name="text" autocomplete="off">
                     <button type="submit" class="btn btn-outline-primary">Send</button>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Tag;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -19,16 +20,36 @@ class PostRedactorController extends Controller
         return response()->json($data);
     }
 
-    public function showCreatePostForm()
+    public function show($post_id)
     {
-        return view('create-post', ['tags' => Tag::popular()->get()]);
+        $post = Post::find($post_id);
+        if (Auth::user()) {
+            if ($post->views->where('id', Auth::id())->isEmpty()) {
+                $post->views()->attach(Auth::user());
+            }
+            if (Carbon::now()->diffInHours($post->views->where('id', Auth::id())->last()->views->created_at) > 3) {
+                $post->views()->attach(Auth::user());
+            }
+        }
+        return view('read-post', [
+            'post' => $post,
+            'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get()
+        ]);
     }
-    public function showUpdatePostForm($post_id)
+
+    public function edit($post_id)
     {
+
         $post = Post::where('id', '=', $post_id)->withTrashed()->get()->first();
-        return view('edit-post', ['tags' => Tag::popular()->get(), 'post' => $post]);
+        return view('post-redactor', ['tags' => Tag::popular()->get(), 'post' => $post]);
     }
-    public function updatePost(Request $request)
+
+    public function create()
+    {
+        return view('post-redactor', ['tags' => Tag::popular()->get()]);
+    }
+
+    public function update(Request $request)
     {
         $post_id = $request->input('post_id');
         $image = $request->file('image');
@@ -46,48 +67,10 @@ class PostRedactorController extends Controller
                 'content' => $request->input('content'),
             ]);
         }
-        return redirect()->route('edit-post', $post_id);
+        return redirect()->route('post.edit', $post_id);
     }
-    public function addTag(Request $request)
-    {
-        $post_id = $request->input('post_id') ?? false;
-        if (!$post_id) {
-            $title = $request->input('title') ?? 'Example title';
-            $content = $request->input('content') ?? 'Example content';
-            $post = Post::create([
-                'author_id' => Auth::user()->id,
-                'title' => $title,
-                'content' => $content,
-            ]);
-        } else {
-            $post = Post::find($post_id);
-        }
-        $tagName = $request->input('myTags');
-        if (Tag::where('name', 'ILIKE', $tagName)->get()->isNotEmpty()) {
-            $tagName = Tag::where('name', 'ILIKE', $tagName)->first()->name;
-        }
-        if (Tag::where('name', 'ILIKE', $tagName)->get()->isEmpty()) {
-            Tag::create([
-                'name' => $tagName,
-            ]);
-            $tag = Tag::where('name', 'ILIKE', $tagName)->first();
-            $post->tags()->attach($tag);
-        } elseif ($post->tags->where('name', $tagName)->isEmpty()) {
-            $tag = Tag::where('name', 'ILIKE', $tagName)->first();
-            $post->tags()->attach($tag);
-        } else {
-            return redirect()->route('edit-post', $post->id);
-        }
-        return redirect()->route('edit-post', $post->id);
-    }
-    public function removeTag($post_id, $tag_id)
-    {
-        $post = Post::where('id', '=', $post_id)->first();
-        $tag = Tag::where('id', '=', $tag_id)->first();
-        $post->tags()->detach($tag);
-        return redirect()->route('edit-post', $post->id);
-    }
-    public function createPost(Request $request)
+
+    public function store(Request $request)
     {
         $image = $request->file('image');
         if (!empty($image)) {
@@ -105,20 +88,20 @@ class PostRedactorController extends Controller
                 'content' => $request->input('content'),
             ]);
         }
-        return redirect()->route('edit-post', $post->id);
+        return redirect()->route('post.edit', $post->id);
     }
 
-    public function deletePost($post_id)
+    public function destroy($post_id)
     {
         $post = Post::find($post_id);
         $post->delete();
-        return redirect()->route('edit-post', $post->id);
+        return redirect()->route('post.edit', $post->id);
     }
 
-    public function restorePost($post_id)
+    public function restore($post_id)
     {
         $post = Post::withTrashed()->find($post_id);
         $post->restore();
-        return redirect()->route('edit-post', $post->id);
+        return redirect()->route('post.edit', $post->id);
     }
 }

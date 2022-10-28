@@ -1,5 +1,5 @@
 <div class="dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px">
-    <form method="POST" class="p-2 mb-2 bg-light border-bottom" action="{{ route('add-tag') }}" enctype="multipart/form-data">
+    <form method="POST" class="p-2 mb-2 bg-light border-bottom" action="{{ route('tag.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="autocomplete">
             <div class="row">
@@ -26,7 +26,7 @@
                     <div class="dropdown-item d-flex align-items-center gap-2 py-2">
                         <span class="d-inline-block bg-primary rounded-circle p-1"></span>
                         {{ $tag->name }}
-                        <a href="{{ route('remove-tag', ['post_id' => $post->id, 'tag_id' => $tag->id]) }}">
+                        <a href="{{ route('post_tag.delete', ['post_id' => $post->id, 'tag_id' => $tag->id]) }}">
                             <span class="d-inline-block text-3xl text-danger p-1">-</span>
                         </a>
                     </div>
@@ -63,7 +63,7 @@
     // })
     async function getTags() {
         try {
-            let url = 'http://127.0.0.1:8000/api';
+            let url = '/api';
             let response = await fetch(url);
             let json = await response.json();
             return JSON.parse(json);

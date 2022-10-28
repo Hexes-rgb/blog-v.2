@@ -7,7 +7,7 @@
 @section('content')
     <section class="w-100 p-4 pb-1 d-flex justify-content-center align-items-center flex-column">
         <div>
-            <form action="{{ route('main-search') }}" method="POST">
+            <form action="{{ route('main.search') }}" method="POST">
                 @csrf
                 @include('layouts.inc.search-form')
             </form>
@@ -74,13 +74,13 @@
                             <p class="text-base">{{Str::limit($post->content, 100)}}</p>
                             @if(!empty(Auth::user()->id) and (Auth::user()->id == $post->author->id))
                                 <div class="mb-1 text-muted">
-                                    Author: <a href="{{ route('user-profile') }}" >
+                                    Author: <a href="{{ route('user.index') }}" >
                                         {{ $post->author->name }}
                                     </a>
                                 </div>
                             @else
                                 <div class="mb-1 text-muted">
-                                    Author: <a href="{{ route('another-user-profile', $post->author->id) }}">
+                                    Author: <a href="{{ route('user.index', $post->author->id) }}">
                                         {{ $post->author->name }}
                                     </a>
                                 </div>

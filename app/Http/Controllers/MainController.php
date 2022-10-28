@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Models\Post;
-use App\Libraries\Services;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -25,13 +24,13 @@ class MainController extends Controller
         } else {
             $posts = Post::all();
         }
-        if ($sort == 'DESC') {
-            return view('main', ['posts' => $posts->sortByDesc('created_at'), 'tags' => Tag::popular()->get(), 'text' => $text]);
-        } else {
-            return view('main', ['posts' => $posts->sortBy('created_at'), 'tags' => Tag::popular()->get(), 'text' => $text]);
-        }
+        return view('main', [
+            'posts' => $posts->sortByDesc('created_at'),
+            'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get(),
+            'text' => $text
+        ]);
     }
-    public function filterByTag($tag_id)
+    public function filter($tag_id)
     {
         if ($tag_id) {
             $posts = Post::whereHas('tags', function (Builder $query) use ($tag_id) {
@@ -40,12 +39,19 @@ class MainController extends Controller
         } else {
             $posts = Post::all();
         }
-        $text = Tag::where('id', $tag_id)->first()->name;
-        return view('main', ['tags' => Services::popularTags(), 'posts' => $posts->sortByDesc('created_at'), 'text' => $text]);
+        $text = Tag::find($tag_id)->name;
+        return view('main', [
+            'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get(),
+            'posts' => $posts->sortByDesc('created_at'),
+            'text' => $text
+        ]);
     }
     public function index()
     {
         $posts = Post::all();
-        return view('main', ['posts' => $posts->sortByDesc('created_at'), 'tags' => Tag::popular()->get()]);
+        return view('main', [
+            'posts' => $posts->sortByDesc('created_at'),
+            'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get()
+        ]);
     }
 }

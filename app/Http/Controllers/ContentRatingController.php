@@ -9,9 +9,12 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ContentRatingController extends Controller
 {
-    public function trends()
+    public function index()
     {
-        return view('trends', ['posts' => Post::trends()->get(), 'tags' => Tag::popular()->get()]);
+        return view('trends', [
+            'posts' => Post::trends()->orderBy('rating', 'desc')->get(),
+            'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get()
+        ]);
     }
 
     public function search(Request $request)
@@ -29,14 +32,17 @@ class ContentRatingController extends Controller
                             $query->where('name', 'ILIKE', '%' . $text . '%');
                         });
                 })
+                ->orderBy('created_at', $sort)
                 ->get();
         } else {
-            $posts = Post::trends()->get();
+            $posts = Post::trends()
+                ->orderBy('created_at', $sort)
+                ->get();
         }
-        if ($sort == 'DESC') {
-            return view('trends', ['posts' => $posts, 'tags' => Tag::popular()->get(), 'text' => $text]);
-        } else {
-            return view('trends', ['posts' => $posts, 'tags' => Tag::popular()->get(), 'text' => $text]);
-        }
+        return view('trends', [
+            'posts' => $posts,
+            'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get(),
+            'text' => $text
+        ]);
     }
 }

@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tag extends Model
 {
     use HasFactory;
+
     protected $fillable = ['name'];
 
     public function posts()
@@ -29,9 +31,6 @@ class Tag extends Model
                 $join->on('post_tag.post_id', '=', 'posts.id')
                     ->where('posts.deleted_at', null);
             })
-            ->groupBy('tags.id', 'tags.name')
-            ->orderBy('posts_count', 'desc')
-            ->orderBy('tags.name', 'asc')
-            ->limit(5);
+            ->groupBy('tags.id', 'tags.name');
     }
 }

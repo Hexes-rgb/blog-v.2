@@ -52,8 +52,6 @@ class Post extends Model
         (select count(*) from likes where likes.post_id = posts.id and likes.deleted_at is null and localtimestamp - likes.created_at < interval \'3 days\') +
         (select count(*) from views where views.post_id = posts.id and localtimestamp - views.created_at < interval \'3 days\') +
         (select count(distinct comments.user_id) from comments where comments.post_id = posts.id and comments.deleted_at is null and localtimestamp - comments.created_at < interval \'3 days\') as rating
-    ')
-            ->orderBy('rating', 'desc')
-            ->get();
+    ');
     }
 }

@@ -6,7 +6,7 @@
             <div class="flex col-3-md">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center text-3xl">
-                    <a href="{{ route('main-index') }}">
+                    <a href="{{ route('main.index') }}">
                        Blog
                     </a>
                 </div>
@@ -15,7 +15,7 @@
                     {{-- <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link> --}}
-                    <a class="link link-primary" href="{{ route('trends') }}">
+                    <a class="link link-primary" href="{{ route('trends.index') }}">
                         Trends
                     </a>
                     {{-- <a class="ms-2 link link-primary" href="{{ route('trends') }}">
@@ -26,7 +26,7 @@
             <div class="col-md-6 my-2">
                 <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                   @foreach($tags as $tag)
-                  <li><a href="{{ route('main-filter-by-tag', $tag->id ) }}"  class="nav-link px-2 link-primary">{{ $tag->name }}</a></li>
+                  <li><a href="{{ route('main.filter', $tag->id ) }}"  class="nav-link px-2 link-primary">{{ $tag->name }}</a></li>
                   @endforeach
                 </ul>
             </div>
@@ -56,10 +56,10 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
-                        <x-dropdown-link :href="route('show-create-post')">
+                        <x-dropdown-link :href="route('post.create')">
                             {{ __('Create new post') }}
                         </x-dropdown-link>
-                        <x-dropdown-link :href="route('user-profile')">
+                        <x-dropdown-link :href="route('user.index', Auth::id())">
                             {{ __('My Profile') }}
                         </x-dropdown-link>
                     </x-slot>

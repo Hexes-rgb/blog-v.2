@@ -8,7 +8,7 @@
             @foreach ($author->posts as $post)
                 @if($post->views->where('id', Auth::id())->isEmpty())
                     <div class="list-group-item py-3 lh-sm">
-                        <a href="{{ route('read-post', $post->id) }}" aria-current="true">
+                        <a href="{{ route('post.show', $post->id) }}" aria-current="true">
                             <div class="d-flex w-100 align-items-center justify-content-between">
                                 <strong class="mb-1">{{ $post->title }}</strong>
                                 <small>{{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y H:i:s') }}</small>
@@ -18,7 +18,7 @@
                             </div>
                         </a>
                             <div class="col-10 mb-1 small">
-                                <a href="{{ route('another-user-profile', $author->id) }}" class="link link-primary">
+                                <a href="{{ route('user.index', $author->id) }}" class="link link-primary">
                                     {{ $post->author->name }}
                                 </a>
                             </div>
