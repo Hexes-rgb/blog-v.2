@@ -64,13 +64,13 @@ Route::controller(PostsTagsController::class)->group(function () {
 });
 
 Route::controller(PostRedactorController::class)->group(function () {
-    Route::get('/post/{post_id}', 'show')->name('post.show');
     Route::get('/post/{post_id}/edit', 'edit')->name('post.edit');
     Route::get('/post/create', 'create')->name('post.create');
+    Route::get('/post/{post_id}', 'show')->name('post.show');
     Route::delete('/post/{post_id}/delete', 'destroy')->name('post.delete');
     Route::post('/post/{post_id}/restore', 'restore')->name('post.restore');
     Route::post('/post', 'store')->name('post.store');
-    Route::post('/post/{post_id}', 'update')->name('post.update');
+    Route::patch('/post/{post_id}', 'update')->name('post.update');
 });
 
 Route::get('/api', [PostRedactorController::class, 'sendTagsJson'])->name('send-tags-json');

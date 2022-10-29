@@ -13,6 +13,7 @@
                     @if(isset($post))
                         <form action="{{ route('post.update', $post->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            @method('patch')
                             <div class="row g-3">
                                 <div class="col-sm-6">
                                     <label for="title" class="form-label">Title</label>
