@@ -37,12 +37,18 @@
                             @endif
                             <hr class="my-4">
                             <button class="btn btn-outline-primary" type="submit">Update post</button>
-                            @if (!$post->trashed())
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#delete-modal" class="link-danger ms-3 delete-post">Delete this post</button>
-                            @else
-                                <a href="{{ route('post.restore', ['post_id' => $post->id]) }}" class="link-success ms-3">Restore deleted post</a>
-                            @endif
                         </form>
+                            @if (!$post->trashed())
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#delete-modal" class="mt-2 btn btn-outline-danger delete-post">Delete this post</button>
+                            @else
+                                <form action="{{ route('post.restore', ['post_id' => $post->id]) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                    <button type="submit" class="mt-2 btn btn-outline-success">
+                                        Restore post
+                                    </button>
+                                </form>
+                            @endif
                         @include('layouts/inc/delete-post-modal')
                     @else
                         <form action="{{ route('post.create') }}" method="POST" enctype="multipart/form-data">

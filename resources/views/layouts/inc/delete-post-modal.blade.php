@@ -9,9 +9,14 @@
             Are you sure you want to delete this post?
         </div>
         <div class="modal-footer row">
-                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end delete-post">
-                    <a href="{{ route('post.delete', ['post_id' => $post->id]) }}">Yes, delete</a>
+            <form action="{{ route('post.delete', ['post_id' => $post->id]) }}" method="POST">
+                @csrf
+                @method('delete')
+                <input type="hidden" name="post_id" value="{{ $post->id }}">
+                <button type="submit" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end delete-post">
+                    Yes, delete
                 </button>
+            </form>
           <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 cancel-delete-post" data-bs-dismiss="modal">No, thanks</button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white border rounded overflow-hidden shadow-sm col" style="width: 380px;">
-    <span class="fs-5 fw-semibold text-center">All my posts ({{ count($user->posts) }})</span>
+    <span class="fs-5 fw-semibold text-center">All posts ({{ count($user->posts) }})</span>
     <div class="list-group list-group-flush border-bottom scrollarea">
         @if ($user->id == Auth::id())
             @foreach ($user->posts()->withTrashed()->get() as $post)

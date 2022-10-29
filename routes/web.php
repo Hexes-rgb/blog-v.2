@@ -22,8 +22,6 @@ use App\Http\Controllers\UserProfileController;
 |
 */
 
-// RESTFul переписать по табличке
-
 Route::controller(MainController::class)->group(function () {
     Route::get('/', 'index')->name('main.index');
     Route::get('/tag/{tag_id}', 'filter')->name('main.filter');
@@ -31,21 +29,21 @@ Route::controller(MainController::class)->group(function () {
 });
 
 Route::controller(LikeController::class)->group(function () {
-    Route::get('/post/{post_id}/like/create', 'create')->name('like.create');
-    Route::delete('/post/like/delete', 'destroy')->name('like.delete');
-    Route::get('/post/{post_id}/like/restore', 'restore')->name('like.restore');
+    Route::post('/post/{post_id}/like/store', 'store')->name('like.store');
+    Route::delete('/post{post_id}/like/delete', 'destroy')->name('like.delete');
+    Route::post('/post/{post_id}/like/restore', 'restore')->name('like.restore');
 });
 
 Route::controller(CommentController::class)->group(function () {
-    Route::get('/post/{post_id}/read/comment/{comment_id}/delete', 'destroy')->name('comment.delete');
-    Route::get('/post/{post_id}/read/comment/{comment_id}/restore', 'restore')->name('comment.restore');
+    Route::delete('/post/{post_id}/read/comment/{comment_id}/delete', 'destroy')->name('comment.delete');
+    Route::post('/post/{post_id}/read/comment/{comment_id}/restore', 'restore')->name('comment.restore');
     Route::post('/comment', 'store')->name('comment.store');
 });
 
 Route::controller(SubscriptionController::class)->group(function () {
-    Route::get('/profile/{author_id}/subscribtion/create', 'create')->name('subscription.create');
-    Route::get('/profile/{author_id}/subscribtion/delete', 'destroy')->name('subscription.delete');
-    Route::get('/profile/{author_id}/subscribtion/restore', 'restore')->name('subscription.restore');
+    Route::post('/profile/{author_id}/subscribtion/store', 'store')->name('subscription.store');
+    Route::delete('/profile/{author_id}/subscribtion/delete', 'destroy')->name('subscription.delete');
+    Route::post('/profile/{author_id}/subscribtion/restore', 'restore')->name('subscription.restore');
 });
 
 Route::controller(TagController::class)->group(function () {
@@ -62,19 +60,20 @@ Route::controller(ContentRatingController::class)->group(function () {
 });
 
 Route::controller(PostsTagsController::class)->group(function () {
-    Route::get('/post/{post_id}/tag/{tag_id}/delete', 'destroy')->name('posts_tags.delete');
+    Route::delete('/post/{post_id}/tag/{tag_id}/delete', 'destroy')->name('post_tag.delete');
 });
 
 Route::controller(PostRedactorController::class)->group(function () {
     Route::get('/post/{post_id}', 'show')->name('post.show');
     Route::get('/post/{post_id}/edit', 'edit')->name('post.edit');
     Route::get('/post/create', 'create')->name('post.create');
-    Route::get('/post/{post_id}/delete', 'destroy')->name('post.delete');
-    Route::get('/post/{post_id}/restore', 'restore')->name('post.restore');
+    Route::delete('/post/{post_id}/delete', 'destroy')->name('post.delete');
+    Route::post('/post/{post_id}/restore', 'restore')->name('post.restore');
     Route::post('/post', 'store')->name('post.store');
     Route::post('/post/{post_id}', 'update')->name('post.update');
-    Route::get('/api', 'sendTagsJson')->name('send-tags-json');
 });
+
+Route::get('/api', [PostRedactorController::class, 'sendTagsJson'])->name('send-tags-json');
 
 require __DIR__ . '/auth.php';
 

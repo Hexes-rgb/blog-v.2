@@ -15,17 +15,24 @@
                     </div>
                     <div class="text-end">
                         @if (Auth::user()->subscriptions->where('id', $user->id)->isEmpty())
-                            <a href="{{ route('subscription.create', $user->id) }}" class="link-primary">
-                                Subscribe
-                            </a>
+                        <form method="POST" action="{{ route('subscription.store', $user->id) }}" class="text-end">
+                            @csrf
+                            <input type="hidden" name="author_id" value="{{ $user->id }}">
+                            <button type="submit" class="btn btn-outline-primary">Subscribe</button>
+                        </form>
                         @elseif(Auth::user()->subscriptions->find($user->id)->subscriptions->deleted_at != null)
-                            <a href="{{ route('subscription.restore', $user->id) }}" class="link-primary">
-                                Subscribe
-                            </a>
+                        <form method="POST" action="{{ route('subscription.restore', $user->id) }}" class="text-end">
+                            @csrf
+                            <input type="hidden" name="author_id" value="{{ $user->id}}">
+                            <button type="submit" class="btn btn-outline-success">Restore subscription</button>
+                        </form>
                         @else
-                            <a href="{{ route('subscription.delete', $user->id) }}" class="link-danger">
-                                Unsubscribe
-                            </a>
+                        <form method="POST" action="{{ route('subscription.delete', $user->id) }}" class="text-end">
+                            @csrf
+                            @method('delete')
+                            <input type="hidden" name="author_id" value="{{ $user->id}}">
+                            <button type="submit" class="btn btn-outline-danger">Delete subscription</button>
+                        </form>
                         @endif
                     </div>
                 </div>

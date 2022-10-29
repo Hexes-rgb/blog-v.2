@@ -22,15 +22,19 @@ class CommentController extends Controller
         return redirect()->route('post.show', $post_id);
     }
 
-    public function destroy($post_id, $comment_id)
+    public function destroy(Request $request)
     {
+        $comment_id = $request->input('comment_id');
+        $post_id = $request->input('post_id');
         $comment = Comment::withTrashed()->find($comment_id);
         $comment->delete();
         return redirect()->route('post.show', $post_id);
     }
 
-    public function restore($post_id, $comment_id)
+    public function restore(Request $request)
     {
+        $comment_id = $request->input('comment_id');
+        $post_id = $request->input('post_id');
         $comment = Comment::withTrashed()->find($comment_id);
         $comment->restore();
         return redirect()->route('post.show', $post_id);

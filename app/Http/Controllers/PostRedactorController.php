@@ -91,15 +91,17 @@ class PostRedactorController extends Controller
         return redirect()->route('post.edit', $post->id);
     }
 
-    public function destroy($post_id)
+    public function destroy(Request $request)
     {
+        $post_id = $request->input('post_id');
         $post = Post::find($post_id);
         $post->delete();
         return redirect()->route('post.edit', $post->id);
     }
 
-    public function restore($post_id)
+    public function restore(Request $request)
     {
+        $post_id = $request->input('post_id');
         $post = Post::withTrashed()->find($post_id);
         $post->restore();
         return redirect()->route('post.edit', $post->id);

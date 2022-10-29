@@ -26,9 +26,16 @@
                     <div class="dropdown-item d-flex align-items-center gap-2 py-2">
                         <span class="d-inline-block bg-primary rounded-circle p-1"></span>
                         {{ $tag->name }}
-                        <a href="{{ route('post_tag.delete', ['post_id' => $post->id, 'tag_id' => $tag->id]) }}">
+                        {{-- <a href="{{ route('post_tag.delete', ['post_id' => $post->id, 'tag_id' => $tag->id]) }}">
                             <span class="d-inline-block text-3xl text-danger p-1">-</span>
-                        </a>
+                        </a> --}}
+                        <form action="{{ route('post_tag.delete', ['post_id' => $post->id, 'tag_id' => $tag->id]) }}" method="POST">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="ms-1 btn-link link-danger">Remove Tag</button>
+                            <input type="hidden" name="post_id" value="{{ $post->id }}">
+                            <input type="hidden" name="tag_id" value="{{ $tag->id }}">
+                        </form>
                     </div>
                 </li>
                 <input type="hidden" class="tag" name="tag_id" value="{{ $tag->id }}">

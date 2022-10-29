@@ -34,9 +34,22 @@
             @endif
 
         @if($comment->author->id == Auth::id() and !$comment->trashed())
-            <a href="{{ route('comment.delete', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-danger">x</a>
+            {{-- <a href="{{ route('comment.delete', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-danger">x</a> --}}
+            <form method="POST" action="{{ route('comment.delete', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}">
+                @csrf
+                @method('delete')
+                <button type="submit" class="btn btn-outline-danger">Delete comment</button>
+                <input type="hidden" name="post_id" value="{{ $comment->post->id }}">
+                <input type="hidden" name="comment_id" value="{{ $comment->id }}">
+            </form>
         @elseif($comment->author->id == Auth::id() and $comment->trashed())
-            <a href="{{ route('comment.restore', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-success">Restore</a>
+            {{-- <a href="{{ route('comment.restore', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}" class="link-success">Restore</a> --}}
+            <form method="POST" action="{{ route('comment.restore', ['comment_id' => $comment->id, 'post_id' => $comment->post->id]) }}">
+                @csrf
+                <button type="submit" class="btn btn-outline-success">Restore comment</button>
+                <input type="hidden" name="post_id" value="{{ $comment->post->id }}">
+                <input type="hidden" name="comment_id" value="{{ $comment->id }}">
+            </form>
         @else
         @endif
         <br>

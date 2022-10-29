@@ -35,23 +35,27 @@
                 @else
                     @if(Auth::user()->likedPosts->where('id', $post->id)->isEmpty())
                         <p class="fs-5 col-4 text-end text-primary">
-                            <a href="{{ route('like.create', ['post_id' => $post->id]) }}">
-                            Like this post
-                            </a>
+                            <form method="POST" action="{{ route('like.store', $post->id) }}" class="text-end">
+                                @csrf
+                                <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                <button type="submit" class="btn btn-outline-primary">Like</button>
+                            </form>
                         </p>
                     @elseif($post->likes->find(Auth::id())->likes->deleted_at != null)
                         <p class="fs-5 col-4 text-end text-primary">
-                            <a href="{{ route('like.restore', ['post_id' => $post->id]) }}">
-                            Like this post
-                            </a>
+                            <form method="POST" action="{{ route('like.restore', $post->id) }}" class="text-end">
+                                @csrf
+                                <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                <button type="submit" class="btn btn-outline-success">Restore like</button>
+                            </form>
                         </p>
                     @else
                         <p class="fs-5 col-4">
-                            <form method="POST" action="{{ route('like.delete') }}" class="text-end">
+                            <form method="POST" action="{{ route('like.delete', $post->id) }}" class="text-end">
                                 @csrf
                                 @method('delete')
                                 <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                <button type="submit" class="btn btn-outline-danger">Delete like</button>
                             </form>
                         </p>
                     @endif

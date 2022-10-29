@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
-    public function create($post_id)
+    public function store(Request $request)
     {
+        $post_id = $request->input('post_id');
         $post = Post::withTrashed()->find($post_id);
         $post->likes()->attach(Auth::user());
         return redirect()->route('post.show', $post_id);
