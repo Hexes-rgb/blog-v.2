@@ -6,7 +6,7 @@ use App\Models\Tag;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
-class PostsTagsController extends Controller
+class PostTagController extends Controller
 {
     public function destroy(Request $request)
     {

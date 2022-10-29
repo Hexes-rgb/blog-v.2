@@ -1,5 +1,5 @@
 <div class="dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px">
-    <form method="POST" class="p-2 mb-2 bg-light border-bottom" action="{{ route('tag.store') }}" enctype="multipart/form-data">
+    <form method="POST" class="p-2 mb-2 bg-light border-bottom" action="{{ route('tag.store') }}" enctype="multipart/form-data" id="add-tag-form">
         @csrf
         <div class="autocomplete">
             <div class="row">
@@ -8,7 +8,7 @@
                         placeholder="Type to find..." required>
                 </div>
                 <div class="col-3">
-                    <button type="submit" class="btn btn-outline-primary">Add tag</button>
+                    <button id="createTag" onclick="sendData()" type="submit" class="btn btn-outline-primary">Add tag</button>
                 </div>
             </div>
         </div>
@@ -45,6 +45,34 @@
 </div>
 
 <script>
+    $(document).ready(function(){
+
+        var form = '#add-tag-form';
+
+        $(form).on('submit', function(event){
+            event.preventDefault();
+
+            var url = $(this).attr('action');
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: new FormData(this),
+                dataType: 'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(response)
+                {
+                    $(form).trigger("reset");
+                    alert(response.success)
+                },
+                error: function(response) {
+                }
+            });
+        });
+
+    });
     title.onblur = function() {
         hiddenTitle.value = title.value
     }

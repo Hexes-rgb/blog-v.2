@@ -5,11 +5,11 @@ use App\Http\Controllers\ContentRatingController;
 use App\Http\Controllers\LikeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
-use App\Http\Controllers\PostRedactorController;
-use App\Http\Controllers\PostsTagsController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostTagController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TagController;
-use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,9 +35,9 @@ Route::controller(LikeController::class)->group(function () {
 });
 
 Route::controller(CommentController::class)->group(function () {
+    Route::post('/comment', 'store')->name('comment.store');
     Route::delete('/post/{post_id}/read/comment/{comment_id}/delete', 'destroy')->name('comment.delete');
     Route::post('/post/{post_id}/read/comment/{comment_id}/restore', 'restore')->name('comment.restore');
-    Route::post('/comment', 'store')->name('comment.store');
 });
 
 Route::controller(SubscriptionController::class)->group(function () {
@@ -50,7 +50,7 @@ Route::controller(TagController::class)->group(function () {
     Route::post('/tag', 'store')->name('tag.store');
 });
 
-Route::controller(UserProfileController::class)->group(function () {
+Route::controller(UserController::class)->group(function () {
     Route::get('/profile/{user_id}', 'index')->name('user.index');
 });
 
@@ -59,21 +59,21 @@ Route::controller(ContentRatingController::class)->group(function () {
     Route::post('/trends/search', 'search')->name('trends.search');
 });
 
-Route::controller(PostsTagsController::class)->group(function () {
+Route::controller(PostTagController::class)->group(function () {
     Route::delete('/post/{post_id}/tag/{tag_id}/delete', 'destroy')->name('post_tag.delete');
 });
 
-Route::controller(PostRedactorController::class)->group(function () {
-    Route::get('/post/{post_id}/edit', 'edit')->name('post.edit');
+Route::controller(PostController::class)->group(function () {
     Route::get('/post/create', 'create')->name('post.create');
+    Route::post('/post', 'store')->name('post.store');
     Route::get('/post/{post_id}', 'show')->name('post.show');
+    Route::get('/post/{post_id}/edit', 'edit')->name('post.edit');
+    Route::patch('/post/{post_id}', 'update')->name('post.update');
     Route::delete('/post/{post_id}/delete', 'destroy')->name('post.delete');
     Route::post('/post/{post_id}/restore', 'restore')->name('post.restore');
-    Route::post('/post', 'store')->name('post.store');
-    Route::patch('/post/{post_id}', 'update')->name('post.update');
 });
 
-Route::get('/api', [PostRedactorController::class, 'sendTagsJson'])->name('send-tags-json');
+Route::get('/api', [PostController::class, 'sendTagsJson'])->name('send-tags-json');
 
 require __DIR__ . '/auth.php';
 

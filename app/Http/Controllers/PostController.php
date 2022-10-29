@@ -8,7 +8,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PostRedactorController extends Controller
+class PostController extends Controller
 {
     public function sendTagsJson()
     {
@@ -75,7 +75,7 @@ class PostRedactorController extends Controller
         $image = $request->file('image');
         if (!empty($image)) {
             $post = Post::create([
-                'author_id' => Auth::user()->id,
+                'author_id' => Auth::id(),
                 'title' => $request->input('title'),
                 'content' => $request->input('content'),
                 'image' => date('YmdHi') . $image->getClientOriginalName(),
@@ -83,7 +83,7 @@ class PostRedactorController extends Controller
             $image->move(public_path('public/postsImages'), date('YmdHi') . $image->getClientOriginalName());
         } else {
             $post = Post::create([
-                'author_id' => Auth::user()->id,
+                'author_id' => Auth::id(),
                 'title' => $request->input('title'),
                 'content' => $request->input('content'),
             ]);
