@@ -11,7 +11,6 @@ class UserController extends Controller
     public function index($user_id)
     {
         $user = User::find($user_id);
-        dd($user->subscriptions);
         if (Auth::id() != null and Auth::id() == $user->id) {
             if ($user->subscriptions->isNotEmpty()) {
                 return view('user-profile', [

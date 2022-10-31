@@ -77,7 +77,16 @@
                     @endif
                 </div>
                 <div id='tags' class="col-md-5 col-lg-4">
-                    @include('layouts/inc/tags-dropdown-menu')
+                    <h3>Create tag</h3>
+                    <div class="mt-1">
+                        @include('layouts/inc/create-tag-form')
+                    </div>
+                    @if(isset($post))
+                        <h3 class="mt-3">Add tag to your post</h3>
+                        <div class="mt-1">
+                        @include('layouts.inc.add-tag-form')
+                        </div>
+                    @endif
                 </div>
             </div>
         </main>

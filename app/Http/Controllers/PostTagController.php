@@ -17,4 +17,22 @@ class PostTagController extends Controller
         $post->tags()->detach($tag);
         return redirect()->route('post.edit', $post->id);
     }
+
+    public function store(Request $request)
+    {
+        $post_id = $request->input('post_id');
+        $post = Post::find($post_id);
+        $tagName = $request->input('myTags');
+        $tag = Tag::where('name', 'ILIKE', $tagName)->first();
+        if (empty($tag)) {
+            return response()->json(['success' => 'This tag does not exist']);
+        } else {
+            if ($post->tags->where('name', $tag->name)->isEmpty()) {
+                $post->tags()->attach($tag);
+                return response()->json(['success' => 'Tag added successfully']);
+            } else {
+                return response()->json(['success' => 'This tag has already been added']);
+            }
+        }
+    }
 }

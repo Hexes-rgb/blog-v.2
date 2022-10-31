@@ -61,6 +61,7 @@ Route::controller(ContentRatingController::class)->group(function () {
 
 Route::controller(PostTagController::class)->group(function () {
     Route::delete('/post/{post_id}/tag/{tag_id}/delete', 'destroy')->name('post_tag.delete');
+    Route::post('/post/{post_id}/tag', 'store')->name('post_tag.store');
 });
 
 Route::controller(PostController::class)->group(function () {

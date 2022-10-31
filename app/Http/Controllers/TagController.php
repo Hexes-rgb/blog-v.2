@@ -45,10 +45,10 @@ class TagController extends Controller
 
     public function store(Request $request)
     {
-        $name = $request->input('myTags');
+        $name = $request->input('tag');
         Tag::create([
             'name' => $name,
         ]);
-        return response()->json(['success' => 'Data is successfully added']);
+        return response()->json(['success' => 'New tag is successfully created.']);
     }
 }
