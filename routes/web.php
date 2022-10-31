@@ -29,20 +29,20 @@ Route::controller(MainController::class)->group(function () {
 });
 
 Route::controller(LikeController::class)->group(function () {
-    Route::post('/post/{post_id}/like/store', 'store')->name('like.store');
-    Route::delete('/post{post_id}/like/delete', 'destroy')->name('like.delete');
+    Route::post('/post/{post_id}/like', 'store')->name('like.store');
+    Route::delete('/post{post_id}/like', 'destroy')->name('like.delete');
     Route::post('/post/{post_id}/like/restore', 'restore')->name('like.restore');
 });
 
 Route::controller(CommentController::class)->group(function () {
     Route::post('/comment', 'store')->name('comment.store');
-    Route::delete('/post/{post_id}/read/comment/{comment_id}/delete', 'destroy')->name('comment.delete');
+    Route::delete('/post/{post_id}/read/comment/{comment_id}', 'destroy')->name('comment.delete');
     Route::post('/post/{post_id}/read/comment/{comment_id}/restore', 'restore')->name('comment.restore');
 });
 
 Route::controller(SubscriptionController::class)->group(function () {
-    Route::post('/profile/{author_id}/subscribtion/store', 'store')->name('subscription.store');
-    Route::delete('/profile/{author_id}/subscribtion/delete', 'destroy')->name('subscription.delete');
+    Route::post('/profile/{author_id}/subscribtion', 'store')->name('subscription.store');
+    Route::delete('/profile/{author_id}/subscribtion', 'destroy')->name('subscription.delete');
     Route::post('/profile/{author_id}/subscribtion/restore', 'restore')->name('subscription.restore');
 });
 
@@ -70,7 +70,7 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/post/{post_id}', 'show')->name('post.show');
     Route::get('/post/{post_id}/edit', 'edit')->name('post.edit');
     Route::patch('/post/{post_id}', 'update')->name('post.update');
-    Route::delete('/post/{post_id}/delete', 'destroy')->name('post.delete');
+    Route::delete('/post/{post_id}', 'destroy')->name('post.delete');
     Route::post('/post/{post_id}/restore', 'restore')->name('post.restore');
 });
 

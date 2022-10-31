@@ -20,7 +20,9 @@ class MainController extends Controller
                 })
                 ->orWhereHas('author', function (Builder $query) use ($text) {
                     $query->where('name', 'ILIKE', '%' . $text . '%');
-                })->get();
+                })
+                ->orderBy('created_at', $sort)
+                ->get();
         } else {
             $posts = Post::all();
         }

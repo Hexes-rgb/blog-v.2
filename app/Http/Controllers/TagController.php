@@ -45,10 +45,15 @@ class TagController extends Controller
 
     public function store(Request $request)
     {
-        $name = $request->input('tag');
-        Tag::create([
-            'name' => $name,
-        ]);
-        return response()->json(['success' => 'New tag is successfully created.']);
+        $tagName = $request->input('tag');
+        $tag = Tag::where('name', 'ILIKE', $tagName)->first();
+        if (empty($tag)) {
+            Tag::create([
+                'name' => $tagName,
+            ]);
+            return response()->json(['success' => 'New tag is successfully created.']);
+        } else {
+            return response()->json(['success' => 'This tag has already exist']);
+        }
     }
 }

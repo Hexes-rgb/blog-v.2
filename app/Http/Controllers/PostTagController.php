@@ -25,13 +25,19 @@ class PostTagController extends Controller
         $tagName = $request->input('myTags');
         $tag = Tag::where('name', 'ILIKE', $tagName)->first();
         if (empty($tag)) {
-            return response()->json(['success' => 'This tag does not exist']);
+            // return response()->json(['success' => 'This tag does not exist']);
+            return response()->json(['data' => view('layouts.inc.add-tag-form', ['post' => $post])->render()]);
         } else {
             if ($post->tags->where('name', $tag->name)->isEmpty()) {
                 $post->tags()->attach($tag);
-                return response()->json(['success' => 'Tag added successfully']);
+                $post = Post::find($post_id);
+                return response()->json(['data' => view('layouts.inc.add-tag-form', ['post' => $post])->render()]);
+                // $tagsList = view('layouts.inc.add-tag-form', ['post' => $post])->render();
+                // return view('layouts.inc.add-tag-form', ['post' => $post])->render();
+                // return $tagsList;
             } else {
-                return response()->json(['success' => 'This tag has already been added']);
+                // return response()->json(['success' => 'This tag has already been added']);
+                return response()->json(['data' => view('layouts.inc.add-tag-form', ['post' => $post])->render()]);
             }
         }
     }
