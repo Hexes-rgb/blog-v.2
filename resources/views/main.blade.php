@@ -15,7 +15,7 @@
     </section>
     <div class="container d-flex justify-content-center">
         <div class="pagination-links">
-            {{ $posts->links() }}
+            {{ $posts->appends(request()->only('text', 'sort'))->links() }}
         </div>
     </div>
     <div class="container">

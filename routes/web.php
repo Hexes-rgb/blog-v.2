@@ -25,7 +25,7 @@ use App\Http\Controllers\UserController;
 Route::controller(MainController::class)->group(function () {
     Route::get('/', 'index')->name('main.index');
     Route::get('/tag/{tag_id}', 'filter')->name('main.filter');
-    Route::post('/search', 'search')->name('main.search');
+    Route::any('/search', 'search')->name('main.search');
 });
 
 Route::controller(LikeController::class)->group(function () {
