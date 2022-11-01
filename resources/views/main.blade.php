@@ -13,7 +13,11 @@
             </form>
         </div>
     </section>
-
+    <div class="container d-flex justify-content-center">
+        <div class="pagination-links">
+            {{ $posts->links() }}
+        </div>
+    </div>
     <div class="container">
         <div class="row mb-2">
             @foreach ($posts as $post)

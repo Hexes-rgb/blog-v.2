@@ -56,7 +56,8 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'subscriptions', 'author_id', 'sub_id')
             ->withPivot('deleted_at')
             ->as('subscribers')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->where('deleted_at', null);
     }
 
     public function subscriptions()
@@ -64,7 +65,8 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'subscriptions', 'sub_id', 'author_id')
             ->withPivot('deleted_at')
             ->as('subscriptions')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->where('deleted_at', null);
     }
 
     public function posts()

@@ -27,6 +27,7 @@ class PostController extends Controller
             if ($post->views->where('id', Auth::id())->isEmpty()) {
                 $post->views()->attach(Auth::user());
             }
+            $post = Post::find($post_id);
             if (Carbon::now()->diffInHours($post->views->where('id', Auth::id())->last()->views->created_at) > 3) {
                 $post->views()->attach(Auth::user());
             }

@@ -22,12 +22,12 @@ class MainController extends Controller
                     $query->where('name', 'ILIKE', '%' . $text . '%');
                 })
                 ->orderBy('created_at', $sort)
-                ->get();
+                ->paginate(4);
         } else {
-            $posts = Post::all();
+            $posts = Post::orderBy('created_at', $sort)->paginate(4);
         }
         return view('main', [
-            'posts' => $posts->sortByDesc('created_at'),
+            'posts' => $posts,
             'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get(),
             'text' => $text
         ]);
@@ -37,9 +37,9 @@ class MainController extends Controller
         if ($tag_id) {
             $posts = Post::whereHas('tags', function (Builder $query) use ($tag_id) {
                 $query->where('id', $tag_id);
-            })->get();
+            })->paginate(4);
         } else {
-            $posts = Post::all();
+            $posts = Post::paginate(4);
         }
         $text = Tag::find($tag_id)->name;
         return view('main', [
@@ -50,9 +50,15 @@ class MainController extends Controller
     }
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::orderBy('created_at', 'desc')->paginate(4);
+        // $posts->withPath('/');
+        // foreach ($posts as $post) {
+        //     $post->setRatingAttribute(rand(0, 10));
+        // }
+        // dd($posts->sortByDesc('rating'));
+        // dd($posts->first()->rating);
         return view('main', [
-            'posts' => $posts->sortByDesc('created_at'),
+            'posts' => $posts,
             'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get()
         ]);
     }
