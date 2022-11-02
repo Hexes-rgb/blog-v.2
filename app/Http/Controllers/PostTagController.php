@@ -12,14 +12,17 @@ class PostTagController extends Controller
     {
         $tag_id = $request->input('tag_id');
         $post_id = $request->input('post_id');
-        $post = Post::where('id', '=', $post_id)->first();
-        $tag = Tag::where('id', '=', $tag_id)->first();
+        $post = Post::find($post_id);
+        $tag = Tag::find($tag_id);
         $post->tags()->detach($tag);
-        return redirect()->route('post.edit', $post->id);
+        $post = Post::find($post_id);
+        // return redirect()->route('post.edit', $post->id);
+        return response()->json(['data' => view('layouts.inc.add-tag-form', ['post' => $post])->render()]);
     }
 
     public function store(Request $request)
     {
+        // dd($request);
         $post_id = $request->input('post_id');
         $post = Post::find($post_id);
         $tagName = $request->input('myTags');

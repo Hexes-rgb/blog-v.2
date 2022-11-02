@@ -1,4 +1,4 @@
-<div class="dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px">
+<div class="dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px" id="postTags">
     <form method="POST" class="p-2 mb-2 bg-light border-bottom" action="{{ route('post_tag.store', $post->id) }}" enctype="multipart/form-data" id="add-tag-form">
         @csrf
         <div class="autocomplete">
@@ -17,6 +17,7 @@
         <input type="hidden" id="hiddenContent" name="content" value=""> --}}
     </form>
     <ul id="tags-dropdown-menu" class="list-unstyled mb-0 d-block">
+        @if($post->tags->isNotEmpty())
             @foreach ($post->tags as $tag)
                 <li>
                     <div class="dropdown-item d-flex align-items-center gap-2 py-2">
@@ -25,27 +26,32 @@
                         {{-- <a href="{{ route('post_tag.delete', ['post_id' => $post->id, 'tag_id' => $tag->id]) }}">
                             <span class="d-inline-block text-3xl text-danger p-1">-</span>
                         </a> --}}
-                        <form action="{{ route('post_tag.delete', ['post_id' => $post->id, 'tag_id' => $tag->id]) }}" method="POST">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="ms-1 btn-link link-danger">Remove Tag</button>
-                            <input type="hidden" name="post_id" value="{{ $post->id }}">
-                            <input type="hidden" name="tag_id" value="{{ $tag->id }}">
-                        </form>
+                        {{-- <form id="remove-tag-form" action="{{ route('post_tag.delete', ['post_id' => $post->id, 'tag_id' => $tag->id]) }}" method="POST"> --}}
+                            {{-- @csrf --}}
+                            {{-- @method('delete') --}}
+                            <button type="button" tag-id="{{ $tag->id }}" post-id="{{ $post->id }}" class="removeTag ms-1 btn-link link-danger">Remove Tag</button>
+                            {{-- <input type="hidden" name="post_id" value="{{ $post->id }}">
+                            <input type="hidden" name="tag_id" value="{{ $tag->id }}"> --}}
+                        {{-- </form> --}}
                     </div>
                 </li>
-                <input type="hidden" class="tag" name="tag_id" value="{{ $tag->id }}">
             @endforeach
+        @endif
     </ul>
 </div>
-
+{{-- <div class="alert alert-warning alert-dismissible" role="alert">
+    <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div> --}}
 <script>
 
     $(document).ready(function(){
 
-        var form = '#add-tag-form';
+        var addTagForm = '#add-tag-form'
 
-        $(form).on('submit', function(event){
+        $(addTagForm).on('submit', function(event){
             event.preventDefault();
 
             var url = $(this).attr('action');
@@ -60,20 +66,41 @@
                 processData: false,
                 success:function(response)
                 {
-                    // $(form).trigger("reset");
-                    // alert(response.success)
-                    $('#postTags').empty();
-
-                    $('#postTags').append(response.data);
-                    // $('#postTags').load(html)
-
+                    $('#postTags').replaceWith(response.data);
+                    $(addTagForm).trigger("reset");
                 },
                 error: function(response) {
-                    $(form).trigger("reset");
-                    $('#postTags').empty();
-                    $('#postTags').append(data);
+                    $('#postTags').replaceWith(response.data);
+                    $(addTagForm).trigger("reset");
+                }
+            });
+        });
 
-                    // alert(response.error)
+        $('.removeTag').on('click', function(event){
+            let post_id = $(this).attr('post-id')
+            let tag_id = $(this).attr('tag-id')
+            let url = "{{ route('post_tag.delete', ['post_id' => $post->id, 'tag_id' => $tag->id ?? null]) }}"
+            let data = {
+                "post_id": post_id,
+                "tag_id": tag_id
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: url,
+                method: 'delete',
+                data,
+                success:function(response)
+                {
+                    $('#postTags').replaceWith(response.data);
+                },
+                error: function(response) {
+                    $('#postTags').replaceWith(response.data);
                 }
             });
         });
@@ -102,7 +129,7 @@
             let json = await response.json();
             return JSON.parse(json);
         } catch {
-            alert('Ошибка, данные не получены.')
+            alert('Data load failed')
         }
     }
 

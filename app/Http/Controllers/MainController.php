@@ -51,7 +51,6 @@ class MainController extends Controller
     public function index()
     {
         $posts = Post::orderBy('created_at', 'desc')->paginate(4);
-        // $posts->withPath('/');
         // foreach ($posts as $post) {
         //     $post->setRatingAttribute(rand(0, 10));
         // }

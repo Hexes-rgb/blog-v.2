@@ -84,9 +84,7 @@
                     @if(isset($post))
                         <h3 class="mt-3">Add tag to your post</h3>
                         <div class="mt-1">
-                        <div id="postTags">
-                            @include('layouts.inc.add-tag-form')
-                        </div>
+                         @include('layouts.inc.add-tag-form')
                         </div>
                     @endif
                 </div>

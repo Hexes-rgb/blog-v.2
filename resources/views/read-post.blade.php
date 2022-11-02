@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div class="p-4 mt-4 container border rounded overflow-hidden shadow-sm">
+<div class="p-4 mt-4 container border rounded overflow-hidden shadow-sm readPost">
     <div class="text-center">
         <h3 class="fs-1">{{ $post->title }}</h3>
     </div>
@@ -29,40 +29,9 @@
         <div class="text-start mt-3 row">
             <p class="fs-5 col-4 text-muted">Created at: {{ \Carbon\Carbon::parse($post->created_at)->format('d.m.Y H:i:s') }}</p>
             <p class="fs-5 col-4 text-muted">Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y H:i:s') }}</p>
-            @auth
-                @if(Auth::check() and (Auth::id() == $post->author->id))
-                    <p class="fs-5 col-4 text-end text-primary"><a href="{{ route('post.edit', $post->id) }}">Edit this post</a></p>
-                @else
-                    @if(Auth::user()->likedPosts->where('id', $post->id)->isEmpty())
-                        <p class="fs-5 col-4 text-end text-primary">
-                            <form method="POST" action="{{ route('like.store', $post->id) }}" class="text-end">
-                                @csrf
-                                <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                <button type="submit" class="btn btn-outline-primary">Like</button>
-                            </form>
-                        </p>
-                    @elseif($post->likes->find(Auth::id())->likes->deleted_at != null)
-                        <p class="fs-5 col-4 text-end text-primary">
-                            <form method="POST" action="{{ route('like.restore', $post->id) }}" class="text-end">
-                                @csrf
-                                <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                <button type="submit" class="btn btn-outline-success">Restore like</button>
-                            </form>
-                        </p>
-                    @else
-                        <p class="fs-5 col-4">
-                            <form method="POST" action="{{ route('like.delete', $post->id) }}" class="text-end">
-                                @csrf
-                                @method('delete')
-                                <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                <button type="submit" class="btn btn-outline-danger">Delete like</button>
-                            </form>
-                        </p>
-                    @endif
-                @endif
-            @endauth
+            @include('layouts.inc.post-like-actions')
         </div>
-        <div class="post-info-block justify-content-end">
+        {{-- <div class="post-info-block justify-content-end">
             <div class="view-block-read">
                 <div>
                     <img id="view-icon" src="{{ url('public/appImages/view.png') }}">
@@ -81,11 +50,12 @@
                     }])->likes_count }}
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>
 
 @include('layouts.inc.comments-block')
+
 
 @endsection
 
