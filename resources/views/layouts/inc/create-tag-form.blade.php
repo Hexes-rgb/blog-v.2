@@ -4,8 +4,11 @@
         <div class="autocomplete">
             <div class="row">
                 <div class="col-8">
-                    <input type="text" autocomplete="off" class="form-control tags" name="tag"
+                    <input type="text" autocomplete="off" class="form-control @error('tag') is-invalid @enderror tags" name="tag"
                         placeholder="Type to find..." required>
+                        @error('tag')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                 </div>
                 <div class="col-4">
                     <button type="submit" class="btn btn-outline-primary">Create tag</button>

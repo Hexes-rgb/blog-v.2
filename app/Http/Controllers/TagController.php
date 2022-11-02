@@ -45,7 +45,10 @@ class TagController extends Controller
 
     public function store(Request $request)
     {
-        $tagName = $request->input('tag');
+        $validated = $request->validate([
+            'tag' => 'required|max:100|min:2',
+        ]);
+        $tagName = $validated['tag'];
         $tag = Tag::where('name', 'ILIKE', $tagName)->first();
         if (empty($tag)) {
             Tag::create([

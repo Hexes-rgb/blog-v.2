@@ -56,8 +56,11 @@
             <div class="ms-2 d-none" id="comment-form{{ $comment->id }}">
                 <form method="POST" action="{{ route('comment.store') }}">
                     @csrf
-                    <input class="" type="text" name="text" autocomplete="off">
+                    <input class="form-control @error('text') is-invalid @enderror" type="text" name="text" autocomplete="off">
                     <button type="submit" class="btn btn-outline-primary">Send</button>
+                    @error('text')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                     <input type="hidden" name="post_id" value="{{ $comment->post->id }}">
                     <input type="hidden" name="comment_id" value="{{ $comment->id }}">
                 </form>

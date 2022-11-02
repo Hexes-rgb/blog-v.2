@@ -52,23 +52,29 @@
                             @endif
                         @include('layouts/inc/delete-post-modal')
                     @else
-                        <form action="{{ route('post.create') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row g-3">
                                 <div class="col-sm-6">
                                     <label for="title" class="form-label">Title</label>
-                                    <input type="text" class="form-control" value="Example title" name="title" id="title">
-                                    <div class="invalid-feedback">
+                                    <input type="text" class="form-control @error('title') is-invalid @enderror" value="Example title" name="title" id="title">
+                                    @error('title')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                    {{-- <div class="invalid-feedback">
                                         Valid title is required.
-                                    </div>
+                                    </div> --}}
                                 </div>
-                            <div class="col-12">
-                                    <label for="content" class="form-label">Text</label>
-                                    <textarea class="form-control" name="content" id="content" placeholder="Type your text here..." required="">Example content</textarea>
-                                    <div class="invalid-feedback">
-                                        Please enter your text here.
-                                    </div>
-                            </div>
+                                <div class="col-12">
+                                        <label for="content" class="form-label">Text</label>
+                                        <textarea class="form-control @error('content') is-invalid @enderror" name="content" id="content" placeholder="Type your text here...">Example content</textarea>
+                                        @error('content')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                        {{-- <div class="invalid-feedback">
+                                            Please enter your text here.
+                                        </div> --}}
+                                </div>
                             </div>
                             @include('layouts/inc/add-image')
                             <hr class="my-4">

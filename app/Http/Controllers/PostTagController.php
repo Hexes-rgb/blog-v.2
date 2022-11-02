@@ -25,7 +25,10 @@ class PostTagController extends Controller
         // dd($request);
         $post_id = $request->input('post_id');
         $post = Post::find($post_id);
-        $tagName = $request->input('myTags');
+        $validated = $request->validate([
+            'tag' => 'required|max:100|min:2',
+        ]);
+        $tagName = $validated['tag'];
         $tag = Tag::where('name', 'ILIKE', $tagName)->first();
         if (empty($tag)) {
             // return response()->json(['success' => 'This tag does not exist']);

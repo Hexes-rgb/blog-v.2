@@ -10,9 +10,12 @@ class CommentController extends Controller
 {
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'text' => 'required|max:255|min:2',
+        ]);
         $post_id = $request->input('post_id');
         $comment_id = $request->input('comment_id') ?? null;
-        $text = $request->input('text');
+        $text = $validated['text'];
         Comment::create([
             'post_id' => $post_id,
             'user_id' => Auth::user()->id,

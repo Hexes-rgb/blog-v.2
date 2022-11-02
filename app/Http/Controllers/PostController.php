@@ -27,7 +27,7 @@ class PostController extends Controller
             if ($post->views->where('id', Auth::id())->isEmpty()) {
                 $post = $post->views()->attach(Auth::user());
             }
-            if (Carbon::now()->diffInHours($post->views->where('id', Auth::id())->first()->views->created_at) > 3) {
+            if (Carbon::now()->diffInHours($post->views->where('id', Auth::id())->last()->views->created_at) > 3) {
                 $post->views()->attach(Auth::user());
             }
         }
@@ -72,12 +72,16 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'title' => 'required|max:255|min:2',
+            'content' => 'required|min:10'
+        ]);
         $image = $request->file('image');
         if (!empty($image)) {
             $post = Post::create([
                 'author_id' => Auth::id(),
-                'title' => $request->input('title'),
-                'content' => $request->input('content'),
+                'title' => $validated['title'],
+                'content' => $validated['content'],
                 'image' => date('YmdHi') . $image->getClientOriginalName(),
             ]);
             $image->move(public_path('public/postsImages'), date('YmdHi') . $image->getClientOriginalName());
