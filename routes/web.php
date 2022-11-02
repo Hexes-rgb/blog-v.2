@@ -28,26 +28,33 @@ Route::controller(MainController::class)->group(function () {
     Route::any('/search', 'search')->name('main.search');
 });
 
-Route::controller(LikeController::class)->group(function () {
-    Route::post('/post/{post_id}/like', 'store')->name('like.store');
-    Route::delete('/post{post_id}/like', 'destroy')->name('like.delete');
-    Route::post('/post/{post_id}/like/restore', 'restore')->name('like.restore');
-});
+Route::middleware('auth')->group(function () {
+    Route::controller(LikeController::class)->group(function () {
+        Route::post('/post/{post_id}/like', 'store')->name('like.store');
+        Route::delete('/post{post_id}/like', 'destroy')->name('like.delete');
+        Route::post('/post/{post_id}/like/restore', 'restore')->name('like.restore');
+    });
 
-Route::controller(CommentController::class)->group(function () {
-    Route::post('/comment', 'store')->name('comment.store');
-    Route::delete('/post/{post_id}/read/comment/{comment_id}', 'destroy')->name('comment.delete');
-    Route::post('/post/{post_id}/read/comment/{comment_id}/restore', 'restore')->name('comment.restore');
-});
+    Route::controller(CommentController::class)->group(function () {
+        Route::post('/comment', 'store')->name('comment.store');
+        Route::delete('/post/{post_id}/read/comment/{comment_id}', 'destroy')->name('comment.delete');
+        Route::post('/post/{post_id}/read/comment/{comment_id}/restore', 'restore')->name('comment.restore');
+    });
 
-Route::controller(SubscriptionController::class)->group(function () {
-    Route::post('/profile/{author_id}/subscribtion', 'store')->name('subscription.store');
-    Route::delete('/profile/{author_id}/subscribtion', 'destroy')->name('subscription.delete');
-    Route::post('/profile/{author_id}/subscribtion/restore', 'restore')->name('subscription.restore');
-});
+    Route::controller(SubscriptionController::class)->group(function () {
+        Route::post('/profile/{author_id}/subscribtion', 'store')->name('subscription.store');
+        Route::delete('/profile/{author_id}/subscribtion', 'destroy')->name('subscription.delete');
+        Route::post('/profile/{author_id}/subscribtion/restore', 'restore')->name('subscription.restore');
+    });
 
-Route::controller(TagController::class)->group(function () {
-    Route::post('/tag', 'store')->name('tag.store');
+    Route::controller(PostTagController::class)->group(function () {
+        Route::delete('/post/{post_id}/tag/{tag_id?}', 'destroy')->name('post_tag.delete');
+        Route::post('/post/{post_id}/tag', 'store')->name('post_tag.store');
+    });
+
+    Route::controller(TagController::class)->group(function () {
+        Route::post('/tag', 'store')->name('tag.store');
+    });
 });
 
 Route::controller(UserController::class)->group(function () {
@@ -59,19 +66,15 @@ Route::controller(ContentRatingController::class)->group(function () {
     Route::post('/trends/search', 'search')->name('trends.search');
 });
 
-Route::controller(PostTagController::class)->group(function () {
-    Route::delete('/post/{post_id}/tag/{tag_id?}', 'destroy')->name('post_tag.delete');
-    Route::post('/post/{post_id}/tag', 'store')->name('post_tag.store');
-});
 
 Route::controller(PostController::class)->group(function () {
-    Route::get('/post/create', 'create')->name('post.create');
-    Route::post('/post', 'store')->name('post.store');
+    Route::get('/post/create', 'create')->middleware('auth')->name('post.create');
+    Route::post('/post', 'store')->middleware('auth')->name('post.store');
     Route::get('/post/{post_id}', 'show')->name('post.show');
-    Route::get('/post/{post_id}/edit', 'edit')->name('post.edit');
-    Route::patch('/post/{post_id}', 'update')->name('post.update');
-    Route::delete('/post/{post_id}', 'destroy')->name('post.delete');
-    Route::post('/post/{post_id}/restore', 'restore')->name('post.restore');
+    Route::get('/post/{post_id}/edit', 'edit')->middleware('auth')->name('post.edit');
+    Route::patch('/post/{post_id}', 'update')->middleware('auth')->name('post.update');
+    Route::delete('/post/{post_id}', 'destroy')->middleware('auth')->name('post.delete');
+    Route::post('/post/{post_id}/restore', 'restore')->middleware('auth')->name('post.restore');
 });
 
 Route::get('/api', [PostController::class, 'sendTagsJson'])->name('send-tags-json');
