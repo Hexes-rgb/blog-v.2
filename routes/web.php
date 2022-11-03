@@ -1,15 +1,17 @@
 <?php
 
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ContentRatingController;
-use App\Http\Controllers\LikeController;
+use App\Models\Tag;
+use App\Http\Resources\TagResource;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostTagController;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\TagController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ContentRatingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,7 +79,13 @@ Route::controller(PostController::class)->group(function () {
     Route::post('/post/{post_id}/restore', 'restore')->middleware('auth')->name('post.restore');
 });
 
-Route::get('/api', [PostController::class, 'sendTagsJson'])->name('send-tags-json');
+// Route::get('/api', function () {
+//     return new TagResource(Tag::all('name'));
+// });
+// Route::get('/api', [PostController::class, 'sendTagsJson'])->name('send.json.tags');
+Route::get('/api', function () {
+    return response()->json(Tag::all('name')->toJson());
+});
 
 require __DIR__ . '/auth.php';
 

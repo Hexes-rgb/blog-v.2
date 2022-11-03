@@ -13,7 +13,7 @@
         <form method="POST" action="{{ route('comment.store') }}">
             @csrf
             <input type="text" name="text" autocomplete="off" class="form-control @error('text') is-invalid @enderror" >
-            <button type="submit" class="btn btn-outline-primary">Send</button>
+            <button type="submit" class="btn btn-outline-primary commentFormButton">Send</button>
             <input type="hidden" name="post_id" value="{{ $post->id }}">
         </form>
         @error('text')
@@ -21,9 +21,43 @@
         @enderror
     @endauth
 
-    <div class="ms-2 mb-2">
+    <div id="answers-" class="ms-2 mb-2">
         @if($post->postComments->isNotEmpty())
             @each('layouts/inc/comment', $post->postComments->where('comment_id', null), 'comment', 'layouts/inc/no-comments')
         @endif
     </div>
 </div>
+
+<script>
+
+$(document).ready(function(){
+
+    // var form = '.create-comment-form';
+
+    $('.commentFormButton').on('click', function(){
+        $('.commentFormButton').parent().submit(function(event){
+            event.preventDefault();
+            var url = $(this).attr('action');
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: new FormData(this),
+                dataType: 'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(response)
+                {
+                    alert(response.success)
+                    // $(form).trigger("reset");
+                },
+                error: function(response) {
+                }
+            });
+        })
+
+    });
+
+});
+</script>

@@ -117,7 +117,7 @@
     autocompleteTags();
     async function autocompleteTags() {
         let tags = await getTags();
-        autocomplete(document.getElementById("myInput"), tags['allTags']);
+        autocomplete(document.getElementById("myInput"), tags);
     }
     // let dropMenu = false
     // document.addEventListener('click', function(e) {
@@ -135,6 +135,8 @@
             let url = '/api';
             let response = await fetch(url);
             let json = await response.json();
+            // arr = JSON.parse(json);
+            // console.log(arr.length);
             return JSON.parse(json);
         } catch {
             alert('Data load failed')
@@ -165,15 +167,15 @@
             /*for each item in the array...*/
             for (i = 0; i < arr.length; i++) {
                 /*check if the item starts with the same letters as the text field value:*/
-                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                if (arr[i].name.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
                     /*create a DIV element for each matching element:*/
                     b = document.createElement("DIV");
                     b.setAttribute("class", "mt-2 text-primary");
                     /*make the matching letters bold:*/
-                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                    b.innerHTML += arr[i].substr(val.length);
+                    b.innerHTML = "<strong>" + arr[i].name.substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].name.substr(val.length);
                     /*insert a input field that will hold the current array item's value:*/
-                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    b.innerHTML += "<input type='hidden' value='" + arr[i].name + "'>";
                     /*execute a function when someone clicks on the item value (DIV element):*/
                     b.addEventListener("click", function(e) {
                         /*insert the value for the autocomplete text field:*/

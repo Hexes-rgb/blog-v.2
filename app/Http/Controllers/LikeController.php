@@ -22,8 +22,9 @@ class LikeController extends Controller
     {
         $post_id = $request->input('post_id');
         $post = Post::withTrashed()->findOrFail($post_id);
-        $post->likes->where('id', Auth::id())->last()->likes->deleted_at = Carbon::now();
-        $post->likes->find(Auth::id())->likes->save();
+        $like = $post->likes->where('id', Auth::id())->last()->likes;
+        $like->deleted_at = Carbon::now();
+        $like->save();
         // return redirect()->route('post.show', $post_id);
         return response()->json(['data' => view('layouts.inc.post-like-actions', ['post' => $post])->render()]);
     }
@@ -32,8 +33,9 @@ class LikeController extends Controller
     {
         $post_id = $request->input('post_id');
         $post = Post::withTrashed()->findOrFail($post_id);
-        $post->likes->where('id', Auth::id())->last()->likes->deleted_at = null;
-        $post->likes->find(Auth::id())->likes->save();
+        $like = $post->likes->where('id', Auth::id())->last()->likes;
+        $like->deleted_at = null;
+        $like->save();
         // return redirect()->route('post.show', $post_id);
         return response()->json(['data' => view('layouts.inc.post-like-actions', ['post' => $post])->render()]);
     }

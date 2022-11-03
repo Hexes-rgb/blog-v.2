@@ -22,8 +22,9 @@ class SubscriptionController extends Controller
     {
         $author_id = $request->input('author_id');
         $user = User::findOrFail(Auth::id());
-        $user->subscriptions->findOrFail($author_id)->subscriptions->deleted_at = Carbon::now();
-        $user->subscriptions->findOrFail($author_id)->subscriptions->save();
+        $sub = $user->subscriptions->findOrFail($author_id)->subscriptions;
+        $sub->deleted_at = Carbon::now();
+        $sub->save();
         return redirect()->route('user.index', $author_id);
     }
 
@@ -31,8 +32,9 @@ class SubscriptionController extends Controller
     {
         $author_id = $request->input('author_id');
         $user = User::find(Auth::id());
-        $user->subscriptions->findOrFail($author_id)->subscriptions->deleted_at = null;
-        $user->subscriptions->findOrFail($author_id)->subscriptions->save();
+        $sub = $user->subscriptions->findOrFail($author_id)->subscriptions;
+        $sub->deleted_at = null;
+        $sub->save();
         return redirect()->route('user.index', $author_id);
     }
 }

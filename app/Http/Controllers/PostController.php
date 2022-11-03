@@ -12,20 +12,21 @@ use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
-    public function sendTagsJson()
-    {
-        $tags = array();
-        foreach (Tag::all() as $tag) {
-            array_push($tags, $tag->name);
-        }
-        $data = json_encode(array('allTags' => $tags));
-        return response()->json($data);
-    }
+    // public function sendTagsJson()
+    // {
+    //     $tags = array();
+    //     foreach (Tag::all() as $tag) {
+    //         array_push($tags, $tag->name);
+    //     }
+    //     $data = json_encode(array('allTags' => $tags));
+    //     return response()->json(Tag::all('name')->toJson());
+    // }
 
     public function show($post_id)
     {
+        // dd(Tag::all('name')->toJson());
         $post = Post::findOrFail($post_id);
-        dd($post->views->where('id', Auth::id())->last()->views);
+        // dd($post->views->where('id', Auth::id())->last()->views->created_at);
         if (Auth::user()) {
             if ($post->views->where('id', Auth::id())->isEmpty()) {
                 $post = $post->views()->attach(Auth::user());

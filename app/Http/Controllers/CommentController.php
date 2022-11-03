@@ -9,18 +9,19 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function store(StoreCommentRequest $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated();
+        // $validated = $request->validated();
         $post_id = $request->input('post_id');
         $comment_id = $request->input('comment_id') ?? null;
         Comment::create([
             'post_id' => $post_id,
             'user_id' => Auth::id(),
             'comment_id' => $comment_id,
-            'text' => $validated['text'],
+            'text' => $request->input('text'),
         ]);
-        return redirect()->route('post.show', $post_id);
+        // return redirect()->route('post.show', $post_id);
+        return response()->json(['success' => 'ok']);
     }
 
     public function destroy(Request $request)

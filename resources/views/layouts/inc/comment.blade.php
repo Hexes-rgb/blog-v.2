@@ -1,5 +1,5 @@
 
-<div class="m-3 p-2 border rounded overflow-hidden shadow-sm">
+<div class="m-3 p-2 border rounded overflow-hidden shadow-sm comment">
     <div class="text-start d-flex">
         @if($comment->author->id == $comment->post->author->id and !$comment->trashed())
             <div>
@@ -57,7 +57,7 @@
                 <form method="POST" action="{{ route('comment.store') }}">
                     @csrf
                     <input class="form-control @error('text') is-invalid @enderror" type="text" name="text" autocomplete="off">
-                    <button type="submit" class="btn btn-outline-primary">Send</button>
+                    <button id="commentFormButton{{ $comment->id }}" type="button" class="btn btn-outline-primary">Send</button>
                     @error('text')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -73,19 +73,51 @@
 </div>
 
 <script>
-function showHideComment(id){
-    if(document.getElementById('answers' + id).className == "d-none"){
-    document.getElementById('answers' + id).className="d-block";
-    } else {
-        document.getElementById('answers' + id).className="d-none";
-    }
-}
+$(document).ready(function(){
 
-function showCommentForm(id){
-    if(document.getElementById('comment-form' + id).className == "d-none"){
-    document.getElementById('comment-form' + id).className="d-block";
-    } else {
-        document.getElementById('comment-form' + id).className="d-none";
+    // var form = '#answer';
+
+    $('#commentFormButton68').on('click', function(){
+        console.log(123);
+        $('#commentFormButton-').parent().submit(function(event){
+            event.preventDefault();
+            var url = $(this).attr('action');
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: new FormData(this),
+                dataType: 'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(response)
+                {
+                    alert(response.success)
+                    // $(form).trigger("reset");
+                },
+                error: function(response) {
+                }
+            });
+        })
+
+    });
+
+});
+    function showHideComment(id){
+        if(document.getElementById('answers' + id).className == "d-none"){
+        document.getElementById('answers' + id).className="d-block";
+        } else {
+            document.getElementById('answers' + id).className="d-none";
+        }
     }
-}
+
+    function showCommentForm(id){
+        if(document.getElementById('comment-form' + id).className == "d-none"){
+        document.getElementById('comment-form' + id).className="d-block";
+        } else {
+            document.getElementById('comment-form' + id).className="d-none";
+        }
+    }
+
 </script>
