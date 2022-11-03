@@ -6,7 +6,9 @@
         <div id="file-name"></div>
     </div>
 </div>
-
+@error('image')
+    <div class="alert alert-danger">{{ $message }}</div>
+@enderror
 <script>
     function getFileName() {
         var file = document.getElementById('postImage').value;

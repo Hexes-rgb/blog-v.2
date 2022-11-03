@@ -18,18 +18,18 @@
                                 <div class="col-sm-6">
                                     <label for="title" class="form-label">Title</label>
                                     <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                    <input type="text" class="form-control" name="title" id="title"
+                                    <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title"
                                         value="{{ $post->title }}">
-                                    <div class="invalid-feedback">
-                                        Valid title is required.
-                                    </div>
+                                        @error('title')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                 </div>
                                 <div class="col-12">
                                     <label for="content" class="form-label">Text</label>
-                                    <textarea class="form-control" name="content" id="content" placeholder="Type your text here...">{{ $post->content }}</textarea>
-                                    <div class="invalid-feedback">
-                                        Please enter your text here.
-                                    </div>
+                                    <textarea class="form-control @error('content') is-invalid @enderror" name="content" id="content" placeholder="Type your text here...">{{ $post->content }}</textarea>
+                                    @error('content')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             @include('layouts/inc/add-image')

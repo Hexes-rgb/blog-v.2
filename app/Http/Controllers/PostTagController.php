@@ -12,10 +12,10 @@ class PostTagController extends Controller
     {
         $tag_id = $request->input('tag_id');
         $post_id = $request->input('post_id');
-        $post = Post::find($post_id);
-        $tag = Tag::find($tag_id);
+        $post = Post::findOrFail($post_id);
+        $tag = Tag::findOrFail($tag_id);
         $post->tags()->detach($tag);
-        $post = Post::find($post_id);
+        $post = Post::findOrFail($post_id);
         // return redirect()->route('post.edit', $post->id);
         return response()->json(['data' => view('layouts.inc.add-tag-form', ['post' => $post])->render()]);
     }

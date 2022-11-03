@@ -7,6 +7,8 @@ use App\Models\Tag;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
@@ -23,6 +25,7 @@ class PostController extends Controller
     public function show($post_id)
     {
         $post = Post::findOrFail($post_id);
+        dd($post->views->where('id', Auth::id())->last()->views);
         if (Auth::user()) {
             if ($post->views->where('id', Auth::id())->isEmpty()) {
                 $post = $post->views()->attach(Auth::user());
@@ -49,34 +52,32 @@ class PostController extends Controller
         return view('post-redactor', ['tags' => Tag::popular()->get()]);
     }
 
-    public function update(Request $request)
+    public function update(UpdatePostRequest $request)
     {
+        $validated = $request->validated();
         $post_id = $request->input('post_id');
-        $image = $request->file('image');
+        $image = $validated['image'];
         $post = Post::where('id', '=', $post_id)->first();
         if ($image) {
             $post->update([
-                'title' => $request->input('title'),
-                'content' => $request->input('content'),
+                'title' => $validated['title'],
+                'content' => $validated['content'],
                 'image' => date('YmdHi') . $image->getClientOriginalName(),
             ]);
             $image->move(public_path('public/postsImages'), date('YmdHi') . $image->getClientOriginalName());
         } else {
             $post->update([
-                'title' => $request->input('title'),
-                'content' => $request->input('content'),
+                'title' => $validated['title'],
+                'content' => $validated['content'],
             ]);
         }
         return redirect()->route('post.edit', $post_id);
     }
 
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|max:255|min:2',
-            'content' => 'required|min:10'
-        ]);
-        $image = $request->file('image');
+        $validated = $request->validated();
+        $image = $validated['image'];
         if (!empty($image)) {
             $post = Post::create([
                 'author_id' => Auth::id(),
@@ -88,8 +89,8 @@ class PostController extends Controller
         } else {
             $post = Post::create([
                 'author_id' => Auth::id(),
-                'title' => $request->input('title'),
-                'content' => $request->input('content'),
+                'title' => $validated['title'],
+                'content' => $validated['content'],
             ]);
         }
         return redirect()->route('post.edit', $post->id);
@@ -98,7 +99,7 @@ class PostController extends Controller
     public function destroy(Request $request)
     {
         $post_id = $request->input('post_id');
-        $post = Post::find($post_id);
+        $post = Post::findOrFail($post_id);
         $post->delete();
         return redirect()->route('post.edit', $post->id);
     }
@@ -106,7 +107,7 @@ class PostController extends Controller
     public function restore(Request $request)
     {
         $post_id = $request->input('post_id');
-        $post = Post::withTrashed()->find($post_id);
+        $post = Post::withTrashed()->findOrFail($post_id);
         $post->restore();
         return redirect()->route('post.edit', $post->id);
     }
