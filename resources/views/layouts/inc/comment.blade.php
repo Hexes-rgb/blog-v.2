@@ -25,9 +25,12 @@
             {{ $comment->text}}
         @endif
         <br>
-        @if($comment->loadCount('comments')->comments_count > 0)
-            <button onclick="showHideComment({{ $comment->id }})" type="button" class="link-primary text-sm" >({{ $comment->loadCount('comments')->comments_count }})hide/show</button>
-        @endif
+        {{-- @if($comment->loadCount('comments')->comments_count > 0) --}}
+            <button onclick="showHideComment({{ $comment->id }})" type="button" class="link-primary text-sm" >
+                {{-- ({{ $comment->loadCount('comments')->comments_count }}) --}}
+                hide/show
+            </button>
+        {{-- @endif --}}
         @auth
             @if(!$comment->trashed())
                 <button onclick="showCommentForm({{ $comment->id }})" type="button" class="link-primary text-sm" >Reply</button>
@@ -57,7 +60,7 @@
                 <form method="POST" action="{{ route('comment.store') }}">
                     @csrf
                     <input class="form-control @error('text') is-invalid @enderror" type="text" name="text" autocomplete="off">
-                    <button id="commentFormButton{{ $comment->id }}" type="button" class="btn btn-outline-primary">Send</button>
+                    <button type="submit" class="btn btn-outline-primary answerFormButton">Send</button>
                     @error('text')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -67,7 +70,7 @@
             </div>
         @endauth
     </div>
-    <div id="answers{{ $comment->id }}" class="d-none">
+    <div id="answers{{ $comment->id }}" class="d-none answers">
         @each('layouts/inc/comment', $comment->comments, 'comment', 'layouts/inc/no-comments')
     </div>
 </div>
@@ -77,12 +80,12 @@ $(document).ready(function(){
 
     // var form = '#answer';
 
-    $('#commentFormButton68').on('click', function(){
-        console.log(123);
-        $('#commentFormButton-').parent().submit(function(event){
+    $('.answerFormButton').off().on('click', function(){
+        $('.answerFormButton').off().parent().submit(function(event){
             event.preventDefault();
             var url = $(this).attr('action');
-
+            var form = $(this)
+            var comment = $(form).parent().parent().parent()
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -93,8 +96,14 @@ $(document).ready(function(){
                 processData: false,
                 success:function(response)
                 {
-                    alert(response.success)
-                    // $(form).trigger("reset");
+                    // alert(response.success)
+                    // $('.answers').append(response.data)
+                    // $('.answers').replaceWith(response.data);
+                    $(form).trigger("reset");
+                    $(comment).children().next().next().removeClass('d-none')
+                    $(comment).children().next().next().addClass('d-block')
+                    $(comment).children().next().next().append(response.data)
+
                 },
                 error: function(response) {
                 }

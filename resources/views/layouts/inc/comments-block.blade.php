@@ -34,10 +34,12 @@ $(document).ready(function(){
 
     // var form = '.create-comment-form';
 
-    $('.commentFormButton').on('click', function(){
-        $('.commentFormButton').parent().submit(function(event){
+    $('.commentFormButton').off().on('click', function(){
+        $('.commentFormButton').off().parent().submit(function(event){
             event.preventDefault();
             var url = $(this).attr('action');
+            var form = $(this)
+            // var comment = $(form).parent().parent().parent()
 
             $.ajax({
                 url: url,
@@ -49,8 +51,10 @@ $(document).ready(function(){
                 processData: false,
                 success:function(response)
                 {
-                    alert(response.success)
+                    // alert(response.success)
                     // $(form).trigger("reset");
+                    $(form).trigger("reset");
+                    $(form).parent().children().next().next().append(response.data)
                 },
                 error: function(response) {
                 }
