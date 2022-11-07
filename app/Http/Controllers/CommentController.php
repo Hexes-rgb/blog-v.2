@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreCommentRequest;
 
 class CommentController extends Controller
@@ -13,6 +14,13 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         // $validated = $request->validated();
+        $validator = Validator::make($request->all(), [
+            'text' => 'required|max:255|min:2',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+        $validated = $validator->validated();
         $post_id = $request->input('post_id');
         $comment_id = $request->input('comment_id') ?? null;
         // $post = Post::findOrFail($post_id);
@@ -20,7 +28,7 @@ class CommentController extends Controller
             'post_id' => $post_id,
             'user_id' => Auth::id(),
             'comment_id' => $comment_id,
-            'text' => $request->input('text'),
+            'text' => $validated['text'],
         ]);
         // return redirect()->route('post.show', $post_id);
         return response()->json(['data' => view('layouts.inc.comment', ['comment' => $comment])->render()]);
