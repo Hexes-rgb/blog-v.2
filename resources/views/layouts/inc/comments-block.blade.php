@@ -1,5 +1,7 @@
 <div class="p-4 mt-4 container border rounded overflow-hidden shadow-sm">
-    <p class="fs-2">({{ count($post->postComments) }}) Commentaries:</p>
+    <p class="fs-2">
+        {{-- ({{ count($post->postComments) }}) --}}
+        Commentaries:</p>
         {{-- @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -21,9 +23,9 @@
         @enderror
     @endauth
 
-    <div id="answers-" class="ms-2 mb-2">
+    <div class="ms-2 mb-2">
         @if($post->postComments->isNotEmpty())
-            @each('layouts/inc/comment', $post->postComments->where('comment_id', null), 'comment', 'layouts/inc/no-comments')
+            @each('layouts/inc/comment', $post->postComments->where('comment_id', null)->sortBy('created_at'), 'comment', 'layouts/inc/no-comments')
         @endif
     </div>
 </div>

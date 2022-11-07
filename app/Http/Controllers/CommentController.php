@@ -15,7 +15,7 @@ class CommentController extends Controller
         // $validated = $request->validated();
         $post_id = $request->input('post_id');
         $comment_id = $request->input('comment_id') ?? null;
-        $post = Post::findOrFail($post_id);
+        // $post = Post::findOrFail($post_id);
         $comment = Comment::create([
             'post_id' => $post_id,
             'user_id' => Auth::id(),
@@ -23,29 +23,26 @@ class CommentController extends Controller
             'text' => $request->input('text'),
         ]);
         // return redirect()->route('post.show', $post_id);
-        if ($comment_id) {
-            // $comment = Comment::findOrFail($comment_id);
-            return response()->json(['data' => view('layouts.inc.comment', ['comment' => $comment])->render()]);
-        } else {
-            return response()->json(['data' => view('layouts.inc.comment', ['comment' => $comment])->render()]);
-        }
+        return response()->json(['data' => view('layouts.inc.comment', ['comment' => $comment])->render()]);
     }
 
     public function destroy(Request $request)
     {
         $comment_id = $request->input('comment_id');
-        $post_id = $request->input('post_id');
+        // $post_id = $request->input('post_id');
         $comment = Comment::withTrashed()->findOrFail($comment_id);
         $comment->delete();
-        return redirect()->route('post.show', $post_id);
+        // return redirect()->route('post.show', $post_id);
+        return response()->json(['data' => view('layouts.inc.deleted-comment-body', ['comment' => $comment])->render()]);
     }
 
     public function restore(Request $request)
     {
         $comment_id = $request->input('comment_id');
-        $post_id = $request->input('post_id');
+        // $post_id = $request->input('post_id');
         $comment = Comment::withTrashed()->findOrFail($comment_id);
         $comment->restore();
-        return redirect()->route('post.show', $post_id);
+        // return redirect()->route('post.show', $post_id);
+        return response()->json(['data' => view('layouts.inc.existed-comment-body', ['comment' => $comment])->render()]);
     }
 }
