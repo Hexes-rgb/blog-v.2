@@ -27,7 +27,7 @@ use App\Http\Controllers\ContentRatingController;
 Route::controller(MainController::class)->group(function () {
     Route::get('/', 'index')->name('main.index');
     Route::get('/tag/{tag_id}', 'filter')->name('main.filter');
-    Route::any('/search', 'search')->name('main.search');
+    Route::get('/search', 'search')->name('main.search');
 });
 
 Route::middleware('auth')->group(function () {

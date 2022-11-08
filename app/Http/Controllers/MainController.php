@@ -12,8 +12,8 @@ class MainController extends Controller
     public function search(Request $request)
     {
         $sort = $request->input('sort') ?? "DESC";
-        $text = $request->input('text');
-        if ($text) {
+        $text = $request->input('query');
+        if ($text != '') {
             $posts = Post::where('title', 'ILIKE', '%' . $text . '%')
                 ->orWhereHas('tags', function (Builder $query) use ($text) {
                     $query->where('name', 'ILIKE', '%' . $text . '%');
@@ -26,11 +26,12 @@ class MainController extends Controller
         } else {
             $posts = Post::orderBy('created_at', $sort)->paginate(4);
         }
-        return view('main', [
-            'posts' => $posts,
-            'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get(),
-            'text' => $text
-        ]);
+        // return view('main', [
+        //     'posts' => $posts,
+        //     'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get(),
+        //     'text' => $text
+        // ]);
+        return response()->json(['data' => view('layouts.inc.main-content', ['posts' => $posts])->render()]);
     }
     public function filter($tag_id)
     {
