@@ -1,17 +1,16 @@
 <?php
 
 use App\Models\Tag;
-use App\Http\Resources\TagResource;
+// use App\Http\Resources\TagResource;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\LikeController;
-use App\Http\Controllers\MainController;
+use App\Http\Controllers\PostSearchController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostTagController;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\ContentRatingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,10 +23,9 @@ use App\Http\Controllers\ContentRatingController;
 |
 */
 
-Route::controller(MainController::class)->group(function () {
-    Route::get('/', 'index')->name('main.index');
-    Route::get('/tag/{tag_id}', 'filter')->name('main.filter');
-    Route::get('/search', 'search')->name('main.search');
+Route::controller(PostSearchController::class)->group(function () {
+    Route::get('/tag/{tag_id}', 'filter')->name('post_search.filter');
+    Route::get('/search', 'search')->name('post_search.search');
 });
 
 Route::middleware('auth')->group(function () {
@@ -63,13 +61,8 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/profile/{user_id}', 'index')->name('user.index');
 });
 
-Route::controller(ContentRatingController::class)->group(function () {
-    Route::get('/trends', 'index')->name('trends.index');
-    Route::post('/trends/search', 'search')->name('trends.search');
-});
-
-
 Route::controller(PostController::class)->group(function () {
+    Route::get('/post', 'index')->name('post.index');
     Route::get('/post/create', 'create')->middleware('auth')->name('post.create');
     Route::post('/post', 'store')->middleware('auth')->name('post.store');
     Route::get('/post/{post_id}', 'show')->name('post.show');

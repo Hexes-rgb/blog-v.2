@@ -12,7 +12,7 @@ class Post extends Model
     use SoftDeletes;
 
     protected $fillable = ['author_id', 'title', 'content', 'image'];
-    protected $appends = ['rating'];
+    // protected $appends = ['rating'];
 
     public function tags()
     {
@@ -56,13 +56,13 @@ class Post extends Model
     ');
     }
 
-    public function getRatingAttribute()
-    {
-        return $this->attributes['rating'];
-    }
+    // public function getRatingAttribute()
+    // {
+    //     return $this->attributes['rating'];
+    // }
 
-    public function setRatingAttribute($value)
-    {
-        $this->attributes['rating'] = $value;
-    }
+    // public function setRatingAttribute($value)
+    // {
+    //     $this->attributes['rating'] = $value;
+    // }
 }

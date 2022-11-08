@@ -7,10 +7,7 @@
 @section('content')
     <section class="w-100 p-4 pb-1 d-flex justify-content-center align-items-center flex-column">
         <div>
-            <form action="{{ route('main.search') }}" method="POST">
-                @csrf
-                @include('layouts.inc.search-form')
-            </form>
+            @include('layouts.inc.search-form')
         </div>
         @include('layouts.inc.main-content')
     </section>

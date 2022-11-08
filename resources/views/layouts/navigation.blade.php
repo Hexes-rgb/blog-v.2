@@ -6,7 +6,7 @@
             <div class="flex col-3-md">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center text-3xl">
-                    <a href="{{ route('main.index') }}">
+                    <a href="{{ route('post.index') }}">
                        Blog
                     </a>
                 </div>
@@ -15,9 +15,9 @@
                     {{-- <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link> --}}
-                    <a class="link link-primary" href="{{ route('trends.index') }}">
+                    {{-- <a class="link link-primary" href="{{ route('trends.index') }}">
                         Trends
-                    </a>
+                    </a> --}}
                     {{-- <a class="ms-2 link link-primary" href="{{ route('trends') }}">
                         Subscriptions
                     </a> --}}
@@ -26,7 +26,7 @@
             <div class="col-md-6 my-2">
                 <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                   @foreach($tags as $tag)
-                  <li><a href="{{ route('main.filter', $tag->id ) }}"  class="nav-link px-2 link-primary">{{ $tag->name }}</a></li>
+                  <li><a href="{{ route('post_search.filter', $tag->id ) }}"  class="nav-link px-2 link-primary">{{ $tag->name }}</a></li>
                   @endforeach
                 </ul>
             </div>

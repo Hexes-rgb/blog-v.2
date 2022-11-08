@@ -21,6 +21,13 @@ class PostController extends Controller
     //     $data = json_encode(array('allTags' => $tags));
     //     return response()->json(Tag::all('name')->toJson());
     // }
+    public function index()
+    {
+        return view('main', [
+            'posts' => Post::trends()->orderBy('rating', 'desc')->paginate(4),
+            'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get()
+        ]);
+    }
 
     public function show($post_id)
     {

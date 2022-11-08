@@ -36,10 +36,13 @@
                             {{ $post->loadCount('views')->views_count }}
                         </div>
                     </div>
+                    <div class="text-success fs-5 ms-4">
+                        Rating: {{ $post->rating }}
+                    </div>
                 </div>
                 <strong class="d-inline-block mb-2 text-end col">
                     @foreach ($post->tags as $tag)
-                        <a href="{{ route('main.filter', $tag->id) }}"class="text-decoration-none link-primary">
+                        <a href="{{ route('post_search.filter', $tag->id) }}"class="text-decoration-none link-primary">
                             {{ $tag->name }}
                         </a>
                     @endforeach
