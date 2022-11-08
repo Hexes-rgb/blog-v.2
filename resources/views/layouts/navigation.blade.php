@@ -15,9 +15,9 @@
                     {{-- <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link> --}}
-                    {{-- <a class="link link-primary" href="{{ route('trends.index') }}">
-                        Trends
-                    </a> --}}
+                    <a class="link link-primary" href="{{ route('mail.create') }}">
+                        Send mail
+                    </a>
                     {{-- <a class="ms-2 link link-primary" href="{{ route('trends') }}">
                         Subscriptions
                     </a> --}}

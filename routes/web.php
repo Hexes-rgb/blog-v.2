@@ -9,6 +9,7 @@ use App\Http\Controllers\PostSearchController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\PostTagController;
 use App\Http\Controllers\SubscriptionController;
 
@@ -55,6 +56,11 @@ Route::middleware('auth')->group(function () {
     Route::controller(TagController::class)->group(function () {
         Route::post('/tag', 'store')->name('tag.store');
     });
+
+    Route::controller(MailController::class)->group(function () {
+        Route::get('/mail/create', 'create')->name('mail.create');
+        Route::post('/mail', 'store')->name('mail.store');
+    });
 });
 
 Route::controller(UserController::class)->group(function () {
@@ -79,7 +85,6 @@ Route::controller(PostController::class)->group(function () {
 Route::get('/api', function () {
     return response()->json(Tag::all('name')->toJson());
 });
-
 require __DIR__ . '/auth.php';
 
 // Route::get('/', [App\Http\Controllers\MainController::class, 'index'])
