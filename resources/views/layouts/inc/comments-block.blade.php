@@ -142,7 +142,7 @@ $(document).ready(function(){
     })
 
 
-    $('.comments').on('click', '.answerForm', function(event){
+    $('.comments').on('submit', '.answerForm', function(event){
         event.preventDefault();
         var url = $(this).attr('action');
         var form = $(this)

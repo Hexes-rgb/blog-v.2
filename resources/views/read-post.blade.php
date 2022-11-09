@@ -31,6 +31,14 @@
             <p class="fs-5 col-4 text-muted">Updated at: {{ \Carbon\Carbon::parse($post->updated_at)->format('d.m.Y H:i:s') }}</p>
             @include('layouts.inc.post-like-actions')
         </div>
+        <div class="d-flex justify-content-start">
+            {{-- <button type="button" post-id="{{ $post->id }}" id="exportPost">
+                <img id="xlsx-icon" src="{{ url('public/appImages/export-excel.png') }}">
+            </button> --}}
+            <a href="{{ route('post.export', $post->id) }}">
+                <img id="xlsx-icon" src="{{ url('public/appImages/export-excel.png') }}">
+            </a>
+        </div>
         {{-- <div class="post-info-block justify-content-end">
             <div class="view-block-read">
                 <div>
@@ -56,6 +64,34 @@
 
 @include('layouts.inc.comments-block')
 
+{{-- <script>
+$(document).ready(function(){
+    $(document).on('click', '#exportPost', function(){
+        let post_id = $(this).attr('post-id');
+        // let data = {
+        //     'post_id': post_id,
+        // }
+        let url = `${post_id}/export`;
 
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: url,
+            method: 'get'
+            success:function(response)
+            {
+                $(comment_body).replaceWith(response.data);
+            },
+            error: function(response) {
+                $(comment_body).replaceWith(response.data);
+            }
+        });
+    });
+});
+</script> --}}
 @endsection
 

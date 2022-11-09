@@ -24,6 +24,10 @@ use App\Http\Controllers\SubscriptionController;
 |
 */
 
+Route::get('/', function () {
+    return redirect()->route('post.index');
+});
+
 Route::controller(PostSearchController::class)->group(function () {
     Route::get('/tag/{tag_id}', 'filter')->name('post_search.filter');
     Route::get('/search', 'search')->name('post_search.search');
@@ -71,6 +75,7 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/post', 'index')->name('post.index');
     Route::get('/post/create', 'create')->middleware('auth')->name('post.create');
     Route::post('/post', 'store')->middleware('auth')->name('post.store');
+    Route::get('post/{post_id}/export', 'export')->name('post.export');
     Route::get('/post/{post_id}', 'show')->name('post.show');
     Route::get('/post/{post_id}/edit', 'edit')->middleware('auth')->name('post.edit');
     Route::patch('/post/{post_id}', 'update')->middleware('auth')->name('post.update');
@@ -85,6 +90,9 @@ Route::controller(PostController::class)->group(function () {
 Route::get('/api', function () {
     return response()->json(Tag::all('name')->toJson());
 });
+
+// Route::get('post/export', [PostController::class, 'export']);
+
 require __DIR__ . '/auth.php';
 
 // Route::get('/', [App\Http\Controllers\MainController::class, 'index'])

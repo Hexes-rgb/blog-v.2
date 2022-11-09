@@ -5,24 +5,19 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Tag;
 use App\Models\Post;
+use App\Exports\PostsExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
-    // public function sendTagsJson()
-    // {
-    //     $tags = array();
-    //     foreach (Tag::all() as $tag) {
-    //         array_push($tags, $tag->name);
-    //     }
-    //     $data = json_encode(array('allTags' => $tags));
-    //     return response()->json(Tag::all('name')->toJson());
-    // }
     public function index()
     {
+        // phpinfo();
         return view('main', [
             'posts' => Post::trends()->orderBy('rating', 'desc')->paginate(4),
             'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get()
@@ -118,5 +113,25 @@ class PostController extends Controller
         $post = Post::withTrashed()->findOrFail($post_id);
         $post->restore();
         return redirect()->route('post.edit', $post->id);
+    }
+
+    public function export($post_id)
+    {
+        (new PostsExport($post_id))->store('post' . $post_id . '.xlsx', 'public_exports');
+        $mailFiles = array();
+        array_push($mailFiles, public_path('exports/' . 'post' . $post_id . '.xlsx'));
+        $to_name = Auth::user()->name;
+        $to_email = Auth::user()->email;
+        $data = array('name' => $to_name, 'body' => 'Take your post');
+        Mail::send('emails.mail', $data, function ($message) use ($to_name, $to_email, $mailFiles) {
+            $message->to($to_email, $to_name)
+                ->subject('Post');
+            // $message->from("hello@example.com");
+
+            foreach ($mailFiles as $file) {
+                $message->attach($file);
+            }
+        });
+        return redirect()->route('post.show', $post_id);
     }
 }
