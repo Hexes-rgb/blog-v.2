@@ -3,7 +3,6 @@
 namespace App\Exports;
 
 use App\Models\Post;
-use Maatwebsite\Excel\Excel;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 
@@ -23,6 +22,6 @@ class PostsExport implements FromQuery
 
     public function query()
     {
-        return Post::query()->select('id', 'title', 'content', 'created_at')->where('id', $this->id);;
+        return Post::query()->select('id', 'title', 'content', 'created_at')->where('id', $this->id);
     }
 }

@@ -69,8 +69,10 @@
                 {
                     $(form).trigger("reset");
                     alert(response.success)
+                    autocompleteTags();
                 },
                 error: function(response) {
+
                 }
             });
         });

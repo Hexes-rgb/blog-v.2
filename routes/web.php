@@ -75,7 +75,7 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/post', 'index')->name('post.index');
     Route::get('/post/create', 'create')->middleware('auth')->name('post.create');
     Route::post('/post', 'store')->middleware('auth')->name('post.store');
-    Route::get('post/{post_id}/export', 'export')->name('post.export');
+    Route::get('post/{post_id}/export', 'export')->middleware('auth')->name('post.export');
     Route::get('/post/{post_id}', 'show')->name('post.show');
     Route::get('/post/{post_id}/edit', 'edit')->middleware('auth')->name('post.edit');
     Route::patch('/post/{post_id}', 'update')->middleware('auth')->name('post.update');

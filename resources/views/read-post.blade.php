@@ -32,12 +32,15 @@
             @include('layouts.inc.post-like-actions')
         </div>
         <div class="d-flex justify-content-start">
-            {{-- <button type="button" post-id="{{ $post->id }}" id="exportPost">
+            <button type="button" post-id="{{ $post->id }}" id="exportPost">
                 <img id="xlsx-icon" src="{{ url('public/appImages/export-excel.png') }}">
-            </button> --}}
-            <a href="{{ route('post.export', $post->id) }}">
+            </button>
+            <div id="loadingDiv">
+                @include('layouts.inc.load-spinner')
+            </div>
+            {{-- <a href="{{ route('post.export', $post->id) }}">
                 <img id="xlsx-icon" src="{{ url('public/appImages/export-excel.png') }}">
-            </a>
+            </a> --}}
         </div>
         {{-- <div class="post-info-block justify-content-end">
             <div class="view-block-read">
@@ -64,8 +67,15 @@
 
 @include('layouts.inc.comments-block')
 
-{{-- <script>
+<script>
 $(document).ready(function(){
+    $('#loadingDiv').hide()
+    $(document).ajaxStart(function() {
+        $('#loadingDiv').show();
+    })
+    $(document).ajaxStop(function() {
+        $('#loadingDiv').hide();
+    })
     $(document).on('click', '#exportPost', function(){
         let post_id = $(this).attr('post-id');
         // let data = {
@@ -81,17 +91,14 @@ $(document).ready(function(){
 
         $.ajax({
             url: url,
-            method: 'get'
+            method: 'get',
             success:function(response)
             {
-                $(comment_body).replaceWith(response.data);
-            },
-            error: function(response) {
-                $(comment_body).replaceWith(response.data);
+                alert(response.success);
             }
         });
     });
 });
-</script> --}}
+</script>
 @endsection
 

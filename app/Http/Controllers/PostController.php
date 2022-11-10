@@ -9,7 +9,6 @@ use App\Exports\PostsExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 
@@ -31,7 +30,8 @@ class PostController extends Controller
         // dd($post->views->where('id', Auth::id())->last()->views->created_at);
         if (Auth::user()) {
             if ($post->views->where('id', Auth::id())->isEmpty()) {
-                $post = $post->views()->attach(Auth::user());
+                $post->views()->attach(Auth::user());
+                $post = Post::findOrFail($post_id);
             }
             if (Carbon::now()->diffInHours($post->views->where('id', Auth::id())->last()->views->created_at) > 3) {
                 $post->views()->attach(Auth::user());
@@ -59,8 +59,8 @@ class PostController extends Controller
     {
         $validated = $request->validated();
         $post_id = $request->input('post_id');
-        $image = $validated['image'];
         $post = Post::where('id', '=', $post_id)->first();
+        $image = $validated['image'];
         if ($image) {
             $post->update([
                 'title' => $validated['title'],
@@ -132,6 +132,7 @@ class PostController extends Controller
                 $message->attach($file);
             }
         });
-        return redirect()->route('post.show', $post_id);
+        return response()->json(['success' => 'Post successfully export to xlsx and sent to your email.']);
+        // return redirect()->route('post.show', $post_id);
     }
 }
