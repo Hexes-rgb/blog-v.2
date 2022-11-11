@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
@@ -111,5 +112,10 @@ class User extends Authenticatable
             })
             ->groupBy('users.id', 'users.name')
             ->where('users.id', '=', Auth::id());
+    }
+
+    public function scopeDayAway($query)
+    {
+        $query->where('last_login', '<', Carbon::now()->subDays(1));
     }
 }

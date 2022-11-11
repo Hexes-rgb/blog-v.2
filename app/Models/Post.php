@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -54,6 +55,11 @@ class Post extends Model
         (select count(*) from views where views.post_id = posts.id and localtimestamp - views.created_at < interval \'3 days\') +
         (select count(distinct comments.user_id) from comments where comments.post_id = posts.id and comments.deleted_at is null and localtimestamp - comments.created_at < interval \'3 days\') as rating
     ');
+    }
+
+    public function scopeDailyPosts($query)
+    {
+        $query->where('created_at', '>', Carbon::now()->subDays(1));
     }
 
     // public function getRatingAttribute()

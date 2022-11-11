@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Tag;
 use App\Models\Post;
+use App\Models\User;
+use App\Mail\PostDelivery;
 use App\Exports\PostsExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,18 +18,16 @@ class PostController extends Controller
 {
     public function index()
     {
-        // phpinfo();
         return view('main', [
-            'posts' => Post::trends()->orderBy('rating', 'desc')->paginate(4),
+            'posts' => Post::trends()->orderBy('created_at', 'desc')->paginate(4),
             'tags' => Tag::popular()->orderBy('posts_count', 'desc')->orderBy('tags.name', 'asc')->limit(5)->get()
         ]);
     }
 
     public function show($post_id)
     {
-        // dd(Tag::all('name')->toJson());
+        // dd(User::dayAway()->get());
         $post = Post::findOrFail($post_id);
-        // dd($post->views->where('id', Auth::id())->last()->views->created_at);
         if (Auth::user()) {
             if ($post->views->where('id', Auth::id())->isEmpty()) {
                 $post->views()->attach(Auth::user());
@@ -57,21 +57,21 @@ class PostController extends Controller
 
     public function update(UpdatePostRequest $request)
     {
-        $validated = $request->validated();
         $post_id = $request->input('post_id');
-        $post = Post::where('id', '=', $post_id)->first();
-        $image = $validated['image'];
-        if ($image) {
+        $post = Post::findOrFail($post_id);
+        $image = $request['image'] ?? null;
+        // dd($image);
+        if (!empty($image)) {
             $post->update([
-                'title' => $validated['title'],
-                'content' => $validated['content'],
+                'title' => $request['title'],
+                'content' => $request['content'],
                 'image' => date('YmdHi') . $image->getClientOriginalName(),
             ]);
             $image->move(public_path('public/postsImages'), date('YmdHi') . $image->getClientOriginalName());
         } else {
             $post->update([
-                'title' => $validated['title'],
-                'content' => $validated['content'],
+                'title' => $request['title'],
+                'content' => $request['content'],
             ]);
         }
         return redirect()->route('post.edit', $post_id);
@@ -80,7 +80,7 @@ class PostController extends Controller
     public function store(StorePostRequest $request)
     {
         $validated = $request->validated();
-        $image = $validated['image'];
+        $image = $request['image'] ?? null;
         if (!empty($image)) {
             $post = Post::create([
                 'author_id' => Auth::id(),

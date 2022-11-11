@@ -2,6 +2,9 @@
 
 namespace App\Http;
 
+use App\Console\Commands\SendingNewPostsCommand;
+use App\Libraries\SendingNewPosts;
+use App\Mail\PostDelivery;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 

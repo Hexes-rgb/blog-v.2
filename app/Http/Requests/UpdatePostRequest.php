@@ -29,8 +29,7 @@ class UpdatePostRequest extends FormRequest
             'content' => 'required|min:10',
             'image' => [
                 File::image()
-                    ->types(['jpeg', 'jpg', 'jpe'])
-                    ->min(1024)
+                    ->types(['jpeg', 'jpg', 'jpe', 'png'])
                     ->max(3 * 1024)
             ]
         ];

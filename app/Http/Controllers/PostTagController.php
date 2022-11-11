@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PostTagController extends Controller
 {
@@ -25,14 +26,18 @@ class PostTagController extends Controller
         // dd($request);
         $post_id = $request->input('post_id');
         $post = Post::find($post_id);
-        $validated = $request->validate([
-            'tag' => 'required|max:100|min:2',
+        $validator = Validator::make($request->all(), [
+            'tag' => 'required|max:255|min:2',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['data' => view('layouts.inc.add-tag-form', ['post' => $post])->render(), 'errors' => $validator->errors()->all()]);
+        }
+        $validated = $validator->validated();
         $tagName = $validated['tag'];
         $tag = Tag::where('name', 'ILIKE', $tagName)->first();
         if (empty($tag)) {
-            // return response()->json(['success' => 'This tag does not exist']);
-            return response()->json(['data' => view('layouts.inc.add-tag-form', ['post' => $post])->render()]);
+            // return response()->json(['error' => 'This tag does not exist']);
+            return response()->json(['data' => view('layouts.inc.add-tag-form', ['post' => $post])->render(), 'errors' => ['errors' => 'This tag does not exist']]);
         } else {
             if ($post->tags->where('name', $tag->name)->isEmpty()) {
                 $post->tags()->attach($tag);
@@ -42,8 +47,8 @@ class PostTagController extends Controller
                 // return view('layouts.inc.add-tag-form', ['post' => $post])->render();
                 // return $tagsList;
             } else {
-                // return response()->json(['success' => 'This tag has already been added']);
-                return response()->json(['data' => view('layouts.inc.add-tag-form', ['post' => $post])->render()]);
+                // return response()->json(['error' => 'This tag has already been added']);
+                return response()->json(['data' => view('layouts.inc.add-tag-form', ['post' => $post])->render(), 'errors' => ['errors' => 'This tag has already been added']]);
             }
         }
     }

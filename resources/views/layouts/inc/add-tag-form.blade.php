@@ -4,17 +4,15 @@
         <div class="autocomplete">
             <div class="row">
                 <div class="col-8">
-                    <input type="text" autocomplete="off" class="form-control @error('tag') is-invalid @enderror tags" id="myInput" name="tag"
+                    <input type="text" autocomplete="off" class="form-control tags" id="myInput" name="tag"
                         placeholder="Type to find..." required>
-                        @error('tag')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                </div>
-                <div class="col-4">
-                    <button type="submit" class="btn btn-outline-primary">Add tag</button>
+                    </div>
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-outline-primary">Add tag</button>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="alert alert-danger" id="tagErrors" style="display:none"></div>
         <input type="hidden" name="post_id" value="{{ $post->id }}">
         {{-- <input type="hidden" id="hiddenTitle" name="title" value="">
         <input type="hidden" id="hiddenContent" name="content" value=""> --}}
@@ -75,11 +73,23 @@
                 success:function(response)
                 {
                     $('#postTags').replaceWith(response.data);
+                    if(response.errors){
+                        $('#tagErrors').empty();
+                        $('#tagErrors').hide();
+                        $('#tagErrors').show();
+                        jQuery.each(response.errors, function(key, value){
+                            $('#tagErrors').append('<p>'+value+'</p>');
+                        });
+                    }
                     $(addTagForm).trigger("reset");
                 },
                 error: function(response) {
-                    $('#postTags').replaceWith(response.data);
-                    $(addTagForm).trigger("reset");
+                    // $('#tagErrors').empty();
+                    // $('#tagErrors').hide();
+                    // $('#tagErrors').show();
+                    // $('#tagErrors').append('<p>'+response.error+'</p>');
+                    // $('#postTags').replaceWith(response.data);
+                    // $(addTagForm).trigger("reset");
                 }
             });
         });

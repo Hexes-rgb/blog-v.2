@@ -95,6 +95,11 @@ $(document).ready(function(){
             success:function(response)
             {
                 alert(response.success);
+            },
+            error: (error) => {
+                debugger;
+
+                window.location.replace('/login');
             }
         });
     });
